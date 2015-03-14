@@ -57,8 +57,11 @@ parfor i=1:size(Enumerated,1)
     
     %% -----Trans Hab Module-----(Nathan)
     %{
-    INPUTS: Cur_Arch
-    OUTPUTS: Trans_Hab_Mass
+    The inputs are: 
+	Cur_Arch
+	
+    The outputs are:
+	Trans_Hab_Mass
     %}
     
     Trans_Hab_Mass = Trans_Hab_Module (Cur_Arch);
@@ -66,18 +69,23 @@ parfor i=1:size(Enumerated,1)
     
     %% -----Propulsion Module-----(Eric)
     %{
-    INPUTS: Cur_Arch
-    OUTPUTS: Prop_Nums; Isp, FOx Ratio and Inert Mass Ratio
+    The inputs are:
+	Cur_Arch
+    The outputs are:
+	Prop_Nums (Uses the 'Prop_Class' class to store .Isp .Fox_Rat and .InertM_Rat )
+		Prop_Nums.Isp (Units: seconds, Type: double)
+		Prop_Nums.FOx_Rat (Units: N/A, Type: double)
+		Prop_Nums.InertM_Rat (Units: N/A, Type: double)
     %}
     
-    Prop_Nums = Prop_Lookup (Cur_Arch); %Prop_Nums is a 1x3 array with Isp, Fuel-to-Oxidizer Ratio and Inert Mass Ratio in that order
+    Prop_Nums = Prop_Lookup (Cur_Arch); 
     
   
     %% ------Transit Module (return)-----(Eric)
     %{
-    INPUTS: Cur_Arch, Trans_Hab_Mass, Prop_Nums
+    The inputs are: Cur_Arch, Trans_Hab_Mass, Prop_Nums
     Calls: Destination = Earth, Origin = Mars Orbit
-    OUTPUTS: Mars_Area_Fuel, Earth_Area_Fuel, Time_of_Flight_Return
+    The outputs are: Mars_Area_Fuel, Earth_Area_Fuel, Time_of_Flight_Return
     %}
     
     [ Mars_Area_Fuel, Earth_Area_Fuel, Return_Engine_Mass] = Transit (Cur_Arch, Trans_Hab_Mass, Prop_Nums);
@@ -87,8 +95,8 @@ parfor i=1:size(Enumerated,1)
     
     %% -----Ascent----- (Eric)
     %{
-    INPUTS: Cur_Arch, Mars_Area_Fuel, Prop_Nums
-    OUTPUTS: Ascent_Vehicle_Mass, Ascent_Fuel
+    The inputs are: Cur_Arch, Mars_Area_Fuel, Prop_Nums
+    The outputs are: Ascent_Vehicle_Mass, Ascent_Fuel
     %}
     
     %% ----Transfer to Surface---- (Eric)
@@ -102,30 +110,67 @@ parfor i=1:size(Enumerated,1)
        
     %% -----Site Selection Analysis----- (Ryan)
     %{
-    INPUTS:Cur_Arch
-    OUTPUTS:Rad_Exposure, Site_Sci_Value
+    The inputs are:Cur_Arch
+    The outputs are:Rad_Exposure, Site_Sci_Value
     %}
     
     
     %% -----Surf Structure----- (Chris)
     %{
-    INPUTS:Cur_Arch, Rad_Exposure
-    OUTPUTS:Hab_ISRU_Consume, Hab_Spares, Science_Cpk, Hab_Mass_Resupply, Hab_Mass_Infra(eventually)
+    The inputs are:
+    Cur_Arch
+    Rad_Exposure
+    
+    The outputs are:
+    Hab_ISRU_Consume
+    Hab_Spares
+    Crew_Activity (Structure as of right now, may turn in to a class later)
+                    Crew_Acitivity.EVA_Freq (Units: EVA/wk Type:Number) for frequency of EVA activities
+                    Crew_Activity.CM_EVA (Units: CM/EVA Type: Number) for crew members per EVA activity
+                    Crew_Activity.EVA_Dur (Units: hrs/CM Type: Number) for duration of EVA activities
+    Hab_Mass_Resupply
+    Hab_Mass_Infra(eventually)
+    Habitat_Volume_Infra ( Units: m^3 Type:Number)
     %}
     
     
     %% -----Surf ECLSS Module----- (Chris)
     %{
-    INPUTS: Cur_Arch
-    OUTPUTS: ECLSS_ISRU_Consume, ECLSS_Spares, ECLSS_Mass_Resupply, ECLSS_Mass_Infra(eventually)
-    Hab_Power_Req, Hab_ISRU_Consume,
-    Hab_Mass_Infra(eventuall)
+    The input is:
+    Food_Supply (Units: % Type: Number) this is percent of food grown on Mars
+    Crew_Activity (Structure as of right now, may turn in to a class later)
+                    Crew_Acitivity.EVA_Freq (Units: EVA/wk Type:Number) for frequency of EVA activities
+                    Crew_Activity.CM_EVA (Units: CM/EVA Type: Number) for crew members per EVA activity
+                    Crew_Activity.EVA_Dur (Units: hrs/CM Type: Number) for duration of EVA activities
+    Habitat_Volume ( Units: m^3 Type:Number)
+
+    The outputs are:
+    ISRU_Requirements (Structure as of right now, may turn in to a class later)
+                    ISRU_Requirements.Oxygen (Units: kg/day Type: Number) for expected oxygen usage
+                    ISRU_Requirements.Water (Units: kg/day Type: Number)  for expected water usage
+                    ISRU_Requirements.Nitrogen (Units: kg/day Type: Number)  for expected nitrogen usage
+                    ISRU_Requirements.CO2 (Units: kg/day Type: Number)  for expected CO2 usage
+    ECLSS_Power (Units: kW Type:Number)
+    ECLSS_Mass (Units: kg/mission Type:Number)
+    ECLSS_Volume(Units: m^3/mission Type:Number)
     %}
+    
+    %function [ISRU_Requirements, ECLSS_Power, ECLSS_Mass, ECLSS_Volume] = ECLSS(Food_Supply, Crew_Activity, Habitat_Volume )
+    
+    [ ECLSS_ISRU_Req, ECLSS_Power, ECLSS_Mass_Resupply, ECLSS_Vol_Resupply ] = ECLSS (Cur_Arch(Food_Index, Crew_Activity, Hab_Vol_Infra);
     
     %% -----Surf ISRU Module----- (Chris)
     %{
-    INPUTS: Cur_Arch, Mars_ISRU_Fuel, Hab_ISRU_Consume, ECLSS_ISRU_Consume
-    OUTPUTS: ISRU_Mass_Resupply, ISRU_Power_Req, ISRU_spares
+    The inputs are:
+    Cur_Arch,
+    Mars_ISRU_Fuel,
+    Hab_ISRU_Consume,
+    ECLSS_ISRU_Consume
+    
+    The outputs are:
+    ISRU_Mass_Resupply,
+    ISRU_Power_Req,
+    ISRU_spares
     %}
     
     %extract relevant architectural decisions
@@ -142,8 +187,8 @@ parfor i=1:size(Enumerated,1)
     
     %% -----Science Module----- (Ryan)
     %{
-    INPUTS: Cur_Arch, Site_Sci_Value, Science_Cpk
-    OUTPUTS: Science_Value_per_Time, Science_Power_Req, Science_Spares, Science_Mass_Resupply,
+    The inputs are: Cur_Arch, Site_Sci_Value, Science_Cpk
+    The outputs are: Science_Value_per_Time, Science_Power_Req, Science_Spares, Science_Mass_Resupply,
     Science_Mass_Setup (eventually)
     %}
     
@@ -151,8 +196,8 @@ parfor i=1:size(Enumerated,1)
     
     %% -----ISFR Module----- (Chris)
     %{
-    INPUTS: Cur_Arch, Hab_Spares, ECLSS_Spares, ISRU_Spares
-    OUTPUTS: ISFR_Power_Req, ISFR_Mass_Resupply,
+    The inputs are: Cur_Arch, Hab_Spares, ECLSS_Spares, ISRU_Spares
+    The outputs are: ISFR_Power_Req, ISFR_Mass_Resupply,
     ISFR_Mass_Infra(eventually)
     %}
     
@@ -200,8 +245,8 @@ parfor i=1:size(Enumerated,1)
     
     %% -----Surf Power Module----- (Chris)
     %{
-    INPUTS: Cur_Arch, Hab_Power_Req, ISRU_Power_Req, Science_Req
-    OUTPUTS: Power_Mass_Resupply, Power_Mass_Setup (eventually)
+    The inputs are: Cur_Arch, Hab_Power_Req, ISRU_Power_Req, Science_Req
+    The outputs are: Power_Mass_Resupply, Power_Mass_Setup (eventually)
     %}
     
     %% Transfer to Logistics
@@ -213,27 +258,27 @@ parfor i=1:size(Enumerated,1)
     
     %% -----EDL Module----- (Eric)
     %{
-    INPUTS: Cur_Arch, FMMS, IMMS(eventually)
-    OUTPUTS: MTMD, Time_of_Flight_Descent
+    The inputs are: Cur_Arch, FMMS, IMMS(eventually)
+    The outputs are: MTMD, Time_of_Flight_Descent
     %}
     
     MTMO = MTMD + Earth_Area_Fuel; %Mass to Mars Orbit is the Mass to Mars Descent plus the Return Fuel from earth area
     
     %% ------Transit Module----- (Eric)
     %{
-    INPUTS: Cur_Arch, MTMO, Trans_Hab_Mass, Prop_Nums,
+    The inputs are: Cur_Arch, MTMO, Trans_Hab_Mass, Prop_Nums,
     Time_of_Flight_Descent, Time_of_Flight_Return
     CALLS: Destination = Mars Orbit, Origin = Staging Point
-    OUTPUTS: Departure_Mass, Departure_Fuel, Days_on_Mars,
+    The outputs are: Departure_Mass, Departure_Fuel, Days_on_Mars,
     Total_Time_of_Flight
     %}
     
    
     % -----Rendevous Module----- (Eric)
     %{
-    INPUTS: Cur_Arch, Departure_Mass, Departure_Fuel, Isp, FOx_Ratio,
+    The inputs are: Cur_Arch, Departure_Mass, Departure_Fuel, Isp, FOx_Ratio,
     InertM_Ratio
-    OUTPUTS: IMLEO, Rendevous_Risk
+    The outputs are: IMLEO, Rendevous_Risk
     %}
     
     %% Results
