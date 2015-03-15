@@ -1,4 +1,3 @@
-t
 %% Setup
 %--Tradespace Enumeration--
 
