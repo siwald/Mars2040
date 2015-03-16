@@ -1,4 +1,4 @@
-classdef SC_Class
+classdef SC_Class < handle
     %SC_CLASS Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -13,13 +13,13 @@ classdef SC_Class
     end
     
     methods
-        function obj = origin_def(origin, payload, prop, fox_rat)
-            obj.Prop_M = prop;
-            obj.Origin_M = origin;
-            obj.Bus_M = origin - payload - fuel;
-            obj.Payload_M = payload;
-            obj.Fuel_M = prop*(fox_rat/(fox_rat + 1));
-            obj.Ox_M = prop*(1/(fox_rat + 1));
+        function origin_def(this, origin, prop, fox_rat)
+            %Send variable to this function in order, Origin Mass, Propellant Mass and Fuel/Oxidizer Ratio
+            this.Prop_M = prop;
+            this.Origin_M = origin;
+            this.Bus_M = origin - this.Payload_M - prop - this.Hab_M;
+            this.Fuel_M = prop*(fox_rat/(fox_rat + 1));
+            this.Ox_M = prop*(1/(fox_rat + 1));
         end
             
     end
