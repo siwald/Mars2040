@@ -77,17 +77,33 @@ parfor i=1:size(Enumerated,1)
 		Prop_Nums.InertM_Rat (Units: N/A, Type: double)
     %}
     
-    Prop_Nums = Prop_Lookup (Cur_Arch); 
-    
+    Prop_Nums = Prop_Lookup (Cur_Arch);
+       
   
     %% ------Transit Module (return)-----(Eric)
     %{
-    The inputs are: Cur_Arch, Trans_Hab_Mass, Prop_Nums
+    The inputs are: 
+        Cur_Arch, this main loop's instance of the Arch_Class 
+        Return_S_C, instance of S_C_Class with these defined: 
+            .Payload_M
+            .Hab_M
+        Prop_Nums, instance of Prop_Class with these defined:
+            .Isp
+            .FOx_Rat
+            .InertM_Rat
     Calls: Destination = Earth, Origin = Mars Orbit
-    The outputs are: Mars_Area_Fuel, Earth_Area_Fuel, Time_of_Flight_Return
+    The outputs are: 
+        Return_S_C, an instance of the S_C_Class, now with these defined:
+            .Payload_M
+            .Hab_M
+            .Prop_M *added
+            .Fuel_M *added
+            .Ox_M *added
+            .Bus_M *added
+            .Origin_M *added
     %}
     
-    [ Mars_Area_Fuel, Earth_Area_Fuel, Return_Engine_Mass] = Transit (Cur_Arch, Trans_Hab_Mass, Prop_Nums);
+    [ Return_S_C ] = Transit (Cur_Arch, Trans_Hab_Mass, Prop_Nums);
     
     Return_SC_Mass = Trans_Hab_Mass + Return_Engine_Mass
     
