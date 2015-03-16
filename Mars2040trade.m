@@ -60,10 +60,11 @@ parfor i=1:size(Enumerated,1)
 	Cur_Arch
 	
     The outputs are:
-	Trans_Hab_Mass
+	Return_SC
+        .Hab_M defined
     %}
-    
-    Trans_Hab_Mass = Trans_Hab_Module (Cur_Arch);
+    Return_SC = SC_Class;
+    Return_SC = Trans_Hab_Module (Cur_Arch, Return_SC);
     
     
     %% -----Propulsion Module-----(Eric)
@@ -103,10 +104,8 @@ parfor i=1:size(Enumerated,1)
             .Origin_M *added
     %}
     
-    [ Return_S_C ] = Transit (Cur_Arch, Trans_Hab_Mass, Prop_Nums);
-    
-    Return_SC_Mass = Trans_Hab_Mass + Return_Engine_Mass
-    
+    [ Return_SC ] = Transit (Cur_Arch, Return_SC, Prop_Nums);
+        
     
     %% -----Ascent----- (Eric)
     %{
