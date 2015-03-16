@@ -1,5 +1,5 @@
-function [ S_C_inst ] = Propellant_Mass( ~ , ~ )
-%function [ S_C_Mass ] = Propellant_Mass( Prop_Nums, Payload_Mass )
+function [ SC_Inst ] = Propellant_Mass( ~ , ~ )
+%function [ SC_Inst ] = Propellant_Mass( Prop_Nums, s_C_Inst )
 %PROPELLANT_MASS Calculate the mass of the propellant needed for a maneuver
 %   Calculating the necessary propellant mass from a Delta_V manuever and
 %   the Isp of the fuel source.
@@ -16,7 +16,8 @@ function [ S_C_inst ] = Propellant_Mass( ~ , ~ )
     Prop_Nums.Isp = 380; %in seconds
     Prop_Nums.FOx_Rat = 6.0; %Ratio, 6kg fuel to 1kg oxidizer
     Prop_Nums.InertM_Rat = 0.17; %percentage, 0-1
-    Payload_Mass = 30000; %kg
+    SC_Inst = SC_Class;
+    SC_Inst.Payload_M = 30000; %kg
     dV = 6; %km/s
 %-----Testing-----
 
@@ -34,22 +35,25 @@ Eng_Mass = 0; %initialize engine mass for 1st iteration
 it = 0; %counting variable
 while converge > converge_to
     %evaluate the rocket equation for fuel mass
-    Prop_Mass=e^(((dV)/(g0*Prop_Nums.Isp)))*(Eng_Mass+Payload_Mass)-Eng_Mass-Payload_Mass;
-    %Rocket_Eqn == dV = Prop_Nums.Isp*g0*log((Eng_Mass+Payload_Mass+fuel_mass)/(Eng_Mass+Payload_Mass))
+    Prop_Mass=e^(((dV)/(g0*Prop_Nums.Isp)))*(Eng_Mass+SC_Inst.Payload_M)-Eng_Mass-SC_Inst.Payload_M;
+    %Rocket_Eqn == dV = Prop_Nums.Isp*g0*log((Eng_Mass+SC_Inst.Payload_Mass+fuel_mass)/(Eng_Mass+SC_Inst.Payload_Mass))
     %Prop_Mass = solve(Rocket_Eqn, fuel_mass)
     %evaluate engine mass and determine SpaceCraft Mass
     Eng_Mass = Prop_Mass * Prop_Nums.InertM_Rat;
-    S_C_Mass = Prop_Mass + Eng_Mass + Payload_Mass;
+    SC_Mass = Prop_Mass + Eng_Mass + SC_Inst.Payload_M;
     
     %compare results to last iteration
-    converge = (S_C_Mass - last) / S_C_Mass;
-    last = S_C_Mass; %set tracking variable to this iteration
+    converge = (SC_Mass - last) / SC_Mass;
+    last = SC_Mass; %set tracking variable to this iteration
     it = it + 1;
 
 end
 
 %put solutions into spacecraft object
-S_C_inst = S_C_Class(S_C_Mass, Payload_Mass, Prop_Mass); %create S/C instance, takes: total mass at origin, payload mass at destination and fuel mass at origin, respectivley 
+SC_Inst.Prop_M = Prop_Mass;
+SC_Inst.Bus_M = Eng_Mass;
+SC_Inst.Fuel_M = Prop_Mass*(Prop_Nums.FOx_Rat/(Prop_Nums.FOx_Rat+1));
+SC_Inst.Ox_M = 
 
 %{
 Prop_Loop_time_in_seconds = toc
