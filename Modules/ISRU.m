@@ -1,4 +1,4 @@
-function [ISRU_Power, ISRU_Volume] = ISRU(ECLSS_Requirements)
+function [ISRU_Power, ISRU_Volume, ISRU_Risk] = ISRU(ECLSS_Requirements)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -50,6 +50,10 @@ end
 
 ISRU_Power = (Oxygen_Moxie_Required * Moxie_Power);
 ISRU_Volume = (Oxygen_Moxie_Required * Moxie_Volume);
+
+tech_risk = <Math Here>; %define the technological risk appropriatle for the module
+ops_risk = <Math Here>; %define the operational risk for the module
+ISRU_Risk = Risk_Class(tech_risk, ops_risk); %put the risks into a structure
 
 end
 
