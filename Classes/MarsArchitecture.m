@@ -23,7 +23,8 @@ classdef MarsArchitecture < handle
         foodSupply = {Location.EARTH, 0.5000; Location.MARS, 0.5000};
         surfaceShielding = 'Regolith';
         surfaceStructure = 'Hybrid';
-        surfacePower = {cellstr('Nuclear'); cellstr('RTG'); cellstr('Solar')};
+        %surfacePower = {cellstr('Nuclear'); cellstr('RTG'); cellstr('Solar')};
+        surfacePower = {cellstr('Hybrid')};
         isfrUse = {cellstr('Metal')};
         returnEntry = 'Direct'; % TODO: can we assume this from no orbital destination before earth
         
