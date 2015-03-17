@@ -13,10 +13,12 @@ function [ SC_Inst ] = Propellant_Mass( ~ , ~ )
 
 %-----Testing Inputs-----
     %--would be delivered by Propulsion Module
-    Prop_Nums = Prop_Class;
-    Prop_Nums.Isp = 380; %in seconds
-    Prop_Nums.FOx_Rat = 6.0; %Ratio, 6kg fuel to 1kg oxidizer
-    Prop_Nums.InertM_Rat = 0.17; %percentage, 0-1
+    %--Prop_Nums = Prop_Class;
+    %--Prop_Nums.Isp = 380; %in seconds
+    %--Prop_Nums.ROx_RAT = 6.0; %Ratio, 6kg fuel to 1kg oxidizer
+    %--Prop_Nums.InertM_Rat = 0.17; %percentage, 0-1
+    % new propulsion logic
+    propulsion = Propulsion.LOH_LOX;
    
     %--would be defined in trans hab module
     SC_Inst = SC_Class;
@@ -43,11 +45,11 @@ while converge > converge_to
     %sum rocket parts to see final mass
     Final_M = Eng_Mass + SC_Inst.Payload_M + SC_Inst.Hab_M;
     %evaluate the rocket equation for fuel mass
-    Prop_Mass=e^(((dV)/(g0*Prop_Nums.Isp)))*(Final_M)-Final_M;
-    %Rocket_Eqn == dV = Prop_Nums.Isp*g0*log((Eng_Mass+SC_Inst.Payload_Mass+fuel_mass)/(Eng_Mass+SC_Inst.Payload_Mass))
+    Prop_Mass=e^(((dV)/(g0*propulsion.Isp)))*(Final_M)-Final_M;
+    %Rocket_Eqn == dV = propulsion.Isp*g0*log((Eng_Mass+SC_Inst.Payload_Mass+fuel_mass)/(Eng_Mass+SC_Inst.Payload_Mass))
     %Prop_Mass = solve(Rocket_Eqn, fuel_mass)
     %evaluate engine mass and determine SpaceCraft Mass
-    Eng_Mass = Prop_Mass * Prop_Nums.InertM_Rat;
+    Eng_Mass = Prop_Mass * propulsion.InertMassRatio;
     SC_Mass = Prop_Mass + Eng_Mass + SC_Inst.Payload_M;
     
     %compare results to last iteration
@@ -59,7 +61,7 @@ end
 
 %put solutions into spacecraft object by using the origin_def method for
 %the SC_Class
-SC_Inst.origin_def (SC_Mass, Prop_Mass, Prop_Nums.FOx_Rat);
+SC_Inst.origin_def (SC_Mass, Prop_Mass, propulsion.FuelOxRatio);
 
 %{
 %----debugging outputs
