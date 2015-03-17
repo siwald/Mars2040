@@ -18,8 +18,8 @@ classdef SC_Class < handle
             this.Prop_M = prop;
             this.Origin_M = origin;
             this.Bus_M = origin - this.Payload_M - prop - this.Hab_M;
-            this.Fuel_M = prop*(fox_rat/(fox_rat + 1));
-            this.Ox_M = prop*(1/(fox_rat + 1));
+            this.Ox_M = prop*(fox_rat/(fox_rat + 1));
+            this.Fuel_M = prop*(1/(fox_rat + 1));
         end
             
     end
