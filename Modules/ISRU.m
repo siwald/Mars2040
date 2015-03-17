@@ -9,10 +9,10 @@ function [ISRU_Power, ISRU_Volume, ISRU_Risk] = ISRU(ECLSS_Requirements)
 %------Inputs------
 
 % ISRU requirements from ECLSS module
-    ECLSS_Requirements.Oxygen = 10.81;
-    ECLSS_Requirements.Water = 57.94;
-    ECLSS_Requirements.Nitrogen = 1.70;
-    ECLSS_Requirements.CO2 = 19.94;  
+    ECLSS_Requirements.Oxygen = 10.81; %Units?
+    ECLSS_Requirements.Water = 57.94; %Units?
+    ECLSS_Requirements.Nitrogen = 1.70; %Units?
+    ECLSS_Requirements.CO2 = 19.94;  %Units?
 
 %------Outputs------
 

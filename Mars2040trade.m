@@ -136,8 +136,6 @@ parfor i=1:size(Enumerated,1)
     Rad_Exposure
     
     The outputs are:
-    Hab_ISRU_Consume
-    Hab_Spares
     Crew_Activity (Structure as of right now, may turn in to a class later)
                     Crew_Acitivity.EVA_Freq (Units: EVA/wk Type:Number) for frequency of EVA activities
                     Crew_Activity.CM_EVA (Units: CM/EVA Type: Number) for crew members per EVA activity
@@ -178,8 +176,8 @@ parfor i=1:size(Enumerated,1)
     The inputs are:
     Cur_Arch,
     Mars_ISRU_Fuel,
-    Hab_ISRU_Consume,
-    ECLSS_ISRU_Consume
+    Hab_Mass,
+    ECLSS_Mass
     
     The outputs are:
     ISRU_Mass_Resupply,
@@ -219,7 +217,7 @@ parfor i=1:size(Enumerated,1)
     Total_Spares_Mass = Hab_Spares, ECLSS_Spares, ISRU_Spares + Science_Spares;
     
     %determine the current architectural decisions
-    ISFR = Cur_Arch(ISFR_Index);
+    ISFR = Cur_Arch.ISFR_Index;
     
     switch ISFR 
         case 'None'
@@ -264,7 +262,7 @@ parfor i=1:size(Enumerated,1)
     %}
     
     %% Transfer to Logistics
-    MTMS = Hab_Mass_Resupply + ISRU_Mass_Resupply + Science_Mass_Resupply + Power_Mass_Resupply;
+    MTMS = Hab_Mass_Resupply + ISRU_Mass_Resupply + Science_Mass_Resupply + Power_Mass_Resupply + Ascent_Vehicle_Mass;
     %IMMS = Hab_Mass_Infra + ISRU_Mass_Infra + Science_Mass_Infra + Power_Mass_Infra;
     
     %% Outgoing Logistics Begin
