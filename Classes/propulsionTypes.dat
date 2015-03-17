@@ -1,0 +1,3 @@
+PropulsionType,Isp,FuelOxidizerRatio,InertMassRatio,StaticMass
+LH2,448,5,0.17,0
+NUC,1018,0,0.15,4000
