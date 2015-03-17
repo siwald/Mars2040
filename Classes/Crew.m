@@ -62,7 +62,7 @@ classdef Crew < handle
     enumeration
         MIN_CREW (2)
         DEFAULT_TRANSIT (4)
-        TRAGET_SURFACE (20)
+        TARGET_SURFACE (20)
     end
 end
 
