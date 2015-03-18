@@ -72,7 +72,7 @@ end
                 case 'LMO'
                     dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
-                    dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLEO + LMOtoMars;
+                    dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO + LMOtoMars;
                 otherwise
                     disp('Please consult the table itself');
             end
@@ -88,6 +88,8 @@ end
                     dV = LunarEsctoLLO + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST;
                 case 'Earth'
                     dV = LunarEsctoLLO + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST + EarthtoLEO;
+                case 'TMI'
+                    dV = LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT;
                 case 'LMO'
                     dV = LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
@@ -168,6 +170,12 @@ end
                 otherwise
                     disp('Please consult the table itself');
             end
+        case 'TMI'
+            switch final
+                case 'LMO'
+                    dV = EMTtoCapEsc + MarsCapEsctoLMO;
+                case 'Mars'
+                    dV = EMTtoCapEsc + MarsCapEsctoLMO + LMOtoMars;
         otherwise
             disp('Please consult the table itself');
     end
