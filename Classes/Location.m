@@ -2,169 +2,113 @@
 classdef Location < handle
     %% Location constants to be used for lookups and calculations
     properties (Constant)
-        %% Constant array holding all the location abbreviations by location index
-        LOCATION_ABBRS = [cellstr('EARTH'),'LEO','GEO','EML1','EML2','EML3','EML4','EML5','LLO','LUNAR','EL1','EL2','EL3','EL4','EL5','MTO','MCO','LMO','MARS','PTO','LPO','PHOBOS','DTO','LDO','DEIMOS'];
+        %% table containing miscellaneous properties of each location
+        % most data is interpreted from common knowledge
+        % use of ISRU resources should be sourced
+        DETAILS_TABLE = readtable('locations-details.dat','ReadRowNames',true);
+                
+        %% table containing all delta-v paths for Earth-Mars system
+        % delta-v network populated from http://i.imgur.com/WGOy3qT.png
+        % assumes hohmann transfer orbits
+        % aerocapture noted in following table but not included in delta-v
+        % low thrust propulsion (i.e. SEP), should use 1.5 * delta-v values
+        DELTAV_TABLE = readtable('locations-deltaVs.dat','ReadRowNames',true);
         
-        %% Constant array holding all the location names by location index
-        LOCATION_NAMES = [cellstr('Earth Surface'),'Low Earth Orbit','Geosynchronous Earth Orbit',...
-            'Earth-Moon L1','Earth-Moon L2','Earth-Moon L3','Earth-Moon L4','Earth-Moon L5',...
-            'Low Lunar Orbit','Lunar Surface',...
-            'Earth-Sun L1','Earth-Sun L2','Earth-Sun L3','Earth-Sun L4','Earth-Sun L5',...
-            'Mars Transfer Orbit','Mars Capture Orbit','Low Mars Orbit','Mars Surface',...
-            'Phobos Transfer Orbit','Low Phobos Orbit','Phobos Surface',...
-            'Deimos Transfer Orbit','Low Deimos Orbit','Deimos Surface'];
-        
-        %% Constants array holding location's orbital indicator by location index
-        ORBITAL_LOCATIONS = logical([0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0]);
-        
-        %% Constants array holding the location's lagrangian indicator by location index
-        LAGRANGIAN_LOCATIONS = int8([0,0,0,1,2,3,4,5,0,0,1,2,3,4,5,0,0,0,0,0,0,0,0,0,0]);
-        
-        %% Constant table holding all delta-V values between locations
-        % TODO : need to add the delta V table
-        DELTAV_TABLE = [ ...
-           %Earth|LEO  |GEO  |EML1 |EML2 |EML3 |EML4 |EML5 |LLO  |Moon |EL1  |EL2  |EL3  |EL4  |EL5  |MTO  |MCO  |LMO  |Mars |PTO  |LPO  |Phobo|DTO  |LDO  |Deimo|
-           %1,    2,    3,    4,    5,    6,    7,    8,    9,    10,   11,   12,   13,   14,   15,   16,   17,   18,   19,   20,   21,   22,   23,   24,   25; ...
-            % Earth row
-            0,    9.5,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN; ...
-            % LEO row
-            NaN,  0,    NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN,  NaN; ...
-            ];
-        
-        %% index constants for delta-v lookups
-        EARTH_INDEX	= int8(1);
-        LEO_INDEX	= int8(2);
-        GEO_INDEX	= int8(3);
-        EML1_INDEX	= int8(4);
-        EML2_INDEX	= int8(5);
-        EML3_INDEX	= int8(6);
-        EML4_INDEX	= int8(7);
-        EML5_INDEX	= int8(8);
-        LLO_INDEX	= int8(9);
-        LUNAR_INDEX	= int8(10);
-        EL1_INDEX	= int8(11);
-        EL2_INDEX	= int8(12);
-        EL3_INDEX	= int8(13);
-        EL4_INDEX	= int8(14);
-        EL5_INDEX	= int8(15);
-        MTO_INDEX	= int8(16);
-        MCO_INDEX	= int8(17);
-        LMO_INDEX	= int8(18);
-        MARS_INDEX	= int8(19);
-        PTO_INDEX	= int8(20);
-        LPO_INDEX	= int8(21);
-        PHOBOS_INDEX= int8(22);
-        DTO_INDEX	= int8(23);
-        LDO_INDEX	= int8(24);
-        DEIMOS_INDEX= int8(25);
+        %% table containing all aerocapture paths for Earth-Mars system
+        % aerocapture network populated from http://i.imgur.com/WGOy3qT.png
+        % table is assymetric, representing one-way nature of aerocapture
+        % table contains logical values, 1 for aerocapture, nothing otherwise
+        AEROCAPTURE_TABLE = readtable('locations-aerocaptureTrajs.dat','ReadRowNames',true);
     end
     
     %% private properties
     properties (GetAccess = private, SetAccess = immutable)
-        %% original value used to instantiate object
-        originalVal;
-        %% location index for the current location object
-        index = int8(0);
+        %% original value used to instantiate location representing the row name of location
+        locationName;
     end
     
     %% Public properties for location object
+    %
+    % TODO: verify certain properties, such that surfaces are typically the
+    % only location for ISRU resources and location indicators are mutually
+    % exclusive
+    %
     properties (Dependent)
         %% Short-hand form of location
-        Initials;
+        Code;
         %% Descriptive name of location
         Name;
+        %% Description of location
+        Description;
+        %% Indicator of whether the location represents a surface of an object
+        IsSurface;
         %% Indicator of whether or not the location represents a direct orbit around a celestial body
         IsOrbital;
         %% Indicator of whether or not the location represents a Lagrangian point about two celestial bodies
         IsLagrangian;
+        %% List of names of resources available from location
+        ISRU;
     end
     
-    methods
+    %% private class functions
+    methods (Access = private)
         %% Location class construction
         % initialize location name
         function obj = Location(location)
             % verify we have a location input
             if nargin > 0 && ischar(location)
                 % store original value of location
-                obj.originalVal = char(location);
-                % lookup index for provided location
-                switch upper(location)
-                    case 'EARTH'
-                        obj.index = Location.EARTH_INDEX;
-                    case 'LEO'
-                        obj.index = Location.LEO_INDEX;
-                    case 'GEO'
-                        obj.index = Location.GEO_INDEX;
-                    case 'EML1'
-                        obj.index = Location.EML1_INDEX;
-                    case 'EML2'
-                        obj.index = Location.EML2_INDEX;
-                    case 'EML3'
-                        obj.index = Location.EML3_INDEX;
-                    case 'EML4'
-                        obj.index = Location.EML4_INDEX;
-                    case 'EML5'
-                        obj.index = Location.EML5_INDEX;
-                    case 'LLO'
-                        obj.index = Location.LLO_INDEX;
-                    case 'LUNAR'
-                        obj.index = Location.LUNAR_INDEX;
-                    case 'EL1'
-                        obj.index = Location.EL1_INDEX;
-                    case 'EL2'
-                        obj.index = Location.EL2_INDEX;
-                    case 'EL3'
-                        obj.index = Location.EL3_INDEX;
-                    case 'EL4'
-                        obj.index = Location.EL4_INDEX;
-                    case 'EL5'
-                        obj.index = Location.EL5_INDEX;
-                    case 'MTO'
-                        obj.index = Location.MTO_INDEX;
-                    case 'MCO'
-                        obj.index = Location.MCO_INDEX;
-                    case 'LMO'
-                        obj.index = Location.LMO_INDEX;
-                    case 'MARS'
-                        obj.index = Location.MARS_INDEX;
-                    case 'PTO'
-                        obj.index = Location.PTO_INDEX;
-                    case 'LPO'
-                        obj.index = Location.LPO_INDEX;
-                    case 'PHOBOS'
-                        obj.index = Location.PHOBOS_INDEX;
-                    case 'DTO'
-                        obj.index = Location.DTO_INDEX;
-                    case 'LDO'
-                        obj.index = Location.LDO_INDEX;
-                    case 'DEIMOS'
-                        obj.index = Location.DEIMOS_INDEX;
-                    otherwise
-                        % TODO: some sort of exception;
+                obj.locationName = upper(char(location));                
+                % make sure that the Delta-V table contains a row that
+                % matches the requested location, if not throw error
+                if ~any(strcmp(Location.DELTAV_TABLE.Properties.RowNames, obj.locationName))
+                    error('Location name was not valid.');
                 end
+            else
+                error('Location was not initialized with any input.');
             end
         end
-        
-        %% Initials getter
-        function initials = get.Initials(obj)
+    end
+    
+    %% Public class methods
+    methods        
+        %% Code getter
+        function Code = get.Code(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
                     && isa(obj, 'Location') ... % obj is a Location object
-                    && obj.index > 0 % obj has a valid index
-                % set value of initials by looking up location abbreviation
-                % with current index
-                initials = obj.LOCATION_ABBRS(obj.index);
+                % get value of Code by using object location name
+                Code = obj.locationName;
             end
-        end        
+        end
         %% Name getter
         function name = get.Name(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
                     && isa(obj, 'Location') ... % obj is a Location object
-                    && obj.index > 0 % obj has a valid index
-                % set value of name by looking up location names
-                % with current index
-                name = obj.LOCATION_NAMES(obj.index);
+                % get value of name from details table for current
+                % location code
+                name = strjoin(obj.DETAILS_TABLE{obj.locationName, 'Name'});
+            end
+        end
+        %% Description getter
+        function desc = get.Description(obj)
+            % validate we have a initalized location object
+            if nargin > 0 ... % received input arguments
+                    && isa(obj, 'Location') ... % obj is a Location object
+                % get value of description from details table for current
+                % location code
+                desc = strjoin(obj.DETAILS_TABLE{obj.locationName, 'Description'});
+            end
+        end
+        %% Is Surface getter
+        function isSurface = get.IsSurface(obj)
+            % validate we have a initalized location object
+            if nargin > 0 ... % received input arguments
+                    && isa(obj, 'Location') ... % obj is a Location object
+                % get value for surface indicator from details table for
+                % current location code, converted to logical value
+                isSurface = logical(obj.DETAILS_TABLE{obj.locationName, 'IsSurface'});
             end
         end
         %% Oribital getter
@@ -172,10 +116,9 @@ classdef Location < handle
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
                     && isa(obj, 'Location') ... % obj is a Location object
-                    && obj.index > 0 % obj has a valid index
-                % set value of isOrbit by looking up location orbits
-                % with current index
-                isOrbit = obj.ORBITAL_LOCATIONS(obj.index);
+                % get value for orbital indicator from details table for
+                % current location code, converted to logical value
+                isOrbit = logical(obj.DETAILS_TABLE{obj.locationName, 'IsOrbital'});
             end
         end
         %% Lagrangian getter
@@ -183,10 +126,19 @@ classdef Location < handle
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
                     && isa(obj, 'Location') ... % obj is a Location object
-                    && obj.index > 0 % obj has a valid index
-                % set value of isOrbit by looking up location orbits
-                % with current index
-                isLagrangian = obj.LAGRANGIAN_LOCATIONS(obj.index);
+                % get value for lagrangian indicator from details table for
+                % current location code, converted to logical value
+                isLagrangian = logical(obj.DETAILS_TABLE{obj.locationName, 'IsLagrangian'});
+            end
+        end
+        %% ISRU getter
+        function isru = get.ISRU(obj)
+            % validate we have a initalized location object
+            if nargin > 0 ... % received input arguments
+                    && isa(obj, 'Location') ... % obj is a Location object
+                % get value for ISRU list from details table for
+                % current location code, converted cell array
+                isru = eval(cell2mat(obj.DETAILS_TABLE{obj.locationName, 'ISRU'}));
             end
         end
             
@@ -207,45 +159,69 @@ classdef Location < handle
             end % end if 'DeltaVArgs'
             
             % check if locations are the same
-            if strcmp(currentLocation.Initials, destinationLocation.Initials)
+            if strcmp(currentLocation.Code, destinationLocation.Code)
                 % set delta-v to zero (0)
                 deltaV = 0;
                 % quit function
                 return;
             end
             
-            % lookup deltaV by using current index for row and destination
-            % index for cell/column
-            deltaV = Location.DELTAV_TABLE(currentLocation.index, destinationLocation.index);
+            % lookup deltaV by using current and destination row names from
+            % table
+            deltaV = Location.DELTAV_TABLE{currentLocation.Code, destinationLocation.Code};
+            
+            % verify we found a deltaV, if not, locations were not adjacent
+            % so we now must check for a path between them
+            if ~isfinite(deltaV)
+                % must get index of locations from table in order to
+                % calculate shortest path
+                % get current location index from rows
+                currIndex = find(strcmp(Location.DELTAV_TABLE.Properties.RowNames, currentLocation.locationName));
+                % get destination location index from rows
+                destIndex = find(strcmp(Location.DELTAV_TABLE.Properties.RowNames, destinationLocation.locationName));
+                % call the shortest path function with the Delta-V table,
+                % the current and destination indices, and the height of
+                % the delta-v table for the step parameter to ensure all
+                % iterations are completed.
+                deltaV = shortestPath(table2array(Location.DELTAV_TABLE),currIndex,destIndex,height(Location.DELTAV_TABLE));
+            end
         end
     end
     
     enumeration
         EARTH ('EARTH'), % Earth surface
-        LEO ('LEO'), % low Earth orbig
-        GEO ('GEO'), % geosynchronous earth orbit
+        LEO ('LEO'), % low Earth orbit
+        GTO ('GTO'), % geostationary orbit transfer
+        GEO ('GEO'), % geostationary earth orbit
+        LT ('LT'), % lunar orbit transfer
+        LCE ('LCE'), % lunar capture/escape
+        LLO ('LLO'), % low lunar orbit
+        LUNAR ('LUNAR'), % Moon surface
         EML1 ('EML1'), % Earth-moon L1
         EML2 ('EML2'), % Earth-moon L2
         EML3 ('EML3'), % Earth-moon L3
         EML4 ('EML4'), % Earth-moon L4
         EML5 ('EML5'), % Earth-moon L5
-        LLO ('LLO'), % low lunar orbit
-        LUNAR ('LUNAR'), % Moon surface
+        ECE ('ECE'), % Earth escape/capture
+        ASTEROID ('ASTRD'), % near-earth asteroids
         EL1 ('EL1'), % Earth-sun L1
         EL2 ('EL2'), % Earth-sun L2
         EL3 ('EL3'), % Earth-sun L3
         EL4 ('EL4'), % Earth-sun L4
         EL5 ('EL5'), % Earth-sun L5
         MTO ('MTO'), % Mars transfer orbit
-        MCO ('MCO'), % Mars capture orbit
-        LMO ('LMO'), % low Mars orbit
-        MARS ('Mars'), % Mars surface
+        MCE ('MCE'), % Mars capture orbit
+        DTO ('DTO'), % Deimos transfer orbit
         PTO ('PTO'), % Phobos transfer orbit
+        LMO ('LMO'), % low Mars orbit
+        MARS ('MARS'), % Mars surface
+        DCE ('DCE'), % Deimos capture/escape
+        LDO ('LDO'), % low Deimos orbit
+        DEIMOS ('DEIMOS'), % Deimos surface
+        PCE ('PCE'), % Phobos capture/escape
         LPO ('LPO'), % low Phobos orbit
         PHOBOS ('PHOBOS'), % Phobos surface
-        DTO ('DTO'), % Deimos transfer orbit
-        LDO ('LDO'), % low Deimos orbit
-        DEIMOS ('DEIMOS') % Deimos surface
+        DPT ('DPT') % Deimos-Phobos transfer orbit
     end
 end
 

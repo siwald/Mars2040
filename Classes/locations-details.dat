@@ -1,0 +1,34 @@
+Location,Name,Description,IsSurface,IsOrbital,IsLagrangian,ISRU
+EARTH,Earth Surface,,1,0,0,{'H2' 'O2' 'H2O' 'FOOD' 'SUPPLY'}
+LEO,Low Earth Orbit,,0,1,0,{}
+GTO,Geostationary Earth Transfer Orbit,,0,0,0,{}
+GEO,Geostationary Earth Orbit,,0,1,0,{}
+LT,Lunar Transfer Orbit,,0,0,0,{}
+LCE,Lunar Capture/Escape,,0,0,0,{}
+LLO,Low Lunar Orbit,,0,1,0,{}
+LUNAR,Lunar Surface,,1,0,0,{'H2' 'O2' 'H2O'}
+EML1,Earth-Moon L1,,0,0,1,{}
+EML2,Earth-Moon L2,,0,0,1,{}
+EML3,Earth-Moon L3,,0,0,1,{}
+EML4,Earth-Moon L4,,0,0,1,{}
+EML5,Earth-Moon L5,,0,0,1,{}
+ECE,Earth Capture/Escape,,0,0,0,{}
+ASTRD,Near-Earth Asteroid,,1,0,0,{'H2' 'O2' 'H2O'}
+EL1,Earth L1,,0,0,1,{}
+EL2,Earth L2,,0,0,1,{}
+EL3,Earth L3,,0,0,1,{}
+EL4,Earth L4,,0,0,1,{}
+EL5,Earth L5,,0,0,1,{}
+MTO,Mars Transfer Orbit,,0,0,0,{}
+MCO,Mars Capture/Escape,,0,0,0,{}
+DTO,Deimos Transfer Orbit,,0,0,0,{}
+PTO,Phobos Transfer Orbit,,0,0,0,{}
+LMO,Low Mars Orbit,,0,1,0,{}
+MARS,Mars Surface,,1,0,0,{'H2' 'O2' 'H2O' 'FOOD' 'SUPPLY'}
+DCE,Deimos Capture/Escape,,0,0,0,{}
+LDO,Low Deimos Orbit,,0,1,0,{}
+DEIMOS,Deimos Surface,,1,0,0,{'H2' 'O2' 'H2O'}
+PCE,Phobos Capture/Escape,,0,0,0,{}
+LPO,Low Phobos Orbit,,0,1,0,{}
+PHOBOS,Phobos Surface,,1,0,0,{'H2' 'O2' 'H2O'}
+DPT,Deimos-Phobos Transfer Orbit,,0,0,0,{}
