@@ -5,7 +5,7 @@ classdef MarsArchitecture < handle
         origin = Location.EARTH;
         stageLocation = Location.LEO;
         destinations = [Location.LMO, Location.EARTH];        
-        propulsionType = Propulsion.LOH_LOX;
+        propulsionType = Propulsion.LH2;
         transitFuel = 'Lunar_O2';
         transitTrajectory = 'Hohmann';
         returnFuel = 'Mars_O2';
