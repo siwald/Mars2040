@@ -12,20 +12,20 @@ function[dV] = Hohm_Chart(initial,final)
     %Delta-V's from the chart, all in km/s
     EarthtoLEO = 9.0;
     LEOtoGST = 2.44;
-    LEOtoGSTO = 1.47;
-    GSTtoMT = 0.68;
-    MTtoEML2 = 0.35;
-    EML2toLO = 0.64;
-    MTtoEML1 = 0.58;
-    EML1toLO = 0.64;
-    MTtoCapEsc = 0.14;
-    CapEsctoLO = 0.68;
-    LOtoMoon = 1.72;
-    MTtoECE = 0.09;
-    ECEtoEMT = 0.39;
+    GSTtoGEO = 1.47;
+    GSTtoLTrans = 0.68;
+    LTranstoEML2 = 0.35;
+    EML2toLLO = 0.64;
+    LTranstoEML1 = 0.58;
+    EML1toLLO = 0.64;
+    LTranstoLunarEsc = 0.14;
+    LunarEsctoLLO = 0.68;
+    LLOtoMoon = 1.72;
+    LTranstoECE = 0.09;
+    EEsctoEMT = 0.39;
     EMTtoCapEsc = 0.67;
-    MarsCapEsctoLO = 1.44;
-    LOtoMars = 3.6;
+    MarsCapEsctoLMO = 1.44;
+    LMOtoMars = 3.6;
     
 %If initial and final are the same, return dV = 0
 if strcmp(initial,final)
@@ -39,93 +39,97 @@ end
                 case 'GST'
                     dV = LEOtoGST;
                 case 'MoonTransfer'
-                    dV = LEOtoGST + GSTtoMT;
+                    dV = LEOtoGST + GSTtoLTrans;
                 case 'EML2'
-                    dV = LEOtoGST + GSTtoMT + MTtoEML2;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoEML2;
                 case 'EML1'
-                    dV = LEOtoGST + GSTtoMT + MTtoEML1;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoEML1;
                 case 'Moon'
-                    dV = LEOtoGST + GSTtoMT + MTtoCapEsc + CapEsctoLO + LOtoMoon;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoLunarEsc + LunarEsctoLLO + LLOtoMoon;
                 case 'MoonOrbit'
-                    dV = LEOtoGST + GSTtoMT + MTtoCapEsc + CapEsctoLO;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoLunarEsc + LunarEsctoLLO;
                 case 'TMI'
-                    dV = LEOtoGST + GSTtoMT + MTtoECE + ECEtoEMT;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoECE + EEsctoEMT;
                 case 'LMO'
-                    dV = LEOtoGST + GSTtoMT + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
-                    dV = LEOtoGST + GSTtoMT + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO + LOtoMars;
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO + LMOtoMars;
                 otherwise
                     disp('Please consult the table itself');
             end
         case 'Moon'
             switch final
                 case 'EML1'
-                    dV = LOtoMoon + EML1toLO;
+                    dV = LLOtoMoon + EML1toLLO;
                 case 'EML2'
-                    dV = LOtoMoon + EML2toLO;
+                    dV = LLOtoMoon + EML2toLLO;
                 case 'LLO'
-                    dV = LOtoMoon;
+                    dV = LLOtoMoon;
                 case 'LEO'
-                    dV = LOtoMoon + CapEsctoLO + MTtoCapEsc + GSTtoMT + LEOtoGST;
+                    dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST;
                 case 'Earth'
-                    dV = LOtoMoon + CapEsctoLO + MTtoCapEsc + GSTtoMT + LEOtoGST + EarthtoLEO;
+                    dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST + EarthtoLEO;
                 case 'LMO'
-                    dV = LOtoMoon + CapEsctoLO + MTtoCapEsc + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO;
+                    dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
-                    dV = LOtoMoon + CapEsctoLO + MTtoCapEsc + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLEO + LOtoMars;
+                    dV = LLOtoMoon + LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLEO + LMOtoMars;
                 otherwise
                     disp('Please consult the table itself');
             end
         case 'LLO'
             switch final
                 case 'EML1'
-                    dV = EML1toLO;
+                    dV = EML1toLLO;
                 case 'EML2'
-                    dV = EML2toLO;
+                    dV = EML2toLLO;
                 case 'Moon'
-                    dV = LOtoMoon;
+                    dV = LLOtoMoon;
                 case 'LEO'
-                    dV = CapEsctoLO + MTtoCapEsc + GSTtoMT + LEOtoGST;
+                    dV = LunarEsctoLLO + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST;
                 case 'Earth'
-                    dV = CapEsctoLO + MTtoCapEsc + GSTtoMT + LEOtoGST + EarthtoLEO;
+                    dV = LunarEsctoLLO + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST + EarthtoLEO;
                 case 'LMO'
-                    dV = CapEsctoLO + MTtoCapEsc + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO;
+                    dV = LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
-                    dV = CapEsctoLO + MTtoCapEsc + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLEO + LOtoMars;
+                    dV = LunarEsctoLLO + LTranstoLunarEsc + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLEO + LMOtoMars;
                 otherwise
                     disp('Please consult the table itself');
             end
         case 'EML1'
             switch final
                 case 'LLO'
-                    dV = EML1toLO;
+                    dV = EML1toLLO;
                 case 'Moon'
-                    dV = EML1toLO + LOtoMoon;
+                    dV = EML1toLLO + LLOtoMoon;
                 case 'LEO'
-                    dV = MTtoEML1 + GSTtoMT + LEOtoGST;
+                    dV = LTranstoEML1 + GSTtoLTrans + LEOtoGST;
                 case 'Earth'
-                    dV = MTtoEML1 + GSTtoMT + LEOtoGST + EarthtoLEO;
+                    dV = LTranstoEML1 + GSTtoLTrans + LEOtoGST + EarthtoLEO;
+                case 'TMI'
+                    dV = LTranstoEML1 + LTranstoECE + EEsctoEMT;
                 case 'LMO'
-                    dV = MTtoEML1 + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO;
+                    dV = LTranstoEML1 + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
-                    dV = MTtoEML1 + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO + LOtoMars;
+                    dV = LTranstoEML1 + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO + LMOtoMars;
                 otherwise
                     disp('Please consult the table itself');
             end
         case 'EML2'
             switch final
                 case 'LLO'
-                    dV = EML2toLO;
+                    dV = EML2toLLO;
                 case 'Moon'
-                    dV = EML2toLO + LOtoMoon;
+                    dV = EML2toLLO + LLOtoMoon;
                 case 'LEO'
-                    dV = MTtoEML2 + GSTtoMT + LEOtoGST;
+                    dV = LTranstoEML2 + GSTtoLTrans + LEOtoGST;
                 case 'Earth'
-                    dV = MTtoEML2 + GSTtoMT + LEOtoGST + EarthtoLEO;
+                    dV = LTranstoEML2 + GSTtoLTrans + LEOtoGST + EarthtoLEO;
+                case 'TMI'
+                    dV = LTranstoEML2 + LTranstoECE + EEsctoEMT;
                 case 'LMO'
-                    dV = MTtoEML2 + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO;
+                    dV = LTranstoEML2 + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
-                    dV = MTtoEML2 + MTtoECE + ECEtoEMT + EMTtoCapEsc + MarsCapEsctoLO + LOtoMars;
+                    dV = LTranstoEML2 + LTranstoECE + EEsctoEMT + EMTtoCapEsc + MarsCapEsctoLMO + LMOtoMars;
                 otherwise
                     disp('Please consult the table itself');
 
@@ -133,34 +137,34 @@ end
         case 'Mars'
             switch final
                 case 'Earth'
-                    dV = LOtoMars + MarsCapEsctoLO + EMTtoCapEsc + ECEtoCapEsc + MTtoCapEsc + GSTtoMT + LEOtoGST + EarthtoLEO;
+                    dV = LMOtoMars + MarsCapEsctoLMO + EMTtoCapEsc + ECEtoCapEsc + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST + EarthtoLEO;
                 case 'LEO'
-                    dV = LOtoMars + MarsCapEsctoLO + EMTtoCapEsc + ECEtoCapEsc + MTtoCapEsc + GSTtoMT + LEOtoGST;
+                    dV = LMOtoMars + MarsCapEsctoLMO + EMTtoCapEsc + ECEtoCapEsc + LTranstoLunarEsc + GSTtoLTrans + LEOtoGST;
                 case 'LMO'
-                    dV = LOtoMars;
+                    dV = LMOtoMars;
                 case 'EML2'
-                    dV = LOtoMars + MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + MTtoEML2;
+                    dV = LMOtoMars + MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoEML2;
                 case 'EML1'
-                    dV = LOtoMars + MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + MTtoEML1;
+                    dV = LMOtoMars + MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoEML1;
                 case 'LLO'
-                    dV = LOtoMars + MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + MTtoCapEsc + CapEsctoLO;
+                    dV = LMOtoMars + MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoLunarEsc + LunarEsctoLLO;
                 otherwise
                     disp('Please consult the table itself');
             end
         case 'LMO'
             switch final
                 case 'Earth'
-                    dV = MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + GSTtoMT + LEOtoGST + LEOtoGST;
+                    dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + GSTtoLTrans + LEOtoGST + LEOtoGST;
                 case 'LEO'
-                    dV = MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + GSTtoMT + LEOtoGST;
+                    dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + GSTtoLTrans + LEOtoGST;
                 case 'Mars'
-                    dV = LOtoMars;
+                    dV = LMOtoMars;
                 case 'EML2'
-                    dV = MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + MTtoEML2;
+                    dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoEML2;
                 case 'EML1'
-                    dV = MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + MTtoEML1;
+                    dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoEML1;
                 case 'LLO'
-                    dV = MarsCapEsctoLO + EMTtoCapEsc + ECEtoEMT + MTtoECE + MTtoCapEsc + CapEsctoLO;
+                    dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoLunarEsc + LunarEsctoLLO;
                 otherwise
                     disp('Please consult the table itself');
             end

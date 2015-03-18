@@ -36,7 +36,7 @@ classdef Propulsion
         %% ratio describing the amount of mass required for engine and fuel storage as compared to propellant mass
         InertMassRatio
         %% any fixed amount of mass required for engines, fuel, fuel storage, or anything else specific to propulsion
-        StaticMassKg
+        StaticMass
     end
     
     methods
@@ -49,8 +49,8 @@ classdef Propulsion
                 switch upper(typeName)
                     case 'LH2'
                         obj.type = 'LH2';
-                    case 'NUC'
-                        obj.type = 'NUC';
+                    case 'NTR'
+                        obj.type = 'NTR';
                     case 'SEP'
                         obj.type = 'SEP';
                 end
@@ -85,7 +85,7 @@ classdef Propulsion
             end
         end
         %% Static Mass getter
-        function mass = get.StaticMassKg(obj)
+        function mass = get.StaticMass(obj)
             % verify we have correct inputs to get static mass
             if nargin > 0 && isa(obj,'Propulsion') && ischar(obj.type)
                 % lookup static mass using the type and column names from
@@ -97,8 +97,8 @@ classdef Propulsion
     
     %% enumerated values for common propulsion types
     enumeration
-        LOH_LOX ('LH2'),
-        NUCLEAR ('NUC'),
+        LH2 ('LH2'),
+        NTR ('NTR'),
         SEP ('SEP'),
     end
 end

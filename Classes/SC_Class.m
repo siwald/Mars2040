@@ -7,7 +7,7 @@ classdef SC_Class < handle
         Fuel_M %mass of fuel at departure
         Ox_M %mass of oxidizer and departure
         Origin_M %total mass at departure
-        Bus_M %mass of unfueled spacecraft bus (propulsion, nav, etc.)
+        Bus_M %mass of unfueled spacecraft bus (propulsion, nav, etc.) Should be sum of engine mass plus static mass
         Payload_M %mass of payload to destination
         Hab_M %mass of the habitat
     end
