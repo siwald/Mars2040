@@ -1,4 +1,4 @@
-function [ IMLEO ] = Transit( Cur_Arch, Descent_SC, Trans_SC, MissionType )
+function [ IMLEO, Days_on_Mars] = Transit( Cur_Arch, Descent_SC, Trans_SC, MissionType )
 %TRANSIT Solving for the Mass to Orbit based on the staging points and fuel
 %sources, this is for the outgoing leg
 %   Cur_Arch is the Architecture object for the current architecture,
@@ -33,7 +33,11 @@ switch MissionType
                 Arrival_SC.Hab_Mass = Descent_SC.Hab_Mass + Arrival_SC.Hab_Mass;
                 Arrival_SC.Hab_Vol = Descent_SC.Hab_Vol + Arrival_SC.Hab_Vol;
                 
+                %initialize the Departure Stage
                 Departure_Stage = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Stage to Trans-Mars Injection');
+                
+                %Set days in Mars Vacinity
+                Days_Near_Mars = 496; %days, based on DRA 5.0
             case 'Elliptic' %should be same as Hohmann
                 Arrival_SC = SC_Class(Descent_SC.Origin_Mass,0,'Arrival Vehicle without Depart Stage');
                 Departure_Stage = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Vehicle');
@@ -74,10 +78,19 @@ switch Cur_Arch.TransitTrajectory
                 dV = Hohm_Chart(Stage_Point,'TMI'); %lookup dV to get from stage point to Trans Mars Injection
                 Departure_Stage.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
                 Departure_Stage = Propellant_Mass(Cur_Prop,Departure_Stage, dV); %Determine Departure Stage Fuel and Engine masses
+                
+                Cap_Time = 0 ;
             case 'Aerocapture'
-                %should be capture code that outputs SC_Inst with mass to mars approach
-                dV = Hohm_Chart(Stage_Point,'TMI');%lookup dV to mars approach
-                Dep_Mass = Propellant_Mass(Cur_Prop, SC_Inst, dV); %Calc SC_Inst properties to get to aerocapture point (Mars Approach)
+                Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99.
+                Arrival_SC.Bus_Mass = Cap_Syst_Mass; %Calc the S/C
+                origin_calc(Arrival_SC);
+                
+                %departure stage
+                dV = Hohm_Chart(Stage_Point,'TMI'); %lookup dV to get from stage point to Trans Mars Injection
+                Departure_Stage.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
+                Departure_Stage = Propellant_Mass(Cur_Prop,Departure_Stage, dV); %Determine Departure Stage Fuel and Engine masses
+                
+                Cap_Time = 30; %days, based on NASA Aerocapture presentation, Flagship Technology Demonstration-4 
         end
     case 'Cycler_1L1'
         Approach_Vinf = 9.75; % McConaghy, Longuski & Byrnes
@@ -120,4 +133,5 @@ switch Cur_Arch.TransitFuel
     case 'Lunar_all'
         disp('Not yet')
 end
+Days_on_Mars = Days_Near_Mars - Cap_Time;
 end

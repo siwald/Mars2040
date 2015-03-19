@@ -25,6 +25,9 @@ classdef SC_Class < handle
             this.Ox_Mass = prop*(fox_rat/(fox_rat + 1));
             this.Fuel_Mass = prop*(1/(fox_rat + 1));
         end
+        function origin_calc(this) %calc the origin mass by adding all the components
+            this.Origin_Mass = this.Prop_Mass + this.Eng_Mass + this.Bus_Mass + this.Payload_Mass + this.Hab_Mass;
+        end
         function this = SC_Class(payload, hab, desc);
             if nargin > 0
                 this.Hab_Mass = hab;
@@ -40,7 +43,6 @@ classdef SC_Class < handle
 
             end
         end
-
     end
     
 end
