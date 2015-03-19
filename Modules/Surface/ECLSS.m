@@ -1,4 +1,4 @@
-function [ISRU_Requirements, ECLSS_Power, ECLSS_Mass, ECLSS_Volume] = ECLSS(Food_Supply, Crew_Activity, Habitat_Volume )
+function [ISRU_Requirements, ECLSS_Power, ECLSS_Mass, ECLSS_Volume] = ECLSS(Cur_Arch, Habitat_Volume )
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -15,9 +15,9 @@ function [ISRU_Requirements, ECLSS_Power, ECLSS_Mass, ECLSS_Volume] = ECLSS(Food
 %Crew Activities on Mars. EVA_Freq is the amount of EVA trips expected per 
 %week. CM_EVA is the number of crew members per EVA. EVA_Dur is the 
 %duration of each EVA per crew member.
-%Crew_Activity.EVA_Freq = 5;
-%Crew_Activity.CM_EVA = 10;
-%Crew_Activity.EVA_Dur = 8;
+Crew_Activity.EVA_Freq = 5;
+Crew_Activity.CM_EVA = 10;
+Crew_Activity.EVA_Dur = 8;
 
 %Total Cabin Volume for the habitat on Mars. Used for calculating the air
 %requied inside the habitat.
@@ -44,6 +44,7 @@ function [ISRU_Requirements, ECLSS_Power, ECLSS_Mass, ECLSS_Volume] = ECLSS(Food
 %available on the actual usage that is seen.
 
 Crew_Size = 20; %Units: Crew Members; Mission Decision
+Food_Supply = Cur_Arch.FoodSupply{4};
 Mission_Duration = 780; %Units: days; Mission Decision
 Cabin_Pressure = 70.3; %Units: kPa; Architectural Decision by Team
 Gas_Constant = 8.31451; %Units: J/K*mol
@@ -86,7 +87,7 @@ ECLSS_Consumables_Volume = 149.77; %Units: m^3/mission
 EVA_Weekly_Rate = Crew_Activity.EVA_Freq * Crew_Activity.CM_EVA * Crew_Activity.EVA_Dur;
 Cabin_Air = Cabin_Pressure*10^3*Habitat_Volume/Gas_Constant/Temperature; %Units: mol
 N2_Pressure = 1-(O2_Mol_Ratio/100) - (CO2_Mol_Ratio/100); %Units: %
-Crop_Area = 200*(Crew_Size/4)*(Food_Supply/100); %Units: m^2
+Crop_Area = 200*(Crew_Size/4)*(Food_Supply); %Units: m^2
 Airlock_Gas_Loss = 13.8*10^3*EVA_Airlock_Volume/(Gas_Constant*Temperature);
 EVA_O2_Loss = (EVA_Oxygen_Loss_Rate+EVA_Oxygen_Consumption)*EVA_Weekly_Rate/7;
 Oxygen_Loss.Airlock = (EVA_Airlock_Gas_Loss*(O2_Mol_Ratio/100)/100*32)*(Crew_Activity.CM_EVA/2)*Crew_Activity.EVA_Freq/1000/7;

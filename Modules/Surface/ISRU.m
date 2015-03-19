@@ -1,4 +1,4 @@
-function [ISRU_Power, ISRU_Volume, ISRU_Risk] = ISRU(ECLSS_Requirements)
+function [ISRU_Power, ISRU_Volume, ISRU_Mass] = ISRU(Cure_Arch, ECLSS_Requirements)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -9,10 +9,10 @@ function [ISRU_Power, ISRU_Volume, ISRU_Risk] = ISRU(ECLSS_Requirements)
 %------Inputs------
 
 % ISRU requirements from ECLSS module
-    ECLSS_Requirements.Oxygen = 10.81; %Units?
-    ECLSS_Requirements.Water = 57.94; %Units?
-    ECLSS_Requirements.Nitrogen = 1.70; %Units?
-    ECLSS_Requirements.CO2 = 19.94;  %Units?
+    %ECLSS_Requirements.Oxygen = 10.81;
+    %ECLSS_Requirements.Water = 57.94;
+    %ECLSS_Requirements.Nitrogen = 1.70;
+    %ECLSS_Requirements.CO2 = 19.94;  
 
 %------Outputs------
 
@@ -30,10 +30,10 @@ function [ISRU_Power, ISRU_Volume, ISRU_Risk] = ISRU(ECLSS_Requirements)
 %use Moxie units for all resource generation. Moxie production rate for 
 %Oxygen is 22g/hr
 
-Moxie_Volume = 0.0165675; %Units: m^3
-Moxie_Power = 30; %Units: kW
-%Moxie_Mass = ??; %Units: kg
-Moxie_Oxygen_Rate = 22; %Units: g/hr
+Moxie_Volume = 0.0165675; %Units: m^3; Mars Moxie Units
+Moxie_Power = 30; %Units: kW; Mars Moxie Units
+%Moxie_Mass = ??; %Units: kg; Mars Moxie Units
+Moxie_Oxygen_Rate = 22; %Units: g/hr; Mars Moxie Units
 
 %------------------------------------------------------------------------
 
@@ -50,10 +50,7 @@ end
 
 ISRU_Power = (Oxygen_Moxie_Required * Moxie_Power);
 ISRU_Volume = (Oxygen_Moxie_Required * Moxie_Volume);
-
-tech_risk = <Math Here>; %define the technological risk appropriatle for the module
-ops_risk = <Math Here>; %define the operational risk for the module
-ISRU_Risk = Risk_Class(tech_risk, ops_risk); %put the risks into a structure
+ISRU_Mass = 0;
 
 end
 

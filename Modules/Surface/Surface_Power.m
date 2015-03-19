@@ -1,4 +1,4 @@
-function [Cumulative_Mass, Cumulative_Volume] = Surface_Power(Cur_Arch,Cumulative_Power, Cumulative_Mass, Cumulative_Volume)
+function [Power_Mass, Power_Volume] = Surface_Power(Cur_Arch,Cumulative_Power)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -45,9 +45,13 @@ L_Reactor_Size = 5; %Units: MW; ORNL reactor, UN pellet fuel pin w/T-111 alloy
 M_Reactor_Size = 4; %Units: MW; 1993 DRM derived from NTP and SP-100
 S_Reactor_Size = 0.1; %Units: MW; SP-100 US Research group for nuclear reactors in space
 XL_Reactor_Mass = 40095; %Units: kg; Rocketdyne reactor, liquid cooled
+XL_Reactor_Volume = 8247.98; %Units: m^3
 L_Reactor_Mass = 24500; %Units: kg; ORNL reactor, UN pellet fuel pin w/T-111 alloy
+L_Reactor_Volume = 2324.74; %Units: m^3;
 M_Reactor_Mass = 41510; %Units: kg; 1993 DRM derived from NTP and SP-100
 S_Reactor_Mass = 4610; %Units: kg; SP-100 US Research group for nuclear reactors in space
+S_Reactor_Volume = 36.77; %Units: m^3;
+M_Reactor_Volume = (S_Reactor_Mass + L_Reactor_Mass)/2; %Units: m^3
 
 PowerPlant_Mass = 1; %Units: kg; Overall Power plant mass
 
@@ -85,11 +89,12 @@ else
 end
 
 PowerPlant_Mass = (XL_Reactor_Quantity * XL_Reactor_Mass) + (L_Reactor_Quantity * L_Reactor_Mass)+(M_Reactor_Quantity * M_Reactor_Mass)+(S_Reactor_Quantity * S_Reactor_Mass);
+PowerPlant_Volume = (XL_Reactor_Quantity * XL_Reactor_Volume) + (L_Reactor_Quantity * L_Reactor_Volume)+(M_Reactor_Quantity * M_Reactor_Volume)+(S_Reactor_Quantity * S_Reactor_Volume);
 
-switch Cur_Arch
+switch char(Cur_Arch.SurfacePower{1})
     case 'Hybrid'
         Power_Mass = Solar_Mass + PowerCable_Mass + PowerPlant_Mass + Battery_Mass + FuelCell_Mass;
-        Power_Volume = (Solar_Area*1) + Battery_Volume + FuelCell_Volume; %Assumption made that Solar Panels are 1 meter thick to calculate volume
+        Power_Volume = (Solar_Area*1) + Battery_Volume + FuelCell_Volume + PowerPlant_Volume; %Assumption made that Solar Panels are 1 meter thick to calculate volume
         
     case 'Solar'
         Power_Mass = Solar_Mass + Battery_Mass;
@@ -104,14 +109,11 @@ switch Cur_Arch
         
     case 'Nuclear'
         Power_Mass = PowerPlant_Mass + PowerCable_Mass;
-        Power_Volume = 0; %No equation at this time. Insert equation when available
+        Power_Volume = PowerPlant_Volume;
     
     otherwise
         error('Power poorly defined in Morph Matrix, should be: Hybrid, Solar, Fuel Cells (H2O), RTGs, or Nuclear')
 end
-
-Cumulative_Mass = Cumulative_Mass + Power_Mass;
-Cumulative_Volume = Cumulative_Volume + Power_Volume;
         
 
 end
