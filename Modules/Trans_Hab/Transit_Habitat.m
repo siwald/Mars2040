@@ -8,7 +8,7 @@ function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Cur_Arch)
 
 %------Inputs------
 % Num_Crew = 4;           % Reference architecture
-Num_Crew = Cur_Arch.TransitCrew
+Num_Crew = Cur_Arch.TransitCrew;
 % Days_to_Mars = 180;     % Approx
 switch char(Cur_Arch.TransitTrajectory)
     case 'Hohmann'

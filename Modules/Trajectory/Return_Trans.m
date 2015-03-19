@@ -92,9 +92,11 @@ switch char(Cur_Arch.ReturnFuel)
     case 'Mars_O2'
         Mars_O2 = Return_SC.Ox_Mass; %move O2 source to Mars
         Return_SC.Ox_Mass = 0;
+        Mars_Fuel = 0;
     case 'Mars_Fuel'
         Mars_Fuel = Return_SC.Fuel_Mass; %move fuel source to Mars
         Return_SC.Fuel_Mass = 0;
+        Mars_O2 = 0;
     case 'Mars_All'
         Mars_O2 = Return_SC.Ox_Mass; %move both to Mars
         Return_SC.Ox_Mass = 0;

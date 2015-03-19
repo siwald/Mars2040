@@ -40,7 +40,7 @@
 
 %for loop, go through each row indicating a seperate architceture, i
  %parfor i=1:size(Enumerated,1)
- parfor i=1:2
+ tic
     
     %extract the ith architcecture from the enumerated matrix
     Cur_Arch = MarsArchitecture.DEFAULT; %test Case for now.
@@ -84,7 +84,7 @@
     
     %Calculate the Earth Descent Craft
     Earth_EDL_Mass = 0; %this should calculate the actual Earth EDL needs in Mass
-    Descent_SC = SC_Class(Earth_EDL_Mass,0,'Earth Descent Craft')%initalize the Descent craft
+    Descent_SC = SC_Class(Earth_EDL_Mass,0,'Earth Descent Craft');%initalize the Descent craft
     origin_calc(Descent_SC); %populate the origin mass of the descent craft
     Return_SC = SC_Class(Descent_SC.Origin_Mass,Trans_Hab.Origin_Mass,'Return craft with Transit Habitat and propulsion');
     [Return_SC, Fuel_From_Mars, Ox_From_Mars ] = Return_Trans (Cur_Arch, Descent_SC, Return_SC);
@@ -104,7 +104,7 @@
     Ascent_SC = Ascent(Cur_Arch, Ascent_SC);
     
     %include ascent vehicle fuel ISRU
-    switch Cur_Arch.Return_Fuel
+    switch Cur_Arch.ReturnFuel
         case 'Mars_O2'
             Ox_From_Mars = Ox_From_Mars + Ascent_SC.Ox_Mass;
             Fuel_From_Mars = 0;
@@ -149,10 +149,16 @@
     Total_Time_of_Flight
     %}
     
-   [IMLEO,Days_on_Mars] = Transit(Cur_Arch,Descent_Craft,Trans_Hab);
+   [IMLEO,Days_on_Mars] = Transit(Cur_Arch,Descent_Craft,Trans_Hab,'Human');
    
     %% Results
     Scientific_Value = Science_Val_per_Day * Days_on_Mars;
+    if ~exist('Surface_Risk')
+        Surface_Risk = 0;
+    end
+    if ~exist('Logistics_Risk')
+        Logistics_Risk = 0;
+    end
     Total_Risk = Surface_Risk + Logistics_Risk;
     
     %display the results
@@ -176,7 +182,8 @@
         
     Results(i,:) = Cur_Results; %input the entire Results vector into the appropriate row of the global results vector
     %}
+    runtime = toc
     %% Close Loop
 %end main for loop, go back and try the next architecture
-end
-disp (Results) %display the final results matrix
+%end
+%disp (Results) %display the final results matrix
