@@ -40,6 +40,7 @@
 
 %for loop, go through each row indicating a seperate architceture, i
  %parfor i=1:size(Enumerated,1)
+ %parfor i=1:2
  tic
     
     %extract the ith architcecture from the enumerated matrix
@@ -124,7 +125,7 @@
   
     %% Surface Begin   
     
-    [MTMS Science_Val_per_Day]= Surface_Architecture(Cur_Arch, Fuel_From_Mars, Ox_From_Mars);
+    [MTMS, Science_Val_per_Day]= Surface_Architecture(Cur_Arch, Fuel_From_Mars, Ox_From_Mars);
     MTMS = MTMS + Earth_Ascent_Fuel + Earth_Ascent_Ox;
     
     %% Outgoing Logistics Begin
@@ -184,6 +185,6 @@
     %}
     runtime = toc
     %% Close Loop
-%end main for loop, go back and try the next architecture
-%end
+
+ %end %end main for loop, go back and try the next architecture
 %disp (Results) %display the final results matrix
