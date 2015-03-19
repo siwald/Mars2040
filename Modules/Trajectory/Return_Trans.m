@@ -30,17 +30,17 @@ end
             Arrival_SC.Payload_Mass = (Descent_SC.Origin_Mass - Descent_SC.Hab_Mass) + Arrival_SC.Payload_Mass;
             Arrival_SC.Hab_Mass = Descent_SC.Hab_Mass + Arrival_SC.Hab_Mass;
             Arrival_SC.Hab_Vol = Descent_SC.Hab_Vol + Arrival_SC.Hab_Vol;
-            Departure_Stage = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Stage to Trans-Earth Injection');
+            Return_SC = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Stage to Trans-Earth Injection');
         case 'Elliptic' %should be same as Hohmann
             Arrival_SC = SC_Class(Descent_SC.Origin_Mass,0,'Arrival Vehicle without Depart Stage');
-            Departure_Stage = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Vehicle');
+            Return_SC = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Vehicle');
         case 'Cycler_1L1'
             Taxi = SC_Class;
         case 'Cycler_2L3'
         otherwise
             disp('Human Mission, Transit Trajectory error')
     end
-end
+
             
 %Initialize the Strings
 
@@ -58,14 +58,19 @@ switch Cur_Arch.TransitTrajectory
                
                 %departure stage
                 dV = Hohm_Chart('LMO','TMI'); %lookup dV to get from stage point to Trans Mars Injection
-                Departure_Stage.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
-                Departure_Stage = Propellant_Mass(Cur_Prop,Departure_Stage, dV); %Determine Departure Stage Fuel and Engine masses
-                Mars_Fuel = Departure_Stage.Fuel_Mass;
+                Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
+                Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
+                Mars_Fuel = Return_SC.Fuel_Mass;
 
             case 'Aerocapture'
-                %should be capture code that outputs SC_Inst with mass to mars approach
-                dV = Hohm_Chart(Stage_Point,'TMI');%lookup dV to mars approach
-                Dep_Mass = Propellant_Mass(Cur_Prop, SC_Inst, dV); %Calc SC_Inst properties to get to aerocapture point (Mars Approach)
+                Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99.
+                Arrival_SC.Bus_Mass = Cap_Syst_Mass; %Calc the S/C
+                origin_calc(Arrival_SC);
+                
+                %departure stage
+                dV = Hohm_Chart('LMO','TMI'); %lookup dV to get from stage point to Trans Mars Injection
+                Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
+                Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
         end
     case 'Cycler_1L1'
         Approach_Vinf = 9.75; % McConaghy, Longuski & Byrnes
@@ -82,21 +87,22 @@ end
 
 %% Fuel Depot Section
                 %Return Spacecraft definition, less Fuel from Mars
-Return_SC = Departure_Stage; %initialize the Return_SC
-if Cur_Arch.Return_Fuel = 'Mars_O2'
-    Mars_O2 = Return_SC.Ox_Mass; %move O2 source to Mars
-    Return_SC.Ox_Mass = 0;
-elseif Cur_Arch.Return_Fuel = 'Mars_Fuel'
-    Mars_Fuel = Return_SC.Fuel_Mass; %move fuel source to Mars
-    Return_SC.Fuel_Mass = 0;
-elseif Cur_Arch.Return_Fuel = 'Mars_All'
-    Mars_O2 = Return_SC.Ox_Mass; %move both to Mars
-    Return_SC.Ox_Mass = 0;
-    Mars_Fuel = Return_SC.Fuel_Mass;
-    Return_SC.Fuel_Mass = 0;
-elseif Cur_Arch.Return_Fuel = 'Earth'
-    Mars_O2 = 0; %move no source to Mars
-    Mars_Fuel = 0;
+Return_SC = Return_SC; %initialize the Return_SC
+switch char(Cur_Arch.ReturnFuel)
+    case 'Mars_O2'
+        Mars_O2 = Return_SC.Ox_Mass; %move O2 source to Mars
+        Return_SC.Ox_Mass = 0;
+    case 'Mars_Fuel'
+        Mars_Fuel = Return_SC.Fuel_Mass; %move fuel source to Mars
+        Return_SC.Fuel_Mass = 0;
+    case 'Mars_All'
+        Mars_O2 = Return_SC.Ox_Mass; %move both to Mars
+        Return_SC.Ox_Mass = 0;
+        Mars_Fuel = Return_SC.Fuel_Mass;
+        Return_SC.Fuel_Mass = 0;
+    case 'Earth'
+        Mars_O2 = 0; %move no source to Mars
+        Mars_Fuel = 0;
 end
 Return_SC.Description = 'SC for return to Earth';
 end

@@ -1,4 +1,4 @@
-function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Num_Crew,Days_to_Mars,Days_to_Earth,Days_Contingency)
+function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Cur_Arch)
 
 %----------------------Code Definition-----------------------------------
 % Mass, Volume, and power required to
@@ -8,7 +8,17 @@ function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Num_Crew,Days_to_Mar
 
 %------Inputs------
 % Num_Crew = 4;           % Reference architecture
+Num_Crew = Cur_Arch.TransitCrew
 % Days_to_Mars = 180;     % Approx
+switch char(Cur_Arch.TransitTrajectory)
+    case 'Hohmann'
+            Days_to_Mars = 259; % HSMAD pg.255, minimum energy orbits
+            Days_to_Earth = 258; % HSMAD pg.255, minimum energy orbits
+            Days_Contingency = 455;
+    case 'Cycler_1L1'
+    case 'Cycler_2L3'
+    case 'Elliptic'
+end
 % Days_to_Earth = 180;    % Approx
 % Days_Contingency = 700; % Approx for contingency flyby & return to Earth; also include stage
 crew_day = Num_Crew * (Days_to_Mars + Days_to_Earth + Days_Contingency);

@@ -10,7 +10,8 @@ classdef MarsArchitecture < handle
         transitTrajectory = 'Hohmann';
         returnFuel = 'Mars_O2';
         returnTrajectory = 'Hohmann';
-        transitCrew = Crew.DEFAULT_TRANSIT;
+        %transitCrew = Crew.DEFAULT_TRANSIT;
+        transitCrew = 4; %until Crew.m works
         transitShielding = 'Temp';
         transitShieldMaterial = 'Water';
         transitHabitatVolume = '10';

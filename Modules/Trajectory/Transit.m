@@ -62,7 +62,7 @@ end
             
 %Initialize the Strings
 
-Stage_Point = char(Cur_Arch.Staging); %co   nvert architecture 'location' type to string
+Stage_Point = char(Cur_Arch.Staging); %convert architecture 'location' type to string
 
 %% Get the spacecraft at departure based on the selected transit orbit
 

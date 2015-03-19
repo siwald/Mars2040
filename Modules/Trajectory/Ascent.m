@@ -12,6 +12,7 @@ function [ Ascent_Vehicle ] = Ascent( Cur_Arch, Taxi_V )
 dV = 4.41; % total km/s, Mars Surface to LMO (500 km). est. from HSMAD Fig. 10-27.  Section 10.4.2 for detailed calculations.
 
 Ascent_Vehicle = SC_Class(Taxi_V.Payload_Mass,0,'Ascent Vehicle to get Taxi to LMO');
+Ascent_Vehicle = Propellant_Mass(Cur_Arch.PropulsionType,Ascent_Vehicle,dV);
 
 end
 

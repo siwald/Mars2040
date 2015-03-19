@@ -167,6 +167,8 @@ end
                     dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoEML1;
                 case 'LLO'
                     dV = MarsCapEsctoLMO + EMTtoCapEsc + EEsctoEMT + LTranstoECE + LTranstoLunarEsc + LunarEsctoLLO;
+                case 'TMI'
+                    dV = MarsCapEsctoLMO + EMTtoCapEsc;
                 otherwise
                     disp('Please consult the table itself');
             end
