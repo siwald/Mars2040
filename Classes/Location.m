@@ -186,6 +186,44 @@ classdef Location < handle
                 deltaV = shortestPath(table2array(Location.DELTAV_TABLE),currIndex,destIndex,height(Location.DELTAV_TABLE));
             end
         end
+        
+        %% Lookup function to determine if aerocapture is possible
+        % checks for aerocapture between current location and destination
+        function canAerocap = CanAerocaptureTo(currentLocation, destinationLocation)
+            % verify we have method inputs
+            if nargin == 0 ... % no arguments
+                    || ~isa(currentLocation, 'Location') ... % current input not a location object
+                    || ~isa(destinationLocation, 'Location') % destination input not a location object 
+            % start if 'AerocapArgs'
+                % if there is no valid input, return NaN for delta-v
+                canAerocap = NaN; 
+                % quit function
+                return; 
+            end % end if 'AerocapArgs'
+            
+            % check if locations are the same
+            if strcmp(currentLocation.Code, destinationLocation.Code)
+                % set aerocapture to false
+                canAerocap = false;
+                % quit function
+                return;
+            end
+            
+            % lookup aerocapture capability by using current and
+            % destination row names from table
+            canAerocap = Location.AEROCAPTURE_TABLE{currentLocation.Code, destinationLocation.Code};
+            
+            % verify we found an aerocapture indicator, if not, locations
+            % were not adjacent, so we now must check for a path between them
+            if ~isfinite(canAerocap) && ~logical(canAerocap)
+                % must get index of locations from table in order to
+                % calculate shortest path
+                % get current location index from rows
+                currIndex = find(strcmp(Location.DELTAV_TABLE.Properties.RowNames, currentLocation.locationName));
+                % get destination location index from rows
+                destIndex = find(strcmp(Location.DELTAV_TABLE.Properties.RowNames, destinationLocation.locationName));
+            end
+        end
     end
     
     enumeration

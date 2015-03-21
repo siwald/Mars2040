@@ -1,3 +1,10 @@
+%% NEED DESCRIPTION
+% inputs
+%   Cur_Arch - MarsArchitecture object
+% outputs
+%   p_transhab - units?
+%   v_crew - units?
+%   m_transhab - units?
 function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Cur_Arch)
 
 %----------------------Code Definition-----------------------------------
@@ -32,6 +39,10 @@ v_Pressurized = 330;            %Units: m^3, based on Transhab (also BA330)
 m_MOI_max = 126000;             %DRA 5.0 Aerocapture, Table 3-17, post-burn
 
 %------------------------------------------------------------------------
+
+% ADD COMMENTS
+% set mass of crew system by dividing something by something else times
+% crew days to get kg????
 m_crew_sys = 17051/(6*680)*crew_day;       % HSMAD, Table 31-5 (scaled)
 p_crew_sys = 2.47/(6*680)*crew_day;        % HSMAD, Table 31-5 (scaled)
 v_crew_sys = 85.51/(6*680)*crew_day;

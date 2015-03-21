@@ -47,17 +47,27 @@
    
     %% Logistics Setup and Return Logistics
     
-    %% -----Trans Hab Module-----(Nathan)
+    %% ----- Transit Habitation Module-----(Joe)
     %{
     The inputs are: 
-	Cur_Arch
+        Cur_Arch
 	
     The outputs are:
-	Return_SC
-        .Hab_M defined
+        Trans_Hab_Volume - in kW?
+        Trans_Hab_Mass - in m3?
+        Trans_Hab_Mass - in kg?
+    
+        ???
+        Return_SC
+            .Hab_M defined
     %}
-    [Trans_Hab_Power,Trans_Hab_Volume,Trans_Hab_Mass] = Transit_Habitat(Cur_Arch); %Calculate the Transit Habitat needs
-    Trans_Hab = SC_Class(0,Trans_Hab_Mass,'Trans Hab for crew support'); %Create Trans_Hab spacecraft with mass numbers from Transit_Habitat module
+    [Trans_Hab_Power,... % TODO: units?
+        Trans_Hab_Volume,... % TODO: units?
+        Trans_Hab_Mass... % TODO: units?
+        ] = Transit_Habitat(Cur_Arch); % Calculate the Transit Habitat needs from current architecture
+    
+    %Create Trans_Hab spacecraft with mass numbers from Transit_Habitat module
+    Trans_Hab = SC_Class(0,Trans_Hab_Mass,'Trans Hab for crew support'); 
 
     %% ------Transit Module (return)-----(Eric)
     %{
@@ -125,7 +135,7 @@
     %% Surface Begin   
     
     [MTMS Science_Val_per_Day]= Surface_Architecture(Cur_Arch, Fuel_From_Mars, Ox_From_Mars);
-    MTMS = MTMS + Earth_Ascent_Fuel + Earth_Ascent_Ox;
+    MTMS = MTMS + Earth_Ascent_Fuel + Earth_Ascent_Ox
     
     %% Outgoing Logistics Begin
     
@@ -186,4 +196,4 @@
     %% Close Loop
 %end main for loop, go back and try the next architecture
 %end
-%disp (Results) %display the final results matrix
+%disp (Results) %display the final results matrixa

@@ -9,13 +9,16 @@
 % Source: D. P. Bertsekas, Dynamic Programming and Optimal Control, Athena Scientific, 2005 (3rd edition)
 % GB, Last Updated: March 9, 2006
 
-function [J_st,route_st,J,route]=shortestPath(L,s,t,steps)
+function [J_st,route_st,J,route] = shortestPath(L,s,t,steps)
 
-n = size(L,2);
+% get size of array along 2nd dimension, i.e. height of array
+arrHeight = size(L,2);
 
-L(find(L==0))=Inf;  % make all zero distances equal to infinity
+% make all zero distances equal to infinity
+L(find(L==0))=Inf;
 
-for i=1:n
+% iterate through all rows
+for i=1:arrHeight
   J(steps,i) = L(i,t); 
   route(steps,i).path = [t];
 end
@@ -24,7 +27,7 @@ end
 for p=1:steps-1
   k=steps-p; % recurse backwards
   
-  for i=1:n
+  for i=1:arrHeight
     %fprintf('stage %2i, node %2i \n',k,i)
     [J(k,i),ind_j] =  min(L(i,:)+J(k+1,:));
     route(k,i).path = [ind_j, route(k+1,ind_j).path];
@@ -34,5 +37,5 @@ end
 
 [J_st,step_ind] = min(J(:,s));
 route_st = [s, route(step_ind,s).path];
-J=J(sort(1:n,'descend'),:);
-route=route(sort(1:n,'descend'),:);
+J=J(sort(1:arrHeight,'descend'),:);
+route=route(sort(1:arrHeight,'descend'),:);
