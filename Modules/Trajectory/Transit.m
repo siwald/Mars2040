@@ -129,9 +129,37 @@ switch Cur_Arch.TransitFuel
         %Sum IMLEO to get everything to staging point
         IMLEO = Fuel_to_Moon_Transport.Origin_Mass + Stage_From_Earth.Origin_Mass; %Ox_Moon_IMLEO pushes fuel from moon to staging, Stage_From_Earth is the S/C without fuel at the staging point
     case 'Lunar_Fuel'
-        disp('Not yet')
-    case 'Lunar_all'
-        disp('Not yet')
+         %Get the Ox to the staging point
+        Ox_Mass = Departure_Stage.Ox_Mass; %this much Ox
+        Ox_Transport = SC_Class(Ox_Mass,0,'Ox Transport Vehicle, Moon to stage');
+        Ox_Transport = Propellant_Mass(Cur_Prop, Ox_Transport, Hohm_Chart('Moon',Stage_Point)); %Plus this propellant from moon to stage
+        Ox_to_Moon = Ox_Transport.Ox_Mass; %Need this Ox shipped from IMLEO as Propellant for Ox transport
+        Ox_to_Moon_Transport = SC_Class(Ox_to_Moon,0,'Ox Transport Vehicle, Leo to Moon');
+        Ox_to_Moon_Transport = Propellant_Mass(Cur_Prop, Ox_to_Moon_Transport, Hohm_Chart('LEO','Moon')); %IMLEO of Ox to moon plus dV to get there
+        
+        %Get the Fuel and S/C to the staging point
+        UnOxed_Mass = Departure_Stage.Origin_Mass - Departure_Stage.Ox_Mass; %this much S/C with Fuel to combine with the Ox from the moon
+        Stage_From_Earth = SC_Class(UnOxed_Mass,0,'complete S/C without Ox, LEO to staging point');
+        Stage_From_Earth = Propellant_Mass(Cur_Prop, Stage_From_Earth, Hohm_Chart('LEO',Stage_Point)); %IMLEO of S/C with Ox but no Fuel, plus dV to get to staging
+        
+        %Sum IMLEO to get everything to staging point
+        IMLEO = Ox_to_Moon_Transport.Origin_Mass + Stage_From_Earth.Origin_Mass; %Ox_Moon_IMLEO pushes Ox from moon to staging, Stage_From_Earth is the S/C without Ox at the staging point
+    case 'Lunar_All'
+        %Get the Prop to the staging point
+        Prop_Mass = Departure_Stage.Prop_Mass; %this much Prop
+        Prop_Transport = SC_Class(Prop_Mass,0,'Prop Transport Vehicle, Moon to stage');
+        Prop_Transport = Propellant_Mass(Cur_Prop, Prop_Transport, Hohm_Chart('Moon',Stage_Point)); %Plus this propellant from moon to stage
+        Prop_to_Moon = Prop_Transport.Bus_Mass; %Need this Dry Mass shipped from IMLEO for Prop transport
+        Prop_to_Moon_Transport = SC_Class(Prop_to_Moon,0,'Prop Transport Vehicle, Leo to Moon');
+        Prop_to_Moon_Transport = Propellant_Mass(Cur_Prop, Prop_to_Moon_Transport, Hohm_Chart('LEO','Moon')); %IMLEO of Dry Mass to moon plus dV to get there
+        
+        %Get the Dry S/C to the staging point
+        Dry_Mass = Departure_Stage.Origin_Mass - Departure_Stage.Prop_Mass; %this much S/C without the Prop (since that comes from the moon)
+        Stage_From_Earth = SC_Class(Dry_Mass,0,'complete S/C without Prop, LEO to staging point');
+        Stage_From_Earth = Propellant_Mass(Cur_Prop, Stage_From_Earth, Hohm_Chart('LEO',Stage_Point)); %IMLEO of S/C with no Prop, plus dV to get to staging
+        
+        %Sum IMLEO to get everything to staging point
+        IMLEO = Prop_to_Moon_Transport.Origin_Mass + Stage_From_Earth.Origin_Mass; %Prop_to_Moon_Transport pushes Prop from moon to staging, Stage_From_Earth is the S/C without Prop at the staging point
 end
 Days_on_Mars = Days_Near_Mars - Cap_Time;
 end
