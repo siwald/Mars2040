@@ -40,7 +40,7 @@
 
 %for loop, go through each row indicating a seperate architceture, i
  %parfor i=1:size(Enumerated,1)
- %parfor i=1:2
+ parfor i=1:1
  tic
     
     %extract the ith architcecture from the enumerated matrix
@@ -196,5 +196,5 @@
     runtime = toc
     %% Close Loop
 
- %end %end main for loop, go back and try the next architecture
+ end %end main for loop, go back and try the next architecture
 %disp (Results) %display the final results matrix
