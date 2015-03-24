@@ -34,18 +34,48 @@
 %              disp(size(Enumerated,1))
 %             %Preallocate the results array
 %             Results = zeros(size(Enumerated,1),4); %1 row for every architectureal combo, 4 cols: Arch #, IMLEO, Sci_Val, Risk
-
+             Results = cell(9,4); %1 row for every architectureal combo, 4 cols: transit fuel, return fuel, IMLEO, runtime
 
 %% Calulations
 
 %for loop, go through each row indicating a seperate architceture, i
  %parfor i=1:size(Enumerated,1)
- parfor i=1:1
+parfor i=1:9
  tic
     
     %extract the ith architcecture from the enumerated matrix
     Cur_Arch = MarsArchitecture.DEFAULT; %test Case for now.
    
+    %test cases for fuel locations
+    if i==1
+        Cur_Arch.TransitFuel = 'Lunar_O2';
+        Cur_Arch.ReturnFuel = 'Mars_O2';
+    elseif i == 2
+        Cur_Arch.TransitFuel = 'Lunar_Fuel';
+        Cur_Arch.ReturnFuel = 'Mars_O2';
+    elseif i ==3
+        Cur_Arch.TransitFuel = 'Lunar_All';
+        Cur_Arch.ReturnFuel = 'Mars_O2';
+    elseif i ==4
+        Cur_Arch.ReturnFuel = 'Mars_Fuel';
+        Cur_Arch.TransitFuel = 'Lunar_O2';
+    elseif i ==5
+        Cur_Arch.ReturnFuel = 'Mars_Fuel';
+        Cur_Arch.TransitFuel = 'Lunar_Fuel';
+    elseif i==6
+        Cur_Arch.ReturnFuel = 'Mars_Fuel';
+        Cur_Arch.TransitFuel = 'Lunar_All';
+    elseif i==7
+        Cur_Arch.ReturnFuel = 'Mars_All';
+        Cur_Arch.TransitFuel = 'Lunar_O2';
+    elseif i==8
+        Cur_Arch.ReturnFuel = 'Mars_All';
+        Cur_Arch.TransitFuel = 'Lunar_Fuel';
+    elseif i==9
+        Cur_Arch.ReturnFuel = 'Mars_All';
+        Cur_Arch.TransitFuel = 'Lunar_All';
+    end
+    
     %% Logistics Setup and Return Logistics
     
     %% ----- Transit Habitation Module-----(Joe)
@@ -173,28 +203,32 @@
     Total_Risk = Surface_Risk + Logistics_Risk;
     
     %display the results
-    disp('Architecture number:')
-    disp(i)
-    disp('IMLEO:')
-    disp(IMLEO)
-    disp('Scientific Value:')
-    disp(Scientific_Value)
-    disp('Total Risk:')
-    disp(Total_Risk)
+%     disp('Architecture number:')
+%     disp(i)
+disp(Cur_Arch.TransitFuel)
+disp(Cur_Arch.ReturnFuel)
+disp('IMLEO:')
+disp(IMLEO)
+
+%     disp('Scientific Value:')
+%     disp(Scientific_Value)
+%     disp('Total Risk:')
+%     disp(Total_Risk)
     
-    %{
+    
     %add the results into the Results matrix
-    Cur_Results = zeros(1,4); %initialize a temporary results vector, necessary for parfor
-    
-    Cur_Results(1) = i; %architecture number
-    Cur_Results(2)=IMLEO;
-    Cur_Results(3)=Scientific_Value;
-    Cur_Results(4)=Total_Risk;
+    Cur_Results = cell(1,4); %initialize a temporary results vector, necessary for parfor
+   
+    Cur_Results{1}=Cur_Arch.TransitFuel; 
+    Cur_Results{2}=Cur_Arch.ReturnFuel;
+    Cur_Results{3}=IMLEO;
+    Cur_Results{4}=toc;
         
-    Results(i,:) = Cur_Results; %input the entire Results vector into the appropriate row of the global results vector
+    Results{i,:} = Cur_Results; %input the entire Results vector into the appropriate row of the global results vector
     %}
-    runtime = toc
+% runtime = toc;
     %% Close Loop
 
  end %end main for loop, go back and try the next architecture
+     
 %disp (Results) %display the final results matrix
