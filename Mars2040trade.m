@@ -34,48 +34,75 @@
 %              disp(size(Enumerated,1))
 %             %Preallocate the results array
 %             Results = zeros(size(Enumerated,1),4); %1 row for every architectureal combo, 4 cols: Arch #, IMLEO, Sci_Val, Risk
-             Results = cell(9,4); %1 row for every architectureal combo, 4 cols: transit fuel, return fuel, IMLEO, runtime
-
+num_ind = 48;
+num_stat = 6;
+Results = cell(num_ind+1,num_stat); %1 row for every architectureal combo, 4 cols: transit fuel, return fuel, IMLEO, runtime
+Labels = {'Trans', 'Return', 'Stage', 'Capture', 'IMLEO', 'Sci_Value'};
+Results(1,:) = Labels;
 %% Calulations
-
+tic
 %for loop, go through each row indicating a seperate architceture, i
  %parfor i=1:size(Enumerated,1)
-parfor i=1:9
- tic
+parfor i=1:num_ind
+
     
     %extract the ith architcecture from the enumerated matrix
     Cur_Arch = MarsArchitecture.DEFAULT; %test Case for now.
    
     %test cases for fuel locations
-    if i==1
+if i >=25
+    ii = i-24;
+    Cur_Arch.OrbitCapture = 'PropulsiveCapture';
+elseif i<=24
+    ii = i;
+    Cur_Arch.OrbitCapture = 'Aerocapture';
+end
+if ii >=13
+    ii = i-12;
+    Cur_Arch.Staging = Location.EML2;
+elseif ii<=12
+    ii = i;
+    Cur_Arch.Staging = Location.LEO;
+end
+    if ii==1
         Cur_Arch.TransitFuel = 'Lunar_O2';
         Cur_Arch.ReturnFuel = 'Mars_O2';
-    elseif i == 2
+    elseif ii==2
         Cur_Arch.TransitFuel = 'Lunar_Fuel';
         Cur_Arch.ReturnFuel = 'Mars_O2';
-    elseif i ==3
+    elseif ii==3
         Cur_Arch.TransitFuel = 'Lunar_All';
         Cur_Arch.ReturnFuel = 'Mars_O2';
-    elseif i ==4
+    elseif ii==4
         Cur_Arch.ReturnFuel = 'Mars_Fuel';
         Cur_Arch.TransitFuel = 'Lunar_O2';
-    elseif i ==5
+    elseif ii==5
         Cur_Arch.ReturnFuel = 'Mars_Fuel';
         Cur_Arch.TransitFuel = 'Lunar_Fuel';
-    elseif i==6
+    elseif ii==6
         Cur_Arch.ReturnFuel = 'Mars_Fuel';
         Cur_Arch.TransitFuel = 'Lunar_All';
-    elseif i==7
+    elseif ii==7
         Cur_Arch.ReturnFuel = 'Mars_All';
         Cur_Arch.TransitFuel = 'Lunar_O2';
-    elseif i==8
+    elseif ii==8
         Cur_Arch.ReturnFuel = 'Mars_All';
         Cur_Arch.TransitFuel = 'Lunar_Fuel';
-    elseif i==9
+    elseif ii==9
         Cur_Arch.ReturnFuel = 'Mars_All';
         Cur_Arch.TransitFuel = 'Lunar_All';
+    elseif ii== 10
+        Cur_Arch.ReturnFuel = 'Mars_O2';
+        Cur_Arch.TransitFuel = 'Earth';
+    elseif ii== 11
+        Cur_Arch.ReturnFuel = 'Mars_Fuel';
+        Cur_Arch.TransitFuel = 'Earth';
+    elseif ii== 12
+        Cur_Arch.ReturnFuel = 'Mars_All';
+        Cur_Arch.TransitFuel = 'Earth';
     end
-    
+
+
     %% Logistics Setup and Return Logistics
     
     %% ----- Transit Habitation Module-----(Joe)
@@ -193,23 +220,19 @@ parfor i=1:9
    [IMLEO,Days_on_Mars] = Transit(Cur_Arch,Descent_Craft,Trans_Hab,'Human');
    
     %% Results
-    Scientific_Value = Science_Val_per_Day * Days_on_Mars;
-    if ~exist('Surface_Risk')
-        Surface_Risk = 0;
-    end
-    if ~exist('Logistics_Risk')
-        Logistics_Risk = 0;
-    end
-    Total_Risk = Surface_Risk + Logistics_Risk;
+      Scientific_Value = Science_Val_per_Day * Days_on_Mars;
+      
+%     if ~exist('Surface_Risk')
+%         Surface_Risk = 0;
+%     end
+%     if ~exist('Logistics_Risk')
+%         Logistics_Risk = 0;
+%     end
+%     Total_Risk = Surface_Risk + Logistics_Risk;
     
     %display the results
 %     disp('Architecture number:')
 %     disp(i)
-disp(Cur_Arch.TransitFuel)
-disp(Cur_Arch.ReturnFuel)
-disp('IMLEO:')
-disp(IMLEO)
-
 %     disp('Scientific Value:')
 %     disp(Scientific_Value)
 %     disp('Total Risk:')
@@ -217,18 +240,25 @@ disp(IMLEO)
     
     
     %add the results into the Results matrix
-    Cur_Results = cell(1,4); %initialize a temporary results vector, necessary for parfor
+    Cur_Results = cell(1,num_stat); %initialize a temporary results vector, necessary for parfor
    
     Cur_Results{1}=Cur_Arch.TransitFuel; 
     Cur_Results{2}=Cur_Arch.ReturnFuel;
-    Cur_Results{3}=IMLEO;
-    Cur_Results{4}=toc;
+    Cur_Results{3}=char(Cur_Arch.Staging);
+    Cur_Results{4}=Cur_Arch.OrbitCapture;
+    Cur_Results{5}=IMLEO;
+    Cur_Results{6}=Scientific_Value;
         
-    Results{i,:} = Cur_Results; %input the entire Results vector into the appropriate row of the global results vector
-    %}
+   Results(i+1,:) = Cur_Results; %input the entire Results vector into the appropriate row of the global results vector
+
+% disp(Cur_Arch.TransitFuel)
+% disp(Cur_Arch.ReturnFuel)
+% disp('IMLEO:')
+% disp(IMLEO)
+   
 % runtime = toc;
     %% Close Loop
 
  end %end main for loop, go back and try the next architecture
-     
+total_runtime = toc  
 %disp (Results) %display the final results matrix

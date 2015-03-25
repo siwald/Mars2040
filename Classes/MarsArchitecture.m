@@ -282,6 +282,14 @@ classdef MarsArchitecture < handle
         function transitFuel = set.TransitFuel(obj, now)
             obj.transitFuel = now;
         end
+        %% StageLoc Setter
+        function stageLocation = set.Staging(obj, now)
+            obj.stageLocation = now;
+        end
+        %% OrbitCapture Setter
+        function orbitCapture = set.OrbitCapture(obj, now)
+            obj.orbitCapture = now;
+        end
     end
     
     enumeration
