@@ -5,7 +5,7 @@ classdef Crew < handle
     %% Constant properties for static crew properties
     properties(Constant, GetAccess = public)
         %% Average food consumption per crew member per day in kilograms
-        FoodKgMassPerDay = 2.2; % TODO: bogus number
+        FoodKgMassPerDay = 2.3; % Units: kg/person/day, per BVAD, packaged food
         %% Average water consumption/need per crew member per day in kilograms
         H2OKgMassPerDay = 1.5; % TODO: bogus number
         %% Average incidental material need/consumption per crew member per day in kilograms

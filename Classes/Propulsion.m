@@ -57,6 +57,17 @@ classdef Propulsion
             end
         end
         
+        %% Propulsion class display method overload
+        function disp(obj)
+            % verify we have correct inputs to get Isp
+            if nargin > 0 && isa(obj,'Propulsion')
+                disp(['Propulsion.' obj.type]);
+            else 
+                warning('Unable to display object because it was not a Propulsion object.');
+                disp('unknown');
+            end
+        end
+        
         %% Isp getter
         function isp = get.Isp(obj)
             % verify we have correct inputs to get Isp
@@ -97,8 +108,11 @@ classdef Propulsion
     
     %% enumerated values for common propulsion types
     enumeration
+        % liquid hyrdogen/oxygen
         LH2 ('LH2'),
+        % nuclear thermal rocket
         NTR ('NTR'),
+        % solar-electric propulsion
         SEP ('SEP'),
     end
 end

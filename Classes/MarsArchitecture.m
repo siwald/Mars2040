@@ -1,17 +1,20 @@
 %% MARS 2040 Tradespace architecture object
 % record all the architectural decisions for mission to mars
 classdef MarsArchitecture < handle
+    properties (Constant)
+        DEFAULT = MarsArchitecture();
+    end
+    
     properties (Access = private)
         origin = Location.EARTH;
         stageLocation = Location.LEO;
-        destinations = [Location.LMO, Location.EARTH];        
+        destinations = [Location.LMO, Location.EARTH];
         propulsionType = Propulsion.LH2;
-        transitFuel = 'Lunar_O2';
-        transitTrajectory = 'Hohmann';
-        returnFuel = 'Mars_O2';
-        returnTrajectory = 'Hohmann';
-        %transitCrew = Crew.DEFAULT_TRANSIT;
-        transitCrew = 4; %until Crew.m works
+        transitFuel = [Fuel.EARTH_H2, Fuel.LUNAR_O2];
+        transitTrajectory = TrajectoryType.HOHMANN;
+        returnFuel = [Fuel.EARTH_H2, Fuel.MARS_O2];
+        returnTrajectory = TrajectoryType.HOHMANN;
+        transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = 'Temp';
         transitShieldMaterial = 'Water';
         transitHabitatVolume = '10';
@@ -62,12 +65,148 @@ classdef MarsArchitecture < handle
         IsValid;
     end
     
+    %% static class methods
+    methods (Static)
+        %% Method to get an enumeration of possible architectures
+        % 
+        function architectures = Get(varargin)
+            % check if we have any arguments
+            if ~isempty(varargin)
+                % only argument in should be array of options
+                archDecisions = varargin{1};
+                % get the number of options for architecture tradespace
+                % given, this is the number of tradespace decisions being
+                % enumerated for the architecture analysis
+                numberOfDecisions = length(archDecisions);
+
+                % iterate over each tradespace or architectural decision to
+                % enumerate option all the options for that decision
+                for decisionCount = 1:numberOfDecisions
+                    % get the decision options array
+                    optionArray = archDecisions{decisionCount};
+                    % skip any empty options
+                    if isempty(optionArray)
+                        continue; % no options provided for decision so we skip/ignore
+                    end
+                    
+                    % if only one decision option, we override/force this
+                    % decision for all architecture enumerations
+                    if length(optionArray) == 1
+                       % if the architectures variable doesn't exist yet,
+                       % initialize to an array with default architecture
+                       if ~exist('architectures', 'var')
+                            architectures = {MarsArchitecture()};
+                       end
+                       
+                       % determine the type of option being set
+                       if isa(optionArray, 'Propulsion')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set propulsion option for architecture
+                               architectures{archIndIndex}.PropulsionType = optionArray(1);
+                           end
+                       end
+                       if isa(optionArray, 'Site')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set site option for architecture
+                               architectures{archIndIndex}.SurfaceSites = optionArray(1);
+                           end
+                       end
+                       if isa(optionArray, 'Crew')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set transit crew option for architecture
+                               architectures{archIndIndex}.TransitCrew = optionArray(1);
+                           end
+                       end
+                    else
+                        % declare a temporary array for new enumerated
+                        % architectures
+                        tempArray = {};
+                        % initialize architectures if it doesn't exist
+                       if ~exist('architectures', 'var')
+                            architectures = {MarsArchitecture()};
+                       end
+                        % iterate of each of the previous architectures
+                       for archIndex = 1:length(architectures)
+                           % get a reference to the 'current' previous
+                           % architecture
+                           previousArchitecture = architectures{archIndex};
+                           % iterate over each new option
+                           for optionIndex = 1:length(optionArray)
+                               % calculate index for new architecture
+                               newIndex = (archIndex - 1) * length(optionArray) + optionIndex;
+                               % set new architecture into temp array
+                               tempArray{newIndex} = previousArchitecture.Duplicate();
+                               % set option
+                       
+                               if isa(optionArray, 'Propulsion')
+                                   tempArray{newIndex}.PropulsionType = optionArray(optionIndex);
+                               end
+                               if isa(optionArray, 'Site')
+                                   tempArray{newIndex}.SurfaceSites = optionArray(optionIndex);
+                               end
+                               if isa(optionArray, 'Crew')
+                                   tempArray{newIndex}.TransitCrew = optionArray(optionIndex);
+                               end
+                           end % end for option loop
+                       end % end for prev architecture loop
+                       % set architectures value to temp array for next
+                       % loop
+                       architectures = tempArray;
+                    end % end else for multiple option values
+                end % end for input option array loop
+            else
+                % if no input to method, output warning and just return
+                % default architecture
+                warning('Mars architectures requested without any options.');
+                architectures = [MarsArchitecture.DEFAULT];
+            end
+        end
+    end
+    
     %% Architecture public members
     methods
         %% Architecture constructor
         function arch = MarsArchitecture() 
             if nargin > 0
                 % do we need any inputs, set later using setters
+            end
+        end
+        
+        %% Duplication function to copy an architecture
+        function duplicate = Duplicate(currentArchitecture)
+            %% verify we have valid architecture object input to copy
+            if nargin > 0 && isa(currentArchitecture, 'MarsArchitecture')
+                duplicate = MarsArchitecture();
+                
+                duplicate.origin = currentArchitecture.origin;
+                duplicate.stageLocation = currentArchitecture.stageLocation;
+                duplicate.destinations = currentArchitecture.destinations;
+                duplicate.propulsionType = currentArchitecture.propulsionType;
+                duplicate.transitFuel = currentArchitecture.transitFuel;
+                duplicate.transitTrajectory = currentArchitecture.transitTrajectory;
+                duplicate.returnFuel = currentArchitecture.returnFuel;
+                duplicate.returnTrajectory = currentArchitecture.returnTrajectory;
+                duplicate.transitCrew = currentArchitecture.transitCrew;
+                duplicate.transitShielding = currentArchitecture.transitShielding;
+                duplicate.transitShieldMaterial = currentArchitecture.transitShieldMaterial;
+                duplicate.transitHabitatVolume = currentArchitecture.transitHabitatVolume;
+                duplicate.orbitCapture = currentArchitecture.orbitCapture;
+                duplicate.entryDescent = currentArchitecture.entryDescent;
+                duplicate.siteSelection = currentArchitecture.siteSelection;
+                duplicate.surfaceCrew = currentArchitecture.surfaceCrew;
+                duplicate.isruBase = currentArchitecture.isruBase;
+                duplicate.isruUse = currentArchitecture.isruUse;
+                duplicate.foodSupply = currentArchitecture.foodSupply;
+                duplicate.surfaceShielding = currentArchitecture.surfaceShielding;
+                duplicate.surfaceStructure = currentArchitecture.surfaceStructure;
+                duplicate.surfacePower = currentArchitecture.surfacePower;
+                duplicate.isfrUse = currentArchitecture.isfrUse;
+                duplicate.returnEntry = currentArchitecture.returnEntry;
+            else
+                error('Invalid architecture to duplicate.');
             end
         end
         
@@ -215,7 +354,6 @@ classdef MarsArchitecture < handle
                 isru = obj.isruBase;
             end
         end
-        ;
         %% ISRU use getter
         function isru = get.ISRUUse(obj)
             % verify we have valid input object
@@ -274,9 +412,248 @@ classdef MarsArchitecture < handle
                 returnEDL = obj.returnEntry;
             end
         end
-    end
-    
-    enumeration
-        DEFAULT
+        
+        %% Origin setter
+        function set.Origin(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Location')
+                % get origin from architecture object
+                obj.origin = value;
+            else
+                warning('Setting architecture origin not possible because of invalid input.');
+            end
+        end
+        %% Staging location setter
+        function set.Staging(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Location')
+                % get staging location from architecture object
+                obj.stageLocation = value;
+            else
+                warning('Setting architecture staging not possible because of invalid input.');
+            end
+        end
+        %% Destinations setter
+        function set.Destinations(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Location')
+                % get destination list from architecture object
+                obj.destinations = value;
+            else
+                warning('Setting architecture destinations not possible because of invalid input.');
+            end
+        end
+        %% Propulsion setter
+        function set.PropulsionType(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Propulsion')
+                % set propulsion value for architecture object
+                obj.propulsionType = value;
+            else
+                warning('Setting architecture propulsion not possible because of invalid input.');
+            end
+        end
+        %% Transit fuel setter
+        function set.TransitFuel(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get transit fuel object from architecture object
+                obj.transitFuel = value;
+            else
+                warning('Setting architecture transit fuel not possible because of invalid input.');
+            end
+        end
+        %% Transit trajectory setter
+        function set.TransitTrajectory(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get transit trajectory from architecture object
+                obj.transitTrajectory = value;
+            else
+                warning('Setting architecture transit trajectory not possible because of invalid input.');
+            end
+        end
+        %% Return fuel setter
+        function set.ReturnFuel(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get return fuel object from architecture object
+                obj.returnFuel = value;
+            else
+                warning('Setting architecture return fuel not possible because of invalid input.');
+            end
+        end
+        %% Return trajectory setter
+        function set.ReturnTrajectory(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get return trajectory from architecture object
+                obj.returnTrajectory = value;
+            else
+                warning('Setting architecture return trajectory not possible because of invalid input.');
+            end
+        end
+        %% Transit Crew setter
+        function set.TransitCrew(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Crew')
+                % get transit crew object from architecture object
+                obj.transitCrew = value;
+            else
+                warning('Setting architecture transit crew not possible because of invalid input.');
+            end
+        end
+        %% Transit shielding setter
+        function set.TransitShielding(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get transit shielding from architecture object
+                obj.transitShielding = value;
+            else
+                warning('Setting architecture transit shield not possible because of invalid input.');
+            end
+        end
+        %% Transit shield material setter
+        function set.TransitShieldMaterial(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get transit shield material from architecture object
+                obj.transitShieldMaterial = value;
+            else
+                warning('Setting architecture transit shield material not possible because of invalid input.');
+            end
+        end   
+        %% Transit size setter
+        function set.TransitHabitatVolume(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get transit hab size from architecture object
+                obj.transitHabitatVolume = value;
+            else
+                warning('Setting architecture transit habitat not possible because of invalid input.');
+            end
+        end
+        %% Orbit capture setter
+        function set.OrbitCapture(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get orbit capture from architecture object
+                obj.orbitCapture = value;
+            else
+                warning('Setting architecture orbit capture not possible because of invalid input.');
+            end
+        end
+        %% EDL setter
+        function set.EDL(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get EDL from architecture object
+                obj.entryDescent = value;
+            else
+                warning('Setting architecture EDL not possible because of invalid input.');
+            end
+        end
+        %% Sites setter
+        function set.SurfaceSites(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Site')
+                % get sites list from architecture object
+                obj.siteSelection = value;
+            else
+                warning('Setting architecture site not possible because of invalid input.');
+            end
+        end
+        %% Surface crew setter
+        function set.SurfaceCrew(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Crew')
+                % get surface Crew object from architecture object
+                obj.surfaceCrew = value;
+            else
+                warning('Setting architecture surface crew not possible because of invalid input.');
+            end
+        end
+        %% ISRU base setter
+        function set.ISRUBase(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get ISRU base from architecture object
+                obj.isruBase = value;
+            else
+                warning('Setting architecture ISRU base not possible because of invalid input.');
+            end
+        end
+        %% ISRU use setter
+        function set.ISRUUse(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % TODO: determine uses from fuel, food, etc. configuration
+                % get ISRU use from architecture object
+                obj.isruUse = value;
+            else
+                warning('Setting architecture ISRU use not possible because of invalid input.');
+            end
+        end
+        %% ISFR setter
+        function set.ISFRUse(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get ISFR use from architecture object
+                obj.isfrUse = value;
+            else
+                warning('Setting architecture ISRF use not possible because of invalid input.');
+            end
+        end
+        %% Food supply setter
+        function set.FoodSupply(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get food supply list from architecture object
+                obj.foodSupply = value;
+            else
+                warning('Setting architecture food supply not possible because of invalid input.');
+            end
+        end
+        %% Surface shielding setter
+        function set.SurfaceShielding(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get surface shielding from architecture object
+                obj.surfaceShielding = value;
+            else
+                warning('Setting architecture surface shield not possible because of invalid input.');
+            end
+        end
+        %% Surface structure setter
+        function set.SurfaceStructure(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get surface structure from architecture object
+                obj.surfaceStructure = value;
+            else
+                warning('Setting architecture surface structure not possible because of invalid input.');
+            end
+        end
+        %% Surface power setter
+        function set.SurfacePower(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get surface power list from architecture object
+                obj.surfacePower = value;
+            else
+                warning('Setting architecture surface power not possible because of invalid input.');
+            end
+        end
+        %% Return entry setter
+        function set.ReturnEntry(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get return from destinations list
+                % get return EDL from architecture object
+                obj.returnEntry = value;
+            else
+                warning('Setting architecture return entry not possible because of invalid input.');
+            end
+        end
     end
 end
