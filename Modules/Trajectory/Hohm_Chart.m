@@ -178,6 +178,9 @@ end
                     dV = EMTtoCapEsc + MarsCapEsctoLMO;
                 case 'Mars'
                     dV = EMTtoCapEsc + MarsCapEsctoLMO + LMOtoMars;
+                case 'LEO'
+                    dV = LEOtoGST + GSTtoLTrans + LTranstoECE + EEsctoEMT;
+                    
         otherwise
             disp('Please consult the table itself');
     end

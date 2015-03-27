@@ -79,7 +79,7 @@ switch Cur_Arch.TransitTrajectory
                 Departure_Stage.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
                 Departure_Stage = Propellant_Mass(Cur_Prop,Departure_Stage, dV); %Determine Departure Stage Fuel and Engine masses
                 
-                Cap_Time = 0 ;
+                Cap_Time = 0;
             case 'Aerocapture'
                 Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99.
                 Arrival_SC.Bus_Mass = Cap_Syst_Mass; %Calc the S/C
@@ -90,7 +90,7 @@ switch Cur_Arch.TransitTrajectory
                 Departure_Stage.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
                 Departure_Stage = Propellant_Mass(Cur_Prop,Departure_Stage, dV); %Determine Departure Stage Fuel and Engine masses
                 
-                Cap_Time = 30; %days, based on NASA Aerocapture presentation, Flagship Technology Demonstration-4 
+                Cap_Time = 30; %days, based on "NASA Aerocapture presentation, Flagship Technology Demonstration-4" 
         end
     case 'Cycler_1L1'
         Approach_Vinf = 9.75; % McConaghy, Longuski & Byrnes
@@ -99,6 +99,10 @@ switch Cur_Arch.TransitTrajectory
     case 'Cycler_2L3'
         Approach_Vinf = 3.05; % McConaghy, Longuski & Byrnes
         Departure_Vinf = 5.65; % McConaghy, Longuski & Byrnes
+        disp('Not Yet')
+    case 'Cycler_6S8'
+        Approach_Vinf = 3.90; % McConaghy, Longuski & Byrnes
+        Departure_Vinf = 4.02; % McConaghy, Longuski & Byrnes
         disp('Not Yet')
     case 'Elliptical'
         disp('Not Yet')
@@ -117,9 +121,9 @@ switch Cur_Arch.TransitFuel
         Fuel_Mass = Departure_Stage.Fuel_Mass; %this much fuel
         Fuel_Transport = SC_Class(Fuel_Mass,0,'Fuel Transport Vehicle, Moon to stage');
         Fuel_Transport = Propellant_Mass(Cur_Prop, Fuel_Transport, Hohm_Chart('Moon',Stage_Point)); %Plus this propellant from moon to stage
-        Fuel_to_Moon = Fuel_Transport.Fuel_Mass; %Need this Ox shipped from IMLEO as Propellant for fuel transport
+        Fuel_to_Moon = Fuel_Transport.Fuel_Mass; %Need this Fuel shipped from IMLEO as Propellant for fuel transport
         Fuel_to_Moon_Transport = SC_Class(Fuel_to_Moon,0,'Fuel Transport Vehicle, Leo to Moon');
-        Fuel_to_Moon_Transport = Propellant_Mass(Cur_Prop, Fuel_to_Moon_Transport, Hohm_Chart('LEO','Moon')); %IMLEO of Ox to moon plus dV to get there
+        Fuel_to_Moon_Transport = Propellant_Mass(Cur_Prop, Fuel_to_Moon_Transport, Hohm_Chart('LEO','Moon')); %IMLEO of Fuel to moon plus dV to get there
         
         %Get the Oxidizer and S/C to the staging point
         Unfueled_Mass = Departure_Stage.Origin_Mass - Departure_Stage.Fuel_Mass; %this much S/C with oxidizer to combine with the fuel from the moon
@@ -159,7 +163,7 @@ switch Cur_Arch.TransitFuel
         Stage_From_Earth = Propellant_Mass(Cur_Prop, Stage_From_Earth, Hohm_Chart('LEO',Stage_Point)); %IMLEO of S/C with no Prop, plus dV to get to staging
         
         %Sum IMLEO to get everything to staging point
-        IMLEO = Prop_to_Moon_Transport.Origin_Mass + Stage_From_Earth.Origin_Mass; %Prop_to_Moon_Transport pushes Prop from moon to staging, Stage_From_Earth is the S/C without Prop at the staging point
+        IMLEO = Prop_to_Moon_Transport.Origin_Mass + Stage_From_Earth.Origin_Mass; %Prop_to_Moon_Transport pushes Prop from moon to staging, Stage_From_Earth is the S/C without Prop at the staging point    
 end
 Days_on_Mars = Days_Near_Mars - Cap_Time;
 end

@@ -53,7 +53,7 @@ switch Cur_Arch.TransitTrajectory
         switch Cur_Arch.OrbitCapture
             case 'PropulsiveCapture'
                 %arrival stage
-                dV = Hohm_Chart('TMI','Earth'); %lookup final (arrival) stage in the dV in the Hohmann chart
+                dV = Hohm_Chart('TMI','LEO'); %lookup final (arrival) stage in the dV in the Hohmann chart
                 Arrival_SC = Propellant_Mass(Cur_Prop, Arrival_SC, dV); %Calc the S/C
                
                 %departure stage

@@ -32,7 +32,7 @@ classdef MarsArchitecture < handle
         %% validation indicator
         isValid = false;
     end
-    properties (Dependent)
+    properties %(Dependent)
         Origin;
         Staging;
         Destinations;
@@ -273,6 +273,22 @@ classdef MarsArchitecture < handle
                 % get return EDL from architecture object
                 returnEDL = obj.returnEntry;
             end
+        end
+        %% ReturnFuel Setter
+        function returnFuel = set.ReturnFuel(obj, now)
+            obj.returnFuel = now;
+        end
+        %% TransitFuel Setter
+        function transitFuel = set.TransitFuel(obj, now)
+            obj.transitFuel = now;
+        end
+        %% StageLoc Setter
+        function stageLocation = set.Staging(obj, now)
+            obj.stageLocation = now;
+        end
+        %% OrbitCapture Setter
+        function orbitCapture = set.OrbitCapture(obj, now)
+            obj.orbitCapture = now;
         end
     end
     
