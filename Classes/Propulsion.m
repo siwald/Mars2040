@@ -53,6 +53,8 @@ classdef Propulsion
                         obj.type = 'NTR';
                     case 'SEP'
                         obj.type = 'SEP';
+                    case 'CH4'
+                        obj.type = 'CH4';
                 end
             end
         end
@@ -100,6 +102,7 @@ classdef Propulsion
         LH2 ('LH2'),
         NTR ('NTR'),
         SEP ('SEP'),
+        CH4 ('CH4'),
     end
 end
 
