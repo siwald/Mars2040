@@ -53,6 +53,8 @@ classdef Propulsion
                         obj.type = 'NTR';
                     case 'SEP'
                         obj.type = 'SEP';
+                    case 'CH4'
+                        obj.type = 'CH4';
                 end
             end
         end
@@ -114,6 +116,7 @@ classdef Propulsion
         NTR ('NTR'),
         % solar-electric propulsion
         SEP ('SEP'),
+        CH4 ('CH4'),
     end
 end
 
