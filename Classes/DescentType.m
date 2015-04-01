@@ -1,20 +1,18 @@
-%% Class representing rocket fuel types
-classdef Fuel < handle
+%% Class representing landing manuevers
+classdef DescentType < handle
     %% private class members
     properties (Access = private)
     end
     
     %% public dependent members
     properties (Dependent)
-        Mass
-        Refuelable
-        Location
+        CrewAllowable
     end
     
     %% private methods (incl. constrcutor)
     methods(Access = private)
         %% class constructor
-        function obj = Fuel()
+        function obj = DescentType()
         end
     end
     
@@ -24,13 +22,9 @@ classdef Fuel < handle
     
     %% Class enumerations
     enumeration
-        EARTH_H2,
-        EARTH_O2,
-        EARTH_CH4,
-        LUNAR_O2,
-        LUNAR_H2,
-        MARS_H2,
-        MARS_O2
+        PROPULSIVE
+        CHUTE
+        SHOCK_ABSORBTION
     end
 end
 

@@ -1,20 +1,19 @@
 %% Class representing rocket fuel types
-classdef Fuel < handle
+classdef HabitatShielding < handle
     %% private class members
     properties (Access = private)
     end
     
     %% public dependent members
     properties (Dependent)
-        Mass
-        Refuelable
-        Location
+        Protection
+        ThermalLoss        
     end
     
     %% private methods (incl. constrcutor)
     methods(Access = private)
         %% class constructor
-        function obj = Fuel()
+        function obj = HabitatShielding()
         end
     end
     
@@ -24,13 +23,10 @@ classdef Fuel < handle
     
     %% Class enumerations
     enumeration
-        EARTH_H2,
-        EARTH_O2,
-        EARTH_CH4,
-        LUNAR_O2,
-        LUNAR_H2,
-        MARS_H2,
-        MARS_O2
+        DEDICATED
+        H2O_INSULATION
+        REGOLITH
+        BURIED
     end
 end
 

@@ -15,7 +15,7 @@ function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Cur_Arch)
 
 %------Inputs------
 % Num_Crew = 4;           % Reference architecture
-Num_Crew = Cur_Arch.TransitCrew;
+%%%%NATHAN-remove:Num_Crew = Cur_Arch.TransitCrew.Size;
 % Days_to_Mars = 180;     % Approx
 switch char(Cur_Arch.TransitTrajectory)
     case 'Hohmann'
@@ -31,9 +31,9 @@ end
 crew_day = Num_Crew * (Days_to_Mars + Days_to_Earth + Days_Contingency);
 
 %------Constants------
-Crew_Size = Num_Crew;           %Units: Crew Members
+%%%%NATHAN-remove:Crew_Size = Num_Crew;           %Units: Crew Members
 m_Airlock = 1250;               %Units: kg, HSMAD Table 31-6 
-m_food_CM_Day = 2.3;            %Units: kg/CM/day, per BVAD, packaged food
+%%%%NATHAN-remove:m_food_CM_Day = 2.3;            %Units: kg/CM/day, per BVAD, packaged food
 v_food_CM_Day = 0.00678;        %Units: m^3/CM/day, per BVAD, Table 4.3.3 (including rack)
 v_Pressurized = 330;            %Units: m^3, based on Transhab (also BA330)
 m_MOI_max = 126000;             %DRA 5.0 Aerocapture, Table 3-17, post-burn

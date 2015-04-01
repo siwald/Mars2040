@@ -15,27 +15,27 @@ classdef MarsArchitecture < handle
         returnFuel = [Fuel.EARTH_H2, Fuel.MARS_O2];
         returnTrajectory = TrajectoryType.HOHMANN;
         transitCrew = Crew.DEFAULT_TRANSIT;
-        transitShielding = HabitatShield.H2O_INSULATION;
+        transitShielding = 'Temp';
+        transitShieldMaterial = 'Water';
         transitHabitatVolume = '10';
-        orbitCapture = EntryType.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
-        entryDescent = DescentType.PROPULSIVE;
-        siteSelection = Site.HOLDEN_CRATER;
+        orbitCapture = 'Aerocapture'; % TODO: make an array to capture any orbital manuevars from destinations list
+        entryDescent = 'Propulsive';
+        siteSelection = {cellstr('Holden Crater')};
         surfaceCrew = Crew.TARGET_SURFACE;
         isruBase = {cellstr('Atmospheric')};
         isruUse = {cellstr('Fuel')}; % almost feel this should be generated from fuel, food, etc.
         foodSupply = {Location.EARTH, 0.5000; Location.MARS, 0.5000};
-        surfaceShielding = HabitatShielding.REGOLITH;
-        surfaceStructure = {StructureType.FIXED, 0.500; StructureType.INFLATABLE, 0.500};
+        surfaceShielding = 'Regolith';
+        surfaceStructure = 'Hybrid';
         %surfacePower = {cellstr('Nuclear'); cellstr('RTG'); cellstr('Solar')};
-        surfacePower = [PowerSource.NUCLEAR,PowerSource.SOLAR,PowerSource.RTG];
+        surfacePower = {cellstr('Hybrid')};
         isfrUse = {cellstr('Metal')};
-        returnCapture = EntryType.DIRECT;
-        returnDescent = EntryType.CHUTE;
+        returnEntry = 'Direct'; % TODO: can we assume this from no orbital destination before earth
         
         %% validation indicator
         isValid = false;
     end
-    properties (Dependent)
+    properties %(Dependent)
         Origin;
         Staging;
         Destinations;
@@ -45,7 +45,8 @@ classdef MarsArchitecture < handle
         ReturnFuel;
         ReturnTrajectory;
         TransitCrew;
-        TransitShielding;   
+        TransitShielding;
+        TransitShieldMaterial;      
         TransitHabitatVolume;
         OrbitCapture;
         EDL;
@@ -59,8 +60,7 @@ classdef MarsArchitecture < handle
         SurfaceShielding;
         SurfaceStructure;
         SurfacePower;
-        ReturnCapture;
-        ReturnDescent;
+        ReturnEntry;
         %% Indicates whether or not architecture is valid and doesn't contain any contrary decisions
         IsValid;
     end
@@ -69,7 +69,7 @@ classdef MarsArchitecture < handle
     methods (Static)
         %% Method to get an enumeration of possible architectures
         % 
-        function architectures = Enumerate(varargin)
+        function architectures = Get(varargin)
             % check if we have any arguments
             if ~isempty(varargin)
                 % only argument in should be array of options
@@ -191,6 +191,7 @@ classdef MarsArchitecture < handle
                 duplicate.returnTrajectory = currentArchitecture.returnTrajectory;
                 duplicate.transitCrew = currentArchitecture.transitCrew;
                 duplicate.transitShielding = currentArchitecture.transitShielding;
+                duplicate.transitShieldMaterial = currentArchitecture.transitShieldMaterial;
                 duplicate.transitHabitatVolume = currentArchitecture.transitHabitatVolume;
                 duplicate.orbitCapture = currentArchitecture.orbitCapture;
                 duplicate.entryDescent = currentArchitecture.entryDescent;
@@ -203,6 +204,7 @@ classdef MarsArchitecture < handle
                 duplicate.surfaceStructure = currentArchitecture.surfaceStructure;
                 duplicate.surfacePower = currentArchitecture.surfacePower;
                 duplicate.isfrUse = currentArchitecture.isfrUse;
+                duplicate.returnEntry = currentArchitecture.returnEntry;
             else
                 error('Invalid architecture to duplicate.');
             end
@@ -288,6 +290,14 @@ classdef MarsArchitecture < handle
                 transShield = obj.transitShielding;
             end
         end
+        %% Transit shield material getter
+        function transShieldMat = get.TransitShieldMaterial(obj)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture')
+                % get transit shield material from architecture object
+                transShieldMat = obj.transitShieldMaterial;
+            end
+        end   
         %% Transit size getter
         function transSize = get.TransitHabitatVolume(obj)
             % verify we have valid input object
@@ -393,40 +403,16 @@ classdef MarsArchitecture < handle
                 surfPower = obj.surfacePower;
             end
         end
-        %% Return capture getter
-        function returnEDL = get.ReturnCapture(obj)
+        %% Return entry getter
+        function returnEDL = get.ReturnEntry(obj)
             % verify we have valid input object
             if nargin > 0 && isa(obj, 'MarsArchitecture')
                 % get return from destinations list
                 % get return EDL from architecture object
-                returnEDL = obj.returnCapture;
+                returnEDL = obj.returnEntry;
             end
         end
-        %% Return EDL getter
-        function returnEDL = get.ReturnDescent(obj)
-            % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture')
-                % get return from destinations list
-                % get return EDL from architecture object
-                returnEDL = obj.returnDescent;
-            end
-        end
-        %%% ReturnFuel Setter
-        %function returnFuel = set.ReturnFuel(obj, now)
-        %    obj.returnFuel = now;
-        %end
-        %% TransitFuel Setter
-        %function transitFuel = set.TransitFuel(obj, now)
-        %    obj.transitFuel = now;
-        %end
-        %%% StageLoc Setter
-        %function stageLocation = set.Staging(obj, now)
-        %    obj.stageLocation = now;
-        %end
-        %%% OrbitCapture Setter
-        %function orbitCapture = set.OrbitCapture(obj, now)
-        %    obj.orbitCapture = now;
-        %end
+<<<<<<< HEAD
         
         %% Origin setter
         function set.Origin(obj, value)
@@ -471,7 +457,7 @@ classdef MarsArchitecture < handle
         %% Transit fuel setter
         function set.TransitFuel(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Fuel')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get transit fuel object from architecture object
                 obj.transitFuel = value;
             else
@@ -481,7 +467,7 @@ classdef MarsArchitecture < handle
         %% Transit trajectory setter
         function set.TransitTrajectory(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'TrajectoryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get transit trajectory from architecture object
                 obj.transitTrajectory = value;
             else
@@ -491,7 +477,7 @@ classdef MarsArchitecture < handle
         %% Return fuel setter
         function set.ReturnFuel(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Fuel')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get return fuel object from architecture object
                 obj.returnFuel = value;
             else
@@ -501,7 +487,7 @@ classdef MarsArchitecture < handle
         %% Return trajectory setter
         function set.ReturnTrajectory(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'TrajectoryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get return trajectory from architecture object
                 obj.returnTrajectory = value;
             else
@@ -521,13 +507,23 @@ classdef MarsArchitecture < handle
         %% Transit shielding setter
         function set.TransitShielding(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'HabitatShielding')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get transit shielding from architecture object
                 obj.transitShielding = value;
             else
                 warning('Setting architecture transit shield not possible because of invalid input.');
             end
-        end 
+        end
+        %% Transit shield material setter
+        function set.TransitShieldMaterial(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
+                % get transit shield material from architecture object
+                obj.transitShieldMaterial = value;
+            else
+                warning('Setting architecture transit shield material not possible because of invalid input.');
+            end
+        end   
         %% Transit size setter
         function set.TransitHabitatVolume(obj, value)
             % verify we have valid input object
@@ -541,7 +537,7 @@ classdef MarsArchitecture < handle
         %% Orbit capture setter
         function set.OrbitCapture(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get orbit capture from architecture object
                 obj.orbitCapture = value;
             else
@@ -551,7 +547,7 @@ classdef MarsArchitecture < handle
         %% EDL setter
         function set.EDL(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'DescentType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get EDL from architecture object
                 obj.entryDescent = value;
             else
@@ -612,7 +608,7 @@ classdef MarsArchitecture < handle
         %% Food supply setter
         function set.FoodSupply(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Location')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get food supply list from architecture object
                 obj.foodSupply = value;
             else
@@ -622,7 +618,7 @@ classdef MarsArchitecture < handle
         %% Surface shielding setter
         function set.SurfaceShielding(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'HabitatShielding')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get surface shielding from architecture object
                 obj.surfaceShielding = value;
             else
@@ -632,7 +628,7 @@ classdef MarsArchitecture < handle
         %% Surface structure setter
         function set.SurfaceStructure(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'StructureType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get surface structure from architecture object
                 obj.surfaceStructure = value;
             else
@@ -642,34 +638,45 @@ classdef MarsArchitecture < handle
         %% Surface power setter
         function set.SurfacePower(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'PowerSource')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get surface power list from architecture object
                 obj.surfacePower = value;
             else
                 warning('Setting architecture surface power not possible because of invalid input.');
             end
         end
-        %% Return capture setter
-        function set.ReturnCapture(obj, value)
+        %% Return entry setter
+        function set.ReturnEntry(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
-                % get return from destinations list
-                % get return capture from architecture object
-                obj.returnCapture = value;
-            else
-                warning('Setting architecture return capture not possible because of invalid input.');
-            end
-        end
-        %% Return EDL setter
-        function set.ReturnDescent(obj, value)
-            % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, '')
                 % get return from destinations list
                 % get return EDL from architecture object
-                obj.returnDescent = value;
+                obj.returnEntry = value;
             else
-                warning('Setting architecture return descent not possible because of invalid input.');
+                warning('Setting architecture return entry not possible because of invalid input.');
             end
         end
+=======
+        %% ReturnFuel Setter
+        function returnFuel = set.ReturnFuel(obj, now)
+            obj.returnFuel = now;
+        end
+        %% TransitFuel Setter
+        function transitFuel = set.TransitFuel(obj, now)
+            obj.transitFuel = now;
+        end
+        %% StageLoc Setter
+        function stageLocation = set.Staging(obj, now)
+            obj.stageLocation = now;
+        end
+        %% OrbitCapture Setter
+        function orbitCapture = set.OrbitCapture(obj, now)
+            obj.orbitCapture = now;
+        end
+    end
+    
+    enumeration
+        DEFAULT
+>>>>>>> edabb6d3ebb0f8a6e56cdb3493b65bcabdfd0969
     end
 end
