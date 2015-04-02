@@ -153,7 +153,6 @@ end
     %Calculate the Earth Descent Craft
     Earth_EDL_Mass = 0; %this should calculate the actual Earth EDL needs in Mass
     Descent_SC = SC_Class(Earth_EDL_Mass,0,'Earth Descent Craft');%initalize the Descent craft
-    origin_calc(Descent_SC); %populate the origin mass of the descent craft
     Return_SC = SC_Class(Descent_SC.Origin_Mass,Trans_Hab.Origin_Mass,'Return craft with Transit Habitat and propulsion');
     [Return_SC, Fuel_From_Mars, Ox_From_Mars ] = Return_Trans (Cur_Arch, Descent_SC, Return_SC);
     Earth_Transit_Fuel = Return_SC.Fuel_Mass - Fuel_From_Mars;
