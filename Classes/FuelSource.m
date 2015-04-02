@@ -1,5 +1,5 @@
 %% Class representing rocket fuel types
-classdef Fuel < handle
+classdef FuelSource < handle
     %% private class members
     properties (Access = private)
     end
@@ -11,10 +11,10 @@ classdef Fuel < handle
         Location
     end
     
-    %% private methods (incl. constrcutor)
+    %% private methods (incl. constructor)
     methods(Access = private)
         %% class constructor
-        function obj = Fuel()
+        function obj = FuelSource()
         end
     end
     

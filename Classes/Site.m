@@ -8,6 +8,8 @@ classdef Site < handle
     
     properties (Dependent)
         Name;
+        Altitude;
+        ScienceWeighting;
     end
     
     methods
