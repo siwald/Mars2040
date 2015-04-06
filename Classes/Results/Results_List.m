@@ -3,14 +3,13 @@ classdef Results_List < handle
     %   Detailed explanation goes here
     
     properties
-        SC_Drymass
-        Propellant
-        Fuel
-        Oxidizer
         Consumables
-        Food
         Spares
         Replacements
+        Volume
+        Power
+        Fuel_Output
+        Oxidizer_Output
     end
     
     methods
