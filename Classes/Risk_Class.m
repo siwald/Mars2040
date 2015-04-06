@@ -9,10 +9,11 @@ classdef Risk_Class
     end
     
     methods
-        function obj = Risk_Class (tech ops)
+        function obj = Risk_Class (tech,ops)
             obj.Tech_R = tech;
             obj.Ops_R = ops;
         end
+    end
     
 end
 
