@@ -14,7 +14,7 @@ classdef Crew < handle
     
     %% Public properties of crew architecture
     properties(Access = public)
-        Size = int16(0); % set default value of 0 crew, indicates non-initialized object
+        Size = double(0); % set default value of 0 crew, indicates non-initialized object
     end
     
     %% private properties of crew architecture
@@ -41,7 +41,7 @@ classdef Crew < handle
             % validate we got a valid crew size
             if nargin > 0 && isnumeric(size) && size > 0
                 % set crew size to integer value
-                crew.Size = int16(size);
+                crew.Size = double(size);
             end
         end
         %% Size setter
@@ -49,9 +49,9 @@ classdef Crew < handle
         function set.Size(obj, value)
             if nargin == 2 && isa(obj, 'Crew') ...
                 && isnumeric(value) && value > 0
-                obj.Size = int16(value);
+                obj.Size = double(int16(value));
             else
-                obj.Size = int16(0);
+                obj.Size = 0;
             end
         end
         
@@ -60,10 +60,10 @@ classdef Crew < handle
     
     %% Enumeration of standard crew sizes
     enumeration
-        MIN_CREW (2)
-        DEFAULT_TRANSIT (4)
-        DRA_CREW (6)
-        TARGET_SURFACE (20)
+        MIN_CREW (double(2))
+        DEFAULT_TRANSIT (double(4))
+        DRA_CREW (double(6))
+        TARGET_SURFACE (double(20))
     end
 end
 
