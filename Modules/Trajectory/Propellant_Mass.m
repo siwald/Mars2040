@@ -1,4 +1,4 @@
-function [ SC_Inst ] = Propellant_Mass( prop_inst , SC_Inst , dV)
+function [ SC_Module ] = Propellant_Mass( prop_inst , SC_Module , dV, AdditionalSC_Mass)
 %PROPELLANT_MASS Calculate the mass of the propellant needed for a maneuver
 %   Calculating the necessary propellant mass from a Delta_V manuever and
 %   the Isp of the fuel source.
@@ -10,65 +10,51 @@ function [ SC_Inst ] = Propellant_Mass( prop_inst , SC_Inst , dV)
 %  Rocket Equation (Isp version): dV = Isp*g0*ln(m0/m1)
 %  Gravitational Constant, g0 = 9.80665 m/s^2 = 0.0098665 km/s^2
 
-%{
-%-----Testing Inputs-----
-    %--would be delivered by Propulsion Module
-    %--Prop_Nums = Prop_Class;
-    %--Prop_Nums.Isp = 380; %in seconds
-    %--Prop_Nums.ROx_RAT = 6.0; %Ratio, 6kg fuel to 1kg oxidizer
-    %--Prop_Nums.InertM_Rat = 0.17; %percentage, 0-1
-    % new propulsion logic
-    prop_inst = Propulsion.NTR;
-   
-    %--would be defined in trans hab module
-    SC_Inst = SC_Class;
-    SC_Inst.Payload_Mass = 30000; %kg
-    SC_Inst.Hab_Mass = 2500; %kg
-    
-    %--would be delivered by trajectory module
-    dV = 6; %km/s
-%}
-%-----Testing-----
 
 %-----Constants-----
 g0=0.0098665; %km/s^2
 e=2.71828182845904523536028747135266249;
 %-----Constants-----
+
+%----Initialize other SC Module stuff
+if isempty(SC_Module.Bus_Mass)
+    SC_Module.Bus_Mass = 0; %initialize Bus Mass if empty
+end
+SC_Module.Bus_Mass = SC_Module.Bus_Mass + prop_inst.StaticMass; %add engine Static Mass to bus mass.
+
 %tic
 %Convergent loop
 converge_to = 0.0000001; %set convergence limit in difference percent
 converge = 1; %initialize convergence factor
 last = 0; %initialize tracking variable
-if isempty(SC_Inst.Eng_Mass) %initialize engine mass for 1st iteration, if not re-used
-    SC_Inst.Eng_Mass = 0;
+if isempty(SC_Module.Eng_Mass) %initialize engine mass for 1st iteration, if not re-used
+    SC_Module.Eng_Mass = 0;
 end
-it = 0; %counting variable
+it = 0;
 while converge > converge_to
     %sum rocket parts to see final mass
-    Final_Mass = SC_Inst.Eng_Mass + SC_Inst.Payload_Mass + SC_Inst.Hab_Mass + prop_inst.StaticMass;
+    Final_Mass = nansum([SC_Module.Eng_Mass, SC_Module.Payload_Mass, SC_Module.Hab_Mass, SC_Module.Bus_Mass, AdditionalSC_Mass]);
     
     %evaluate the rocket equation for fuel mass
-    SC_Inst.Prop_Mass=e^(((dV)/(g0*prop_inst.Isp)))*(Final_Mass)-Final_Mass;
+    SC_Module.Prop_Mass=e^(((dV)/(g0*prop_inst.Isp)))*(Final_Mass)-Final_Mass;
     
     %evaluate engine mass %determine SpaceCraft Origin Mass
-    if (SC_Inst.Eng_Mass < (SC_Inst.Prop_Mass * prop_inst.InertMassRatio)) %don't overwrite if engine is already big enough
-        SC_Inst.Eng_Mass = SC_Inst.Prop_Mass * prop_inst.InertMassRatio;
+    if (SC_Module.Eng_Mass < (SC_Module.Prop_Mass * prop_inst.InertMassRatio)) %don't overwrite if engine is already big enough
+        SC_Module.Eng_Mass = SC_Module.Prop_Mass * prop_inst.InertMassRatio;
     end
     
     %determine SpaceCraft Origin Mass
-    SC_Inst.Origin_Mass = SC_Inst.Prop_Mass + SC_Inst.Eng_Mass + prop_inst.StaticMass + SC_Inst.Payload_Mass + SC_Inst.Hab_Mass;
-    
+    origin_calc(SC_Module)    
     %compare results to last iteration
-    converge = (SC_Inst.Origin_Mass - last) / SC_Inst.Origin_Mass;
-    last = SC_Inst.Origin_Mass; %set tracking variable to this iteration
+    converge = (SC_Module.Origin_Mass - last) / SC_Module.Origin_Mass;
+    last = SC_Module.Origin_Mass; %set tracking variable to this iteration
     it = it + 1;
 
 end
 
-%fill out the rest of the SC class
-SC_Inst.Bus_Mass = SC_Inst.Eng_Mass + prop_inst.StaticMass;
-SC_Inst.Ox_Mass = SC_Inst.Prop_Mass * ((1 + prop_inst.FuelOxRatio) / prop_inst.FuelOxRatio);
-SC_Inst.Fuel_Mass = SC_Inst.Prop_Mass * (prop_inst.FuelOxRatio / (1 + prop_inst.FuelOxRatio));
+%fill out the fuel vs ox split
+SC_Module.Ox_Mass = SC_Module.Prop_Mass * (prop_inst.FuelOxRatio / (1 + prop_inst.FuelOxRatio));
+SC_Module.Fuel_Mass = SC_Module.Prop_Mass * (1 / (1 + prop_inst.FuelOxRatio));
 
 %{
 %----debugging outputs

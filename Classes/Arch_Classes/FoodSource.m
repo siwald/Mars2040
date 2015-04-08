@@ -42,14 +42,14 @@ classdef FoodSource < handle
         %% Location getter
         function loc = get.Location(obj)
             % verify we have correct inputs to get location
-            if nargin > 0 && isa(obj,'FoodSource') && size(obj.location) > 0
+            if nargin > 0 & isa(obj,'FoodSource') & size(obj.location) > 0
                 loc = obj.location;
             end
         end
         %% Amount getter
         function amt = get.Amount(obj)
             % verify we have correct inputs to get location
-            if nargin > 0 && isa(obj,'FoodSource') && size(obj.location) > 0
+            if nargin > 0 & isa(obj,'FoodSource') & size(obj.location) > 0
                 amt = obj.amount;
             end
         end

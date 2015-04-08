@@ -13,13 +13,17 @@ classdef Results_Class < dynamicprops
         Propellant
         Fuel
         Oxidizer
+        Regolith
+        Science_Time
+        IMLEO
         
         %Module Breakdowns
-        ECLSS
-        Mars_ISRU
-        Lunar_ISRU
-        ISFR
-        PowerPlant
+        Surface_Habitat = Results_List;
+        ECLSS = Results_List;
+        Mars_ISRU = Results_List;
+        Lunar_ISRU = Results_List;
+        ISFR = Results_List;
+        PowerPlant = Results_List;
     end
     properties (SetAccess = private) %thus GetAccess is public, for access to aggregate lists
         Consumables

@@ -2,12 +2,12 @@
 classdef FuelSource < handle
     %% Class enumerations (as constant properties)
     properties (Constant)
-        EARTH_H2 = FuelSource('H2', Location.EARTH);
+        EARTH_LH2 = FuelSource('H2', Location.EARTH);
         EARTH_O2 = FuelSource('O2', Location.EARTH);
         EARTH_CH4 = FuelSource('CH4', Location.EARTH);
         LUNAR_O2 = FuelSource('O2', Location.LUNAR);
-        LUNAR_H2 = FuelSource('O2', Location.LUNAR);
-        MARS_H2 = FuelSource('H2', Location.MARS);
+        LUNAR_LH2 = FuelSource('O2', Location.LUNAR);
+        MARS_LH2 = FuelSource('H2', Location.MARS);
         MARS_O2 = FuelSource('O2', Location.MARS);
     end
     

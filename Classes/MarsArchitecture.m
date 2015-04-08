@@ -7,7 +7,7 @@ classdef MarsArchitecture < handle
         destinations = [Location.LMO, Location.EARTH]; % not used
         propulsionType = Propulsion.LH2;
         trajectory = TrajectoryType.HOHMANN;
-        transitFuel = [TransitFuel.EARTH_H2, TransitFuel.LUNAR_O2];
+        transitFuel = [TransitFuel.EARTH_LH2, TransitFuel.LUNAR_O2];
         transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = ArrivalEntry.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
@@ -21,7 +21,7 @@ classdef MarsArchitecture < handle
         surfaceStructure = {StructureType.FIXED_SHELL, 0.500; StructureType.INFLATABLE, 0.500};
         surfacePower = [PowerSource.NUCLEAR, PowerSource.SOLAR, PowerSource.RTG];
         isfrUse = {cellstr('Metal')};
-        returnFuel = [ReturnFuel.EARTH_H2, ReturnFuel.MARS_O2];
+        returnFuel = [ReturnFuel.EARTH_LH2, ReturnFuel.MARS_O2];
         returnCapture = ReturnEntry.DIRECT;
         returnDescent = ReturnDescent.CHUTE;
         

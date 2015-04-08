@@ -6,8 +6,9 @@ classdef Results_List < handle
         Consumables
         Spares
         Replacements
-        Volume
+        Mass
         Power
+        Volume
         Fuel_Output
         Oxidizer_Output
     end

@@ -32,80 +32,26 @@
 %             %cell is a decision, the contents of which is the specific choice
 %             %for that architecture.
 %              disp(size(Enumerated,1))
-%             %Preallocate the results array
-%             Results = zeros(size(Enumerated,1),4); %1 row for every architectureal combo, 4 cols: Arch #, IMLEO, Sci_Val, Risk
-num_ind = 48;
-num_stat = 6;
-Results = cell(num_ind+1,num_stat); %1 row for every architectureal combo, 4 cols: transit fuel, return fuel, IMLEO, runtime
-Labels = {'Trans', 'Return', 'Stage', 'Capture', 'IMLEO', 'Sci_Value'};
-Results(1,:) = Labels;
+
+            %Preallocate the results array
+            Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 col: Results object
+
 %% Calulations
 tic
 %for loop, go through each row indicating a seperate architceture, i
  %parfor i=1:size(Enumerated,1)
 parfor i=1:num_ind
-
-    
+   
     %extract the ith architcecture from the enumerated matrix
     Cur_Arch = MarsArchitecture.DEFAULT; %test Case for now.
+    %Create the Results object for this run.
+    Results = Results_Class(i);
    
-    %test cases for fuel locations
-if i >=25
-    ii = i-24;
-    Cur_Arch.OrbitCapture = 'PropulsiveCapture';
-elseif i<=24
-    ii = i;
-    Cur_Arch.OrbitCapture = 'Aerocapture';
-end
-if ii >=13
-    ii = i-12;
-    Cur_Arch.Staging = Location.EML2;
-elseif ii<=12
-    ii = i;
-    Cur_Arch.Staging = Location.LEO;
-end
-    if ii==1
-        Cur_Arch.TransitFuel = 'Lunar_O2';
-        Cur_Arch.ReturnFuel = 'Mars_O2';
-    elseif ii==2
-        Cur_Arch.TransitFuel = 'Lunar_Fuel';
-        Cur_Arch.ReturnFuel = 'Mars_O2';
-    elseif ii==3
-        Cur_Arch.TransitFuel = 'Lunar_All';
-        Cur_Arch.ReturnFuel = 'Mars_O2';
-    elseif ii==4
-        Cur_Arch.ReturnFuel = 'Mars_Fuel';
-        Cur_Arch.TransitFuel = 'Lunar_O2';
-    elseif ii==5
-        Cur_Arch.ReturnFuel = 'Mars_Fuel';
-        Cur_Arch.TransitFuel = 'Lunar_Fuel';
-    elseif ii==6
-        Cur_Arch.ReturnFuel = 'Mars_Fuel';
-        Cur_Arch.TransitFuel = 'Lunar_All';
-    elseif ii==7
-        Cur_Arch.ReturnFuel = 'Mars_All';
-        Cur_Arch.TransitFuel = 'Lunar_O2';
-    elseif ii==8
-        Cur_Arch.ReturnFuel = 'Mars_All';
-        Cur_Arch.TransitFuel = 'Lunar_Fuel';
-    elseif ii==9
-        Cur_Arch.ReturnFuel = 'Mars_All';
-        Cur_Arch.TransitFuel = 'Lunar_All';
-    elseif ii== 10
-        Cur_Arch.ReturnFuel = 'Mars_O2';
-        Cur_Arch.TransitFuel = 'Earth';
-    elseif ii== 11
-        Cur_Arch.ReturnFuel = 'Mars_Fuel';
-        Cur_Arch.TransitFuel = 'Earth';
-    elseif ii== 12
-        Cur_Arch.ReturnFuel = 'Mars_All';
-        Cur_Arch.TransitFuel = 'Earth';
-    end
-
-
+ 
     %% Logistics Setup and Return Logistics
     
-    %% ----- Transit Habitation Module-----(Joe)
+    %% ----- Duration Modules ------
+    %% ----- Transit Habitation Module-----
     %{
     The inputs are: 
         Cur_Arch

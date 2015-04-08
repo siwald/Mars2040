@@ -1,4 +1,4 @@
-function [ Return_SC, Mars_Fuel, Mars_O2 ] = Return_Trans( Cur_Arch, Descent_SC, Trans_SC, ~ )
+function [ Spacecraft, Results] = Return_Trans( Cur_Arch, Spacecraft, Results)
 %TRANSIT Solving for the Mass to Orbit based on the staging points and fuel
 %sources, this is for the outgoing leg
 %   Cur_Arch is the Architecture object for the current architecture,
@@ -9,102 +9,76 @@ function [ Return_SC, Mars_Fuel, Mars_O2 ] = Return_Trans( Cur_Arch, Descent_SC,
 
 %% ------Inputs and ititializations------
 %Initialize the propulsion class from the current architecture
-switch char(Cur_Arch.PropulsionType)
-    case 'LH2'
-        Cur_Prop = Propulsion.LH2;
-    case 'NTR'
-        Cur_Prop = Propulsion.NTR;
-    case 'SEP'
-        Cur_Prop = Propulsion.SEP;
-    case 'CH4'
-        Cur_Prop = Propulsion.CH4;
-    otherwise
-        disp('Architecture Propulsion error')
-end
-
-%Initialize the spacecrafts
-    switch Cur_Arch.TransitTrajectory
-        case 'Hohmann'
-            Arrival_SC = Trans_SC; %Copy transit vehicle from Trans Hab Module
-             %add descent vehicle and trans vehicle together
-            Arrival_SC.Payload_Mass = (Descent_SC.Origin_Mass - Descent_SC.Hab_Mass) + Arrival_SC.Payload_Mass;
-            Arrival_SC.Hab_Mass = Descent_SC.Hab_Mass + Arrival_SC.Hab_Mass;
-            Arrival_SC.Hab_Vol = Descent_SC.Hab_Vol + Arrival_SC.Hab_Vol;
-            Return_SC = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Stage to Trans-Earth Injection');
-        case 'Elliptic' %should be same as Hohmann
-            Arrival_SC = SC_Class(Descent_SC.Origin_Mass,0,'Arrival Vehicle without Depart Stage');
-            Return_SC = SC_Class(Arrival_SC.Origin_Mass,0,'Departure Vehicle');
-        case 'Cycler_1L1'
-            Taxi = SC_Class;
-        case 'Cycler_2L3'
-        otherwise
-            disp('Human Mission, Transit Trajectory error')
-    end
-
+Cur_Prop = Cur_Arch.PropulsionType;
             
 %Initialize the Strings
 
-Stage_Point = char(Cur_Arch.Staging); %convert architecture 'location' type to string
-
 %% Get the spacecraft at departure based on the selected transit orbit
 
-switch Cur_Arch.TransitTrajectory
-    case 'Hohmann'
+switch Cur_Arch.Trajectory
+    case TrajectoryType.HOHMANN
         switch Cur_Arch.OrbitCapture
-            case 'PropulsiveCapture'
-                %arrival stage
-                dV = Hohm_Chart('TMI','LEO'); %lookup final (arrival) stage in the dV in the Hohmann chart
-                Arrival_SC = Propellant_Mass(Cur_Prop, Arrival_SC, dV); %Calc the S/C
-               
-                %departure stage
-                dV = Hohm_Chart('LMO','TMI'); %lookup dV to get from stage point to Trans Mars Injection
-                Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
-                Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
-                Mars_Fuel = Return_SC.Fuel_Mass;
+       %switch Cur_Arch.EarthCapture
+            case EntryType.PROPULSIVE
+%                 %arrival stage
+%                 dV = Hohm_Chart('TMI','LEO'); %lookup final (arrival) stage in the dV in the Hohmann chart
+%                 Arrival_SC = Propellant_Mass(Cur_Prop, Arrival_SC, dV); %Calc the S/C
+%                
+%                 %departure stage
+%                 dV = Hohm_Chart('LMO','TMI'); %lookup dV to get from stage point to Trans Mars Injection
+%                 Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
+%                 Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
+%                 Mars_Fuel = Return_SC.Fuel_Mass;
 
-            case 'Aerocapture'
-                Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99.
-                Arrival_SC.Bus_Mass = Cap_Syst_Mass; %Calc the S/C
-                origin_calc(Arrival_SC);
+            case EntryType.AEROCAPTURE
+%                 Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99.
+%                 Arrival_SC.Bus_Mass = Cap_Syst_Mass; %Calc the S/C
+%                 origin_calc(Arrival_SC);
+%                 
+%                 %departure stage
+%                 dV = Hohm_Chart('LMO','TMI'); %lookup dV to get from stage point to Trans Mars Injection
+%                 Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
+%                 Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
+            
+            case EntryType.DIRECT
+                %Arrival Stage is just direct Entry by the Earth Entry
+                %module
                 
-                %departure stage
-                dV = Hohm_Chart('LMO','TMI'); %lookup dV to get from stage point to Trans Mars Injection
-                Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
-                Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
+                %Mars Depature Stage
+                dV = Hohm_Chart('LMO','TMI');%lookup trans-earth injection in the Hohm chart table
+                Return_Engine = SC_Class('Return Engines'); %Initialize the Return Engine S/C module
+                Return_Engine = Propellant_Mass(Cur_Prop, Return_Engine, dV, Spacecraft.Mass);
+                Spacecraft.Add_Craft(Return_Engine);
         end
-    case 'Cycler_1L1'
-        Approach_Vinf = 9.75; % McConaghy, Longuski & Byrnes
-        Departure_Vinf = 6.54;% McConaghy, Longuski & Byrnes
-        disp('Not Yet')
-    case 'Cycler_2L3'
-        Approach_Vinf = 3.05; % McConaghy, Longuski & Byrnes
-        Departure_Vinf = 5.65; % McConaghy, Longuski & Byrnes
-        disp('Not Yet')
-    case 'Elliptical'
+%     case TrajectoryType.1L1
+%         Approach_Vinf = 9.75; % McConaghy, Longuski & Byrnes
+%         Departure_Vinf = 6.54;% McConaghy, Longuski & Byrnes
+%         disp('Not Yet')
+%     case TrajectoryType.2L3
+%         Approach_Vinf = 3.05; % McConaghy, Longuski & Byrnes
+%         Departure_Vinf = 5.65; % McConaghy, Longuski & Byrnes
+%         disp('Not Yet')
+    case TrajectoryType.ELLIPTICAL
         disp('Not Yet')
 end
 
 
 %% Fuel Depot Section
-                %Return Spacecraft definition, less Fuel from Mars
-Return_SC = Return_SC; %initialize the Return_SC
-switch char(Cur_Arch.ReturnFuel)
-    case 'Mars_O2'
-        Mars_O2 = Return_SC.Ox_Mass; %move O2 source to Mars
-        Return_SC.Ox_Mass = 0;
-        Mars_Fuel = 0;
-    case 'Mars_Fuel'
-        Mars_Fuel = Return_SC.Fuel_Mass; %move fuel source to Mars
-        Return_SC.Fuel_Mass = 0;
-        Mars_O2 = 0;
-    case 'Mars_All'
-        Mars_O2 = Return_SC.Ox_Mass; %move both to Mars
-        Return_SC.Ox_Mass = 0;
-        Mars_Fuel = Return_SC.Fuel_Mass;
-        Return_SC.Fuel_Mass = 0;
-    case 'Earth'
-        Mars_O2 = 0; %move no source to Mars
-        Mars_Fuel = 0;
-end
-Return_SC.Description = 'SC for return to Earth';
+
+    if ismember(FuelSource.MARS_O2,Cur_Arch.ReturnFuel)
+        if isempty(Results.Mars_ISRU.Oxidizer_Output)
+            Results.Mars_ISRU.Oxidizer_Output = 0; %initialize this if empty
+        end
+        Results.Mars_ISRU.Oxidizer_Output = Results.Mars_ISRU.Oxidizer_Output + Spacecraft.Ox_Mass; %add O2 to Mars generation
+        remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
+    end
+    if ismember(FuelSource.MARS_LH2,Cur_Arch.ReturnFuel)
+        if isempty(Results.Mars_ISRU.Fuel_Output)
+            Results.Mars_ISRU.Oxidizer_Output = 0; %initialize this if empty
+        end
+        if ~(Cur_Arch.PropulsionType == Propulsion.CH4); %skip if Methane, can't gen on Mars ISRU
+            Results.Mars_ISRU.Fuel_Output = Results.Mars_ISRU.Fuel_Output + Spacecraft.Fuel_Mass; %add LH2 to Mars generation
+            remove_fuel(Spacecraft); %remove all LH2 from Spacecraft Modules
+        end
+    end
 end
