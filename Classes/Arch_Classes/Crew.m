@@ -55,15 +55,23 @@ classdef Crew < handle
             end
         end
         
-        
+        %% class display function
+        function disp(obj)
+            if nargin > 0 && isa(obj, 'Crew')
+                disp(char([num2str(obj.Size) ' Crew']));
+            else
+                warning('Display method of EntryType called without EntryType object');
+                disp('unknown');
+            end
+        end
     end
     
     %% Enumeration of standard crew sizes
-    enumeration
-        MIN_CREW (double(2))
-        DEFAULT_TRANSIT (double(4))
-        DRA_CREW (double(6))
-        TARGET_SURFACE (double(20))
+    properties (Constant)        
+        MIN_CREW = Crew(double(2));
+        DEFAULT_TRANSIT = Crew(double(4));
+        DRA_CREW = Crew(double(6));
+        TARGET_SURFACE = Crew(double(20));
     end
 end
 

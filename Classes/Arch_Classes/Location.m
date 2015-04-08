@@ -76,7 +76,7 @@ classdef Location < handle
         function Code = get.Code(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value of Code by using object location name
                 Code = obj.locationName;
             end
@@ -85,7 +85,7 @@ classdef Location < handle
         function name = get.Name(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value of name from details table for current
                 % location code
                 name = strjoin(obj.DETAILS_TABLE{obj.locationName, 'Name'});
@@ -95,7 +95,7 @@ classdef Location < handle
         function desc = get.Description(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value of description from details table for current
                 % location code
                 desc = strjoin(obj.DETAILS_TABLE{obj.locationName, 'Description'});
@@ -105,7 +105,7 @@ classdef Location < handle
         function isSurface = get.IsSurface(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value for surface indicator from details table for
                 % current location code, converted to logical value
                 isSurface = logical(obj.DETAILS_TABLE{obj.locationName, 'IsSurface'});
@@ -115,7 +115,7 @@ classdef Location < handle
         function isOrbit = get.IsOrbital(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value for orbital indicator from details table for
                 % current location code, converted to logical value
                 isOrbit = logical(obj.DETAILS_TABLE{obj.locationName, 'IsOrbital'});
@@ -125,7 +125,7 @@ classdef Location < handle
         function isLagrangian = get.IsLagrangian(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value for lagrangian indicator from details table for
                 % current location code, converted to logical value
                 isLagrangian = logical(obj.DETAILS_TABLE{obj.locationName, 'IsLagrangian'});
@@ -135,7 +135,7 @@ classdef Location < handle
         function isru = get.ISRU(obj)
             % validate we have a initalized location object
             if nargin > 0 ... % received input arguments
-                    && isa(obj, 'Location') ... % obj is a Location object
+                    && isa(obj, 'Location') % obj is a Location object
                 % get value for ISRU list from details table for
                 % current location code, converted cell array
                 isru = eval(cell2mat(obj.DETAILS_TABLE{obj.locationName, 'ISRU'}));
@@ -222,6 +222,18 @@ classdef Location < handle
                 currIndex = find(strcmp(Location.DELTAV_TABLE.Properties.RowNames, currentLocation.locationName));
                 % get destination location index from rows
                 destIndex = find(strcmp(Location.DELTAV_TABLE.Properties.RowNames, destinationLocation.locationName));
+            end
+        end
+        
+        %% class display function
+        function disp(obj)
+            % validate we have a initalized location object
+            if nargin > 0 ... % received input arguments
+                    && isa(obj, 'Location') % obj is a Location object
+                disp(obj.Name);
+            else
+                warning('Display method of Location called without Location object');
+                disp('unknown');
             end
         end
     end
