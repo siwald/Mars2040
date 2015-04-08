@@ -29,10 +29,10 @@ function [Site_Sci_Value] = Site_Selection(Cur_Arch)
 
 %------------------------------------------------------------------------
 
-switch Cur_Arch.SiteSelection
-    case Site.Holden_Crater
+switch Cur_Arch.SurfaceSites
+    case Site.HOLDEN_CRATER
         Site_Sci_Value = 62; %Based on internal Site selection document
-    case Site.Gale_Crater
+    case Site.GALE_CRATER
         Site_Sci_Value = 57; %Based on internal Site selection document
 end
 

@@ -20,17 +20,8 @@ Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99. < this is AeroCapture, n
 
 %% Descent Taxi
     %Get out the Multiple Entry And Ascent vehicle
-    AscentModulesList = AscentSpacecraft.SC; %extract the SC list
-    [num, ~] = size(AscentModulesList);
-    for i=1:num
-        if AscentModulesList(i).Description = 'Ascent and Earth Entry Module'
-            MEAA = AscentModulesList(i); %copy out the entry module
-            AscentModulesList(i,:) = []; %remove the module from the AscentModulesList
-            AscentSpacecraft.SC = AscentModulesList; %replace the SC list without the Ascent Vehicle
-        end
-    end
+    MEAA = AscentSpacecraft.Get_Craft('Ascent and Earth Entry Module');
     MEAA.Description = 'Multiple Entry and Ascent Module';
-    
     %Add it to the Human Spacecraft
     HumanSpacecraft.Add_Craft = MEAA;
     
@@ -40,7 +31,7 @@ Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99. < this is AeroCapture, n
 
     Cargo_Lander = SC_Class('Cargo Lander');
     Cargo_Lander.Bus_Mass = Cap_Syst_Mass;
-    Cargo_Lander.Payload = Landing_Cargo / Num_Landers;
+    Cargo_Lander.Payload_Mass = Landing_Cargo / Num_Landers;
         for i=1:Num_Landers %add a Cargo_Lander Module until number of landers is reached
             CargoSpacecraft.Add_Craft = Cargo_Lander;
         end

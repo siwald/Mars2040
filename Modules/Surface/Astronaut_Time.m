@@ -1,4 +1,4 @@
-function [Sci_Time] = Astronaut_Time(Cur_Arch, Results)
+function [Results] = Astronaut_Time(Cur_Arch, Results)
 %Astronaut_Sci_Time output in units of: CM-days/day
 
 %Cur_Arch = MarsArchitecture.DEFAULT;
@@ -93,7 +93,7 @@ spent_time = ISRU_upkeep + power_upkeep + food_time + general_repairs + personal
 
 Astronaut_Daily_Time = 24.5 - spent_time; % in Hours per Astronaut
 
-Sci_Time = Astronaut_Daily_Time * Cur_Arch.SurfaceCrew.Size / 24; %in days per Team
+Results.Science_Time = Astronaut_Daily_Time * Cur_Arch.SurfaceCrew.Size / 24; %in days per Team
 % science_fraction = spent_time/24;
 % 
 % days_of_scientific_output = science_fraction*time_on_Mars;

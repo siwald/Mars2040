@@ -5,7 +5,7 @@
 %   p_transhab - units?
 %   v_crew - units?
 %   m_transhab - units?
-function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Cur_Arch)
+function [SpaceCraft] = Transit_Habitat(Cur_Arch, SpaceCraft)
 
 %----------------------Code Definition-----------------------------------
 % Mass, Volume, and power required to
@@ -14,17 +14,15 @@ function [p_transhab, v_crew, m_transhab] = Transit_Habitat(Cur_Arch)
 % Code based on surface habitat module (Mar 17, 2015)
 
 %------Inputs------
-% Num_Crew = 4;           % Reference architecture
+ Num_Crew = Cur_Arch.TransitCrew.Size;           % Reference architecture
 %%%%NATHAN-remove:Num_Crew = Cur_Arch.TransitCrew.Size;
 % Days_to_Mars = 180;     % Approx
-switch char(Cur_Arch.TransitTrajectory)
-    case 'Hohmann'
+switch Cur_Arch.Trajectory
+    case TrajectoryType.HOHMANN
             Days_to_Mars = 259; % HSMAD pg.255, minimum energy orbits
             Days_to_Earth = 258; % HSMAD pg.255, minimum energy orbits
             Days_Contingency = 455;
-    case 'Cycler_1L1'
-    case 'Cycler_2L3'
-    case 'Elliptic'
+    case TrajectoryType.ELLIPTICAL
 end
 % Days_to_Earth = 180;    % Approx
 % Days_Contingency = 700; % Approx for contingency flyby & return to Earth; also include stage
@@ -49,7 +47,7 @@ v_crew_sys = 85.51/(6*680)*crew_day;
 
 m_crew = 70 * Num_Crew;
 
-m_food = m_food_CM_Day * crew_day;
+m_food = Cur_Arch.TransitCrew.FoodKgMassPerDay * crew_day;
 p_ECLSS = (4.2 + 0.18 + 0.575)/6*4;     % HSMAD, Table 31-7 (scaled), ECLSS air, water, thermal 
 p_food = m_food * 0.91;
 
@@ -69,4 +67,11 @@ m_transhab = m_transhab_dry + m_lander + m_crew + m_aero_shield + m_crew_sys;
 v_crew = 330 - (v_crew_sys + v_waste + v_spare);
 margin = m_MOI_max - m_transhab;
 
+Trans_SC = SC_Class('Transit Habitat');
+Trans_SC.Hab_Vol = v_crew;
+Trans_SC.Volume = v_crew_sys;
+Trans_SC.Hab_Power = p_transhab;
+Trans_SC.Hab_Mass = m_transhab;
+
+SpaceCraft.Add_Craft = Trans_SC;
 end

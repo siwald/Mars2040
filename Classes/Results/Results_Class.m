@@ -15,6 +15,7 @@ classdef Results_Class < dynamicprops
         Oxidizer
         Regolith
         Science_Time
+        IMLEO
         
         %Module Breakdowns
         Surface_Habitat = Results_List;

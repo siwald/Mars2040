@@ -83,11 +83,12 @@ classdef OverallSC < dynamicprops
         
         %% Remove an element
         function out = Get_Craft(obj, name)
-            num = size(obj.SC);
+            [num, ~] = size(obj.SC);
             for i=1:num
                 if strcmp(obj.SC{i,1}.Description, name)
                     out = obj.SC{i,1}; %copy out the entry module
                     obj.SC(i,:) = []; %remove the module from the SCModulesList
+                    break
                 end
             end
         end

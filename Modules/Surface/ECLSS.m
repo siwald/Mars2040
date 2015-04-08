@@ -141,14 +141,15 @@ ISRU_Requirements.CO2 = CO2_Loss.Breathing + CO2_Loss.Leakage + CO2_Loss.Airlock
 %spares
 
 %ECLSS_Mass = ECLSS_Spares_Mass + ECLSS_Consumables_Mass;
+Results.ECLSS.Spares = ECLSS_Spares_Mass;
 %ECLSS_Mass = ECLSS_Consumables_Mass;
 Results.ECLSS.Consumables = ECLSS_Consumables_Mass;
 %ECLSS_Volume = ECLSS_Spares_Volume + ECLSS_Consumables_Volume;
 %ECLSS_Volume = ECLSS_Consumables_Volume;
 ECLSS_Power = 247164.17/1000; %Units: kW
 
-Results.ECLSS.Mass = ECLSS_Mass;
-Results.ECLSS.Volume = ECLSS_Volume;
+Results.ECLSS.Mass = 10000; %BS Number, need real sizing data.
+Results.ECLSS.Volume = 30; %BS Number, need real sizing data
 Results.ECLSS.Power = ECLSS_Power;
 end
 
