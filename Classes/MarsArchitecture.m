@@ -6,7 +6,8 @@ classdef MarsArchitecture < handle
         stageLocation = Location.LEO;
         destinations = [Location.LMO, Location.EARTH]; % not used
         propulsionType = Propulsion.LH2;
-        trajectory = TrajectoryType.HOHMANN;
+        crewTrajectory = CrewTrajectory.HOHMANN;
+        cargoTrajectory = CargoTrajectory.HOHMANN;
         transitFuel = [TransitFuel.EARTH_LH2, TransitFuel.LUNAR_O2];
         transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = HabitatShielding.H2O_INSULATION;
@@ -34,7 +35,8 @@ classdef MarsArchitecture < handle
         Destinations;
         PropulsionType;
         TransitFuel;
-        Trajectory;
+        CrewTrajectory;
+        CargoTrajectory;
         ReturnFuel;
         TransitCrew;
         TransitShielding;
@@ -124,11 +126,19 @@ classdef MarsArchitecture < handle
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'TrajectoryType')
+                       if isa(optionArray, 'CrewTrajectory')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
-                               % set trajectory option for architecture
-                               architectures{archIndIndex}.Trajectory = optionArray(1);
+                               % set crew trajectory option for architecture
+                               architectures{archIndIndex}.CrewTrajectory = optionArray(1);
+                           end
+                           continue; % onto next decision
+                       end
+                       if isa(optionArray, 'CargoTrajectory')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set cargo trajectory option for architecture
+                               architectures{archIndIndex}.CargoTrajectory = optionArray(1);
                            end
                            continue; % onto next decision
                        end
@@ -259,8 +269,12 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.TransitCrew = optionArray(optionIndex);
                                    continue;
                                end
-                               if isa(optionArray, 'TrajectoryType')
-                                   tempArray{newIndex}.Trajectory = optionArray(optionIndex);
+                               if isa(optionArray, 'CrewTrajectory')
+                                   tempArray{newIndex}.CrewTrajectory = optionArray(optionIndex);
+                                   continue;
+                               end
+                               if isa(optionArray, 'CargoTrajectory')
+                                   tempArray{newIndex}.CargoTrajectory = optionArray(optionIndex);
                                    continue;
                                end
                                if isa(optionArray, 'PowerSource')
@@ -344,7 +358,8 @@ classdef MarsArchitecture < handle
                 duplicate.destinations = currentArchitecture.destinations;
                 duplicate.propulsionType = currentArchitecture.propulsionType;
                 duplicate.transitFuel = currentArchitecture.transitFuel;
-                duplicate.trajectory = currentArchitecture.trajectory;
+                duplicate.crewTrajectory = currentArchitecture.crewTrajectory;
+                duplicate.cargoTrajectory = currentArchitecture.cargoTrajectory;
                 duplicate.returnFuel = currentArchitecture.returnFuel;
                 duplicate.transitCrew = currentArchitecture.transitCrew;
                 duplicate.transitShielding = currentArchitecture.transitShielding;
@@ -404,12 +419,20 @@ classdef MarsArchitecture < handle
                 transFuel = obj.transitFuel;
             end
         end
-        %% Trajectory getter
-        function trajectory = get.Trajectory(obj)
+        %% Crew Trajectory getter
+        function trajectory = get.CrewTrajectory(obj)
             % verify we have valid input object
             if nargin > 0 && isa(obj, 'MarsArchitecture')
-                % get trajectory from architecture object
-                trajectory = obj.trajectory;
+                % get crew trajectory from architecture object
+                trajectory = obj.crewTrajectory;
+            end
+        end
+        %% Cargo Trajectory getter
+        function trajectory = get.CargoTrajectory(obj)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture')
+                % get cargo trajectory from architecture object
+                trajectory = obj.cargoTrajectory;
             end
         end
         %% Return fuel getter
@@ -618,12 +641,22 @@ classdef MarsArchitecture < handle
                 warning('Setting architecture transit fuel not possible because of invalid input.');
             end
         end
-        %% Trajectory setter
-        function set.Trajectory(obj, value)
+        %% Crew Trajectory setter
+        function set.CrewTrajectory(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'TrajectoryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'CrewTrajectory')
                 % get trajectory from architecture object
-                obj.trajectory = value;
+                obj.crewTrajectory = value;
+            else
+                warning('Setting architecture trajectory not possible because of invalid input.');
+            end
+        end
+        %% Cargo Trajectory setter
+        function set.CargoTrajectory(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'CargoTrajectory')
+                % get trajectory from architecture object
+                obj.cargoTrajectory = value;
             else
                 warning('Setting architecture trajectory not possible because of invalid input.');
             end

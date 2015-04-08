@@ -1,6 +1,14 @@
 %% TrajectoryType class defines the type of trajectory used for space flight
 % simple enumeration type to get track of type
-classdef TrajectoryType < handle % derive handle to prevent object copying
+classdef TrajectoryType < handle % derive handle to prevent object copying    
+    %% Enumerations of trajectory types (as constant properties)
+    properties (Constant)
+        %% Reference to Hohmann trajectory
+        HOHMANN = TrajectoryType('H');
+        %% Reference to Elliptical trajectory
+        ELLIPTICAL = TrajectoryType('E');
+    end
+    
     %% Private class variables
     properties (Access=private)
         %% Type of trajectory
@@ -76,15 +84,18 @@ classdef TrajectoryType < handle % derive handle to prevent object copying
                 % output error if object is not valid
                 error('Invalid trajectory type object to get Name for.');
             end
-        end        
-    end
-    
-    %% Enumerations of trajectory types
-    enumeration
-        %% Reference to Hohmann trajectory
-        HOHMANN ('H')
-        %% Reference to Elliptical trajectory
-        ELLIPTICAL('E')
+        end
+        
+        %% class display function
+        function disp(obj)
+            %% verify we have a valid trajectory type object to get the name
+            if nargin > 0 && isa(obj, 'TrajectoryType')
+                disp(obj.Name);
+            else
+                warning('Cannot execute display function for trajectory type.');
+                disp('unknown');
+            end
+        end
     end
 end
 
