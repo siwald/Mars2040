@@ -10,9 +10,9 @@ classdef MarsArchitecture < handle
         stageLocation = Location.LEO;
         destinations = [Location.LMO, Location.EARTH]; % not used
         propulsionType = Propulsion.LH2;
-        transitFuel = [FuelSource.EARTH_H2, FuelSource.LUNAR_O2];
+        transitFuel = [FuelSource.EARTH_LH2, FuelSource.LUNAR_O2];
         trajectory = TrajectoryType.HOHMANN;
-        returnFuel = [FuelSource.EARTH_H2, FuelSource.MARS_O2];
+        returnFuel = [FuelSource.EARTH_LH2, FuelSource.MARS_O2];
         transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = EntryType.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list

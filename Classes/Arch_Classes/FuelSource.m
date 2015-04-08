@@ -24,12 +24,12 @@ classdef FuelSource < handle
     
     %% Class enumerations
     enumeration
-        EARTH_H2,
+        EARTH_LH2,
         EARTH_O2,
         EARTH_CH4,
         LUNAR_O2,
-        LUNAR_H2,
-        MARS_H2,
+        LUNAR_LH2,
+        MARS_LH2,
         MARS_O2
     end
 end
