@@ -20,8 +20,8 @@ MarsArchitecture.Enumerate( ...
         %{ReturnEntry.AEROCAPTURE,ReturnEntry.AEROBRAKE,ReturnEntry.PROPULSIVE,ReturnEntry.DIRECT}, ...
         %{ReturnDescent.PROPULSIVE,ReturnDescent.CHUTE,ReturnDescent.SHOCK_ABSORBTION});
  
-[~, Num_Arches] = size(Morph)
-enumeration_time = toc
+[~, Num_Arches] = size(Morph);
+enumeration_time = toc;
 %Preallocate the results array
 All_Results = cell(Num_Arches,4); %1 row for every architectureal combo, 4 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C
 tic
@@ -319,15 +319,20 @@ parfor i=1:Num_Arches %begin looping for each architecture
     All_Results(i,:) = Results_Row; 
     %% End Main Loop
 end %end main loop
-time_per_run = toc / Num_Arches
+time_per_run = toc / Num_Arches;
+runtime_Mins = toc / 60;
 %% --- Results Managment --- %%
 All_Results;
 
 %IMLEO vs Sci_Value Scatter Plot
 val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
+LCC_Prox = zeros(1,Num_Arches);
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
     Im(i) = All_Results{i,1}.IMLEO;
+    LCC_Prox(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
+        All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
+        All_Results{i,1}.PowerPlant.Mass]) + (10*All_Results{i,1}.IMLEO);
 end
 scatter(Im,val);
