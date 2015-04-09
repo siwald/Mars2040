@@ -2,7 +2,7 @@
 % record all the architectural decisions for mission to mars
 classdef MarsArchitecture < handle    
     properties (Access = private)
-        origin = Location.EARTH;
+        origin = Location.EARTH; % not used
         stageLocation = Location.LEO;
         destinations = [Location.LMO, Location.EARTH]; % not used
         propulsionType = Propulsion.LH2;
@@ -97,6 +97,14 @@ classdef MarsArchitecture < handle
                            for archIndIndex = 1:length(architectures)
                                % set propulsion option for architecture
                                architectures{archIndIndex}.PropulsionType = optionArray{1};
+                           end
+                           continue; % onto next decision
+                       end
+                       if isa(optionArray{1}, 'Location')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set staging location for architecture
+                               architectures{archIndIndex}.Staging = optionArray{1};
                            end
                            continue; % onto next decision
                        end
@@ -254,6 +262,10 @@ classdef MarsArchitecture < handle
                        
                                if isa(optionArray{1}, 'Propulsion')
                                    tempArray{newIndex}.PropulsionType = optionArray{optionIndex};
+                                   continue;
+                               end
+                               if isa(optionArray{1}, 'Location')
+                                   tempArray{newIndex}.Staging = optionArray{optionIndex};
                                    continue;
                                end
                                if isa(optionArray{1}, 'Site')
