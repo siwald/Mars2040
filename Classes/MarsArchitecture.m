@@ -1,6 +1,6 @@
 %% MARS 2040 Tradespace architecture object
 % record all the architectural decisions for mission to mars
-classdef MarsArchitecture < handle    
+classdef MarsArchitecture < handle  
     properties (Access = private)
         origin = Location.EARTH; % not used
         stageLocation = Location.LEO;
