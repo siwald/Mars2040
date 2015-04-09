@@ -8,6 +8,15 @@ function [FerrySpacecraft, HumanSpacecraft, CargoSpacecraft, Results] = ...
 [CargoSpacecraft, Results] = Lunar_Move(Cur_Arch, CargoSpacecraft, Results);
 
 %% Ferry craft
+%set stage location
+switch Cur_Arch.Staging
+    case Location.LEO
+        stage = 'LEO';
+    case Location.EML1
+        stage = 'EML1';
+    case Location.EML2
+        stage = 'EML2';
+end
 %sum the Lunar ISRU mass
 Prop_Mass = nansum([Results.Lunar_ISRU.Fuel_Output, Results.Lunar_ISRU.Oxidizer_Output]);
 FerrySpacecraft = OverallSC; %initialize the Ferry Craft
@@ -17,12 +26,12 @@ FerrySpacecraft.Add_Craft = Tank;
 
 %Get tank back from staging point
 FerryBack_Eng = SC_Class('Ferry Return Stage');
-FerryBack_Eng = Propellant_Mass(Cur_Arch.PropulsionType,FerryBack_Eng,Hohm_Chart('EML1','Moon'),0);
+FerryBack_Eng = Propellant_Mass(Cur_Arch.PropulsionType,FerryBack_Eng,Hohm_Chart(stage,'Moon'),0);
 FerrySpacecraft.Add_Craft = FerryBack_Eng;
 
 %Get Full tank and fuel to staging point
 Ferry_Eng = SC_Class('Ferry Main Engines');
-Ferry_Eng = Propellant_Mass(Cur_Arch.PropulsionType,Ferry_Eng,Hohm_Chart('EML1','Moon'),Prop_Mass);
+Ferry_Eng = Propellant_Mass(Cur_Arch.PropulsionType,Ferry_Eng,Hohm_Chart(stage,'Moon'),Prop_Mass);
 FerrySpacecraft.Add_Craft = Ferry_Eng;
 
 %Add Ferry Fuel Needs to Lunar ISRU
