@@ -19,7 +19,8 @@ MarsArchitecture.Enumerate( ...
         %{ReturnFuel.EARTH_LH2,[ReturnFuel.EARTH_LH2, ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
         %{ReturnEntry.AEROCAPTURE,ReturnEntry.AEROBRAKE,ReturnEntry.PROPULSIVE,ReturnEntry.DIRECT}, ...
         %{ReturnDescent.PROPULSIVE,ReturnDescent.CHUTE,ReturnDescent.SHOCK_ABSORBTION});
- 
+%  Morph = {MarsArchitecture.DRA5};
+%  Morph = {MarsArchitecture.DEFAULT};
 [~, Num_Arches] = size(Morph);
 enumeration_time = toc;
 %Preallocate the results array
@@ -328,11 +329,14 @@ All_Results;
 val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 LCC_Prox = zeros(1,Num_Arches);
+labels = cell(1,Num_Arches);
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
     Im(i) = All_Results{i,1}.IMLEO;
     LCC_Prox(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
         All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
         All_Results{i,1}.PowerPlant.Mass]) + (10*All_Results{i,1}.IMLEO);
+    labels{i} = num2str(i);
 end
 scatter(Im,val);
+%labelpoints(Im,val,labels);
