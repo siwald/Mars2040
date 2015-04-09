@@ -1,13 +1,27 @@
-
+tic
 %setup morphological matrix
-%Morph = MarsArchitecture(all);
-test_size = 48;
-Morph = cell(test_size,1);
-for i=1:test_size
-Morph{i} = MarsArchitecture.DEFAULT;
-end
-[Num_Arches, ~] = size(Morph);
-
+Morph = ...
+MarsArchitecture.Enumerate( ...
+        {Propulsion.LH2,Propulsion.NTR,Propulsion.CH4}, ... Propulsion.SEP,
+        {CargoTrajectory.HOHMANN}, ... ,CargoTrajectory.ELLIPTICAL
+        {Location.LEO, Location.EML1, Location.EML2}, ... 
+        {TransitFuel.EARTH_LH2,[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2],[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]}, ...
+        {ReturnFuel.EARTH_LH2,[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
+        {Crew.DEFAULT_TRANSIT,Crew.DRA_CREW}, ... Crew.MIN_CREW,
+        {ArrivalEntry.AEROCAPTURE,ArrivalEntry.PROPULSIVE}, ... ArrivalEntry.AEROBRAKE, ,ArrivalEntry.DIRECT
+        {Site.HOLDEN_CRATER,Site.GALE_CRATER}, ...
+        {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25}, ...
+        {SurfaceShielding.REGOLITH}, ...SurfaceShielding.BURIED, SurfaceShielding.DEDICATED,SurfaceShielding.H2O_INSULATION
+        {PowerSource.SOLAR,PowerSource.NUCLEAR,[PowerSource.NUCLEAR, PowerSource.SOLAR, PowerSource.RTG]});%, ...
+        %{ArrivalDescent.PROPULSIVE,ArrivalDescent.CHUTE,ArrivalDescent.SHOCK_ABSORBTION}, ...
+        %{HabitatShielding.DEDICATED,HabitatShielding.H2O_INSULATION}, ...
+        %{StructureType.FIXED_SHELL,StructureType.INFLATABLE,{StructureType.FIXED_SHELL, 0.500; StructureType.INFLATABLE, 0.500}}, ...
+        %{ReturnFuel.EARTH_LH2,[ReturnFuel.EARTH_LH2, ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
+        %{ReturnEntry.AEROCAPTURE,ReturnEntry.AEROBRAKE,ReturnEntry.PROPULSIVE,ReturnEntry.DIRECT}, ...
+        %{ReturnDescent.PROPULSIVE,ReturnDescent.CHUTE,ReturnDescent.SHOCK_ABSORBTION});
+ 
+[~, Num_Arches] = size(Morph)
+enumeration_time = toc
 %Preallocate the results array
 All_Results = cell(Num_Arches,4); %1 row for every architectureal combo, 4 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C
 tic
@@ -279,7 +293,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     CargoSpacecraft.Add_Craft = CargoStageing;
     
     Results.IMLEO = HumanSpacecraft.Mass + CargoSpacecraft.Mass;
-    disp(Results.IMLEO)
+%     disp(Results.IMLEO)
     
     %% --- Science Module --- %%
     %{
@@ -308,3 +322,12 @@ end %end main loop
 time_per_run = toc / Num_Arches
 %% --- Results Managment --- %%
 All_Results;
+
+%IMLEO vs Sci_Value Scatter Plot
+val = zeros(1, Num_Arches); %initialize value vector
+Im = zeros(1,Num_Arches); %ititialize IMLEO vector
+for i=1:Num_Arches
+    val(i) = All_Results{i,1}.Science;
+    Im(i) = All_Results{i,1}.IMLEO;
+end
+scatter(Im,val);

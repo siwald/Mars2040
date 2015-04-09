@@ -45,7 +45,7 @@ Crew_Activity.EVA_Dur = 8;
 %available on the actual usage that is seen.
 
 Crew_Size = Cur_Arch.SurfaceCrew.Size; %Units: Crew Members; Mission Decision
-Food_Supply = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
+[~,Food_Supply] = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
 Mission_Duration = 780; %Units: days; Mission Decision
 Cabin_Pressure = 70.3; %Units: kPa; Architectural Decision by Team
 Gas_Constant = 8.31451; %Units: J/K*mol
@@ -100,7 +100,7 @@ Oxygen_Storage = Crop_O2_Generation - EMU_O2_Supply;
 
 ISRU_Requirements.Oxygen = Oxygen_Storage - (Oxygen_Loss.Airlock + Oxygen_Loss.Leakage + Oxygen_Loss.Breathing);
 if ISRU_Requirements.Oxygen < 0 
-    ISRU_Requirements.Oxygen = ISRU_Requirements.Oxygen * -1;
+    ISRU_Requirements.Oxygen = abs(ISRU_Requirements.Oxygen);
 else
     ISRU_Requirements.Oxygen = 0;
 end
@@ -116,7 +116,7 @@ Habitat_Clean_Water = (Habitat_Water_CCAA+(Crew_Water.Urine_Water_Flush*(UPA_Eff
 
 ISRU_Requirements.Water = Habitat_Clean_Water - Portable_Water_Crew;
 if ISRU_Requirements.Water < 0
-    ISRU_Requirements.Water = ISRU_Requirements.Water * -1;
+    ISRU_Requirements.Water = abs(ISRU_Requirements.Water);
 else
     ISRU_Requirements.Water = 0;
 end
