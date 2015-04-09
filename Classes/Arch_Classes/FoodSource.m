@@ -16,7 +16,7 @@ classdef FoodSource < handle
     properties(Constant, GetAccess = public)
         EARTH_ONLY = FoodSource(Location.EARTH, 1);
         EARTH_MARS_50_SPLIT = [FoodSource(Location.EARTH, 0.500), FoodSource(Location.MARS, 0.500)];
-        MARS_ONLY = FoodSource(Location.EARTH, 1);
+        MARS_ONLY = FoodSource(Location.MARS, 1);
     end
     
     %% private methods (incl. constructor)

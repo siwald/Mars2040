@@ -66,7 +66,7 @@ classdef MarsArchitecture < handle
             % check if we have any arguments
             if ~isempty(varargin)
                 % only argument in should be array of options
-                archDecisions = varargin{1};
+                archDecisions = varargin;
                 % get the number of options for architecture tradespace
                 % given, this is the number of tradespace decisions being
                 % enumerated for the architecture analysis
@@ -92,142 +92,142 @@ classdef MarsArchitecture < handle
                        end
                        
                        % determine the type of option being set
-                       if isa(optionArray, 'Propulsion')
+                       if isa(optionArray{1}, 'Propulsion')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set propulsion option for architecture
-                               architectures{archIndIndex}.PropulsionType = optionArray(1);
+                               architectures{archIndIndex}.PropulsionType = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'Site')
+                       if isa(optionArray{1}, 'Site')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set site option for architecture
-                               architectures{archIndIndex}.SurfaceSites = optionArray(1);
+                               architectures{archIndIndex}.SurfaceSites = optionArray{1};
                            end
                            continue; % onto next decision
                        end
                        % do surface crew before crew, since it is a
                        % subclass of crew
-                       if isa(optionArray, 'SurfaceCrew')
+                       if isa(optionArray{1}, 'SurfaceCrew')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set surface crew option for architecture
-                               architectures{archIndIndex}.SurfaceCrew = optionArray(1);
+                               architectures{archIndIndex}.SurfaceCrew = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'Crew')
+                       if isa(optionArray{1}, 'Crew')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set transit crew option for architecture
-                               architectures{archIndIndex}.TransitCrew = optionArray(1);
+                               architectures{archIndIndex}.TransitCrew = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'CrewTrajectory')
+                       if isa(optionArray{1}, 'CrewTrajectory')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set crew trajectory option for architecture
-                               architectures{archIndIndex}.CrewTrajectory = optionArray(1);
+                               architectures{archIndIndex}.CrewTrajectory = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'CargoTrajectory')
+                       if isa(optionArray{1}, 'CargoTrajectory')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set cargo trajectory option for architecture
-                               architectures{archIndIndex}.CargoTrajectory = optionArray(1);
+                               architectures{archIndIndex}.CargoTrajectory = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'PowerSource')
+                       if isa(optionArray{1}, 'PowerSource')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set power option for architecture
-                               architectures{archIndIndex}.SurfacePower = optionArray(1);
+                               architectures{archIndIndex}.SurfacePower = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray(1), 'StructureType')
+                       if isa(optionArray{1}, 'StructureType')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set structure option for architecture
                                architectures{archIndIndex}.SurfaceStructure = optionArray(1);
                            end
                        end
-                       if isa(optionArray, 'FoodSource')
+                       if isa(optionArray{1}, 'FoodSource')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set food supply option for architecture
-                               architectures{archIndIndex}.FoodSupply = optionArray(1);
+                               architectures{archIndIndex}.FoodSupply = optionArray{1};
                            end
                            continue; % onto next decision
                        end
                        % do surface shielding before transit shielding
                        % since it is a subclass of habitat shielding
-                       if isa(optionArray, 'SurfaceShielding')
+                       if isa(optionArray{1}, 'SurfaceShielding')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set habitat shielding option for architecture
-                               architectures{archIndIndex}.SurfaceShielding = optionArray(1);
+                               architectures{archIndIndex}.SurfaceShielding = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'HabitatShielding')
+                       if isa(optionArray{1}, 'HabitatShielding')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set transit shielding option for architecture
-                               architectures{archIndIndex}.TransitShielding = optionArray(1);
+                               architectures{archIndIndex}.TransitShielding = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'TransitFuel')
+                       if isa(optionArray{1}, 'TransitFuel')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set transit fuel option for architecture
-                               architectures{archIndIndex}.TransitFuel = optionArray(1);
+                               architectures{archIndIndex}.TransitFuel = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'ReturnFuel')
+                       if isa(optionArray{1}, 'ReturnFuel')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set return fuel option for architecture
-                               architectures{archIndIndex}.ReturnFuel = optionArray(1);
+                               architectures{archIndIndex}.ReturnFuel = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'ArrivalEntry')
+                       if isa(optionArray{1}, 'ArrivalEntry')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set orbit capture option for architecture
-                               architectures{archIndIndex}.OrbitCapture = optionArray(1);
+                               architectures{archIndIndex}.OrbitCapture = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'ReturnEntry')
+                       if isa(optionArray{1}, 'ReturnEntry')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set return capture option for architecture
-                               architectures{archIndIndex}.ReturnCapture = optionArray(1);
+                               architectures{archIndIndex}.ReturnCapture = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'ArrivalDescent')
+                       if isa(optionArray{1}, 'ArrivalDescent')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set EDL option for architecture
-                               architectures{archIndIndex}.EDL = optionArray(1);
+                               architectures{archIndIndex}.EDL = optionArray{1};
                            end
                            continue; % onto next decision
                        end
-                       if isa(optionArray, 'ReturnDescent')
+                       if isa(optionArray{1}, 'ReturnDescent')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
                                % set return descent option for architecture
-                               architectures{archIndIndex}.ReturnDescent = optionArray(1);
+                               architectures{archIndIndex}.ReturnDescent = optionArray{1};
                            end
                            continue; % onto next decision
                        end
@@ -252,74 +252,74 @@ classdef MarsArchitecture < handle
                                tempArray{newIndex} = previousArchitecture.Duplicate();
                                % set option
                        
-                               if isa(optionArray, 'Propulsion')
-                                   tempArray{newIndex}.PropulsionType = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'Propulsion')
+                                   tempArray{newIndex}.PropulsionType = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'Site')
-                                   tempArray{newIndex}.SurfaceSites = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'Site')
+                                   tempArray{newIndex}.SurfaceSites = optionArray{optionIndex};
                                    continue;
                                end
                                % must do surface crew before transit crew
-                               if isa(optionArray, 'SurfaceCrew')
-                                   tempArray{newIndex}.SurfaceCrew = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'SurfaceCrew')
+                                   tempArray{newIndex}.SurfaceCrew = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'Crew')
-                                   tempArray{newIndex}.TransitCrew = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'Crew')
+                                   tempArray{newIndex}.TransitCrew = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'CrewTrajectory')
-                                   tempArray{newIndex}.CrewTrajectory = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'CrewTrajectory')
+                                   tempArray{newIndex}.CrewTrajectory = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'CargoTrajectory')
-                                   tempArray{newIndex}.CargoTrajectory = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'CargoTrajectory')
+                                   tempArray{newIndex}.CargoTrajectory = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'PowerSource')
-                                   tempArray{newIndex}.SurfacePower = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'PowerSource')
+                                   tempArray{newIndex}.SurfacePower = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray(1), 'StructureType')
-                                   tempArray{newIndex}.SurfaceStructure = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'StructureType')
+                                   tempArray{newIndex}.SurfaceStructure = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'FoodSource')
-                                   tempArray{newIndex}.FoodSupply = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'FoodSource')
+                                   tempArray{newIndex}.FoodSupply = optionArray{optionIndex};
                                    continue;
                                end
                                % must do surface shielding before transit shielding
-                               if isa(optionArray, 'SurfaceShielding')
-                                   tempArray{newIndex}.SurfaceShielding = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'SurfaceShielding')
+                                   tempArray{newIndex}.SurfaceShielding = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'HabitatShielding')
-                                   tempArray{newIndex}.TransitShielding = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'HabitatShielding')
+                                   tempArray{newIndex}.TransitShielding = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'TransitFuel')
-                                   tempArray{newIndex}.TransitFuel = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'TransitFuel')
+                                   tempArray{newIndex}.TransitFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'ReturnFuel')
-                                   tempArray{newIndex}.ReturnFuel = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'ReturnFuel')
+                                   tempArray{newIndex}.ReturnFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'ArrivalEntry')
-                                   tempArray{newIndex}.OrbitCapture = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'ArrivalEntry')
+                                   tempArray{newIndex}.OrbitCapture = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'ReturnEntry')
-                                   tempArray{newIndex}.ReturnCapture = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'ReturnEntry')
+                                   tempArray{newIndex}.ReturnCapture = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'ArrivalDescent')
-                                   tempArray{newIndex}.EDL = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'ArrivalDescent')
+                                   tempArray{newIndex}.EDL = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray, 'ReturnDescent')
-                                   tempArray{newIndex}.ReturnDescent = optionArray(optionIndex);
+                               if isa(optionArray{1}, 'ReturnDescent')
+                                   tempArray{newIndex}.ReturnDescent = optionArray{optionIndex};
                                    continue;
                                end
                            end % end for option loop
@@ -333,7 +333,11 @@ classdef MarsArchitecture < handle
                 % if no input to method, output warning and just return
                 % default architecture
                 warning('Mars architectures requested without any options.');
-                architectures = [MarsArchitecture.DEFAULT];
+                architectures = {MarsArchitecture.DEFAULT};
+            end
+            
+            if length(architectures) == 1
+                architectures = architectures{1};
             end
         end
     end
@@ -634,7 +638,7 @@ classdef MarsArchitecture < handle
         %% Transit fuel setter
         function set.TransitFuel(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Fuel')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'TransitFuel')
                 % get transit fuel object from architecture object
                 obj.transitFuel = value;
             else
@@ -664,7 +668,7 @@ classdef MarsArchitecture < handle
         %% Return fuel setter
         function set.ReturnFuel(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Fuel')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ReturnFuel')
                 % get return fuel object from architecture object
                 obj.returnFuel = value;
             else
@@ -694,7 +698,7 @@ classdef MarsArchitecture < handle
         %% Orbit capture setter
         function set.OrbitCapture(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalEntry')
                 % get orbit capture from architecture object
                 obj.orbitCapture = value;
             else
@@ -704,7 +708,7 @@ classdef MarsArchitecture < handle
         %% EDL setter
         function set.EDL(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'DescentType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalDescent')
                 % get EDL from architecture object
                 obj.entryDescent = value;
             else
@@ -724,7 +728,7 @@ classdef MarsArchitecture < handle
         %% Surface crew setter
         function set.SurfaceCrew(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Crew')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'SurfaceCrew')
                 % get surface Crew object from architecture object
                 obj.surfaceCrew = value;
             else
@@ -765,7 +769,7 @@ classdef MarsArchitecture < handle
         %% Food supply setter
         function set.FoodSupply(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'Location')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'FoodSource')
                 % get food supply list from architecture object
                 obj.foodSupply = value;
             else
@@ -775,7 +779,7 @@ classdef MarsArchitecture < handle
         %% Surface shielding setter
         function set.SurfaceShielding(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'HabitatShielding')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'SurfaceShielding')
                 % get surface shielding from architecture object
                 obj.surfaceShielding = value;
             else
@@ -785,7 +789,8 @@ classdef MarsArchitecture < handle
         %% Surface structure setter
         function set.SurfaceStructure(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'StructureType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && ...
+                    (isa(value, 'StructureType') || (length(value) > 1 && isa(value{1}, 'StructureType')))
                 % get surface structure from architecture object
                 obj.surfaceStructure = value;
             else
@@ -805,7 +810,7 @@ classdef MarsArchitecture < handle
         %% Return capture setter
         function set.ReturnCapture(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ReturnEntry')
                 % get return from destinations list
                 % get return capture from architecture object
                 obj.returnCapture = value;
@@ -816,7 +821,7 @@ classdef MarsArchitecture < handle
         %% Return EDL setter
         function set.ReturnDescent(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ReturnDescent')
                 % get return from destinations list
                 % get return EDL from architecture object
                 obj.returnDescent = value;
@@ -828,6 +833,14 @@ classdef MarsArchitecture < handle
     
     properties (Constant)
         DEFAULT = MarsArchitecture();
-        DRA5 = MarsArchitecture.Enumerate({Propulsion.NTR},{Crew.DRA_CREW});
+        DRA5 = MarsArchitecture.Enumerate( ...
+            {Propulsion.NTR}, ...
+            {TransitFuel.EARTH_LH2}, ...
+            {HabitatShielding.DEDICATED}, ...
+            {ArrivalEntry.PROPULSIVE}, ...
+            {ArrivalDescent.PROPULSIVE}, ...
+            {Crew.DRA_CREW}, ...
+            {SurfaceShielding.DEDICATED}, ...
+            {FoodSource.EARTH_ONLY});
     end
 end

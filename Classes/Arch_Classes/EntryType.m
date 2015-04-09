@@ -58,6 +58,17 @@ classdef EntryType < handle
                 disp('unknown');
             end
         end
+        
+        function isEqual = eq(obj1, obj2)
+            % validate we have a initalized entry type object
+            if nargin > 0 ... % received input arguments
+                    && isa(obj1, 'EntryType') ... % obj is a EntryType object
+                    && isa(obj2, 'EntryType') % obj is a EntryType object
+                isEqual = strcmp(obj1.name, obj2.name);
+            else
+                isEqual = obj2.eq(obj1);
+            end
+        end
     end
 end
 
