@@ -30,13 +30,15 @@ personal = 12; %sleeping 8, eating/cooking 2, hygiene 1, personal 1
 general_repairs = (spares*0.001)*.15; %for every ton of spares, assume 1 minutes is spent per day making repairs. ie. 10 tons of spares is 2 hours of upkeep a day
 FoodSupply = Cur_Arch.FoodSupply.Amount;
 
-if FoodSupply == 1
-    food_time = 2; %hours per day growing
-elseif FoodSupply > 0
-    food_time = 1;
-else
-    food_time = 0;
-end
+% if FoodSupply == 1
+%     food_time = 2; %hours per day growing
+% elseif FoodSupply > 0
+%     food_time = 1;
+% else
+%     food_time = 0;
+% end
+food_time = 2*FoodSupply;
+
 
 n = length(Cur_Arch.SurfacePower);
 Power_Method = Cur_Arch.SurfacePower;

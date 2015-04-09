@@ -72,9 +72,9 @@ Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from 
 UPA_Efficiency = 74; %Units: %; Efficency to reuse water from urine flush
 WPA_Efficiency = 100; %Units: %; Efficiency to reuse water from waste water
 ECLSS_Spares_Mass = 9340.60; %Units: kg/mission
-ECLSS_Consumables_Mass = 30424.00; %Units: kg/mission
+ECLSS_Consumables_Mass = 30424.00*Food_Supply; %Units: kg/mission
 ECLSS_Spares_Volume = 52.80; %Units: m^3/mission
-ECLSS_Consumables_Volume = 149.77; %Units: m^3/mission
+ECLSS_Consumables_Volume = 149.77*Food_Supply; %Units: m^3/mission
 
 
 %------------------------------------------------------------------------
@@ -148,7 +148,7 @@ Results.ECLSS.Consumables = ECLSS_Consumables_Mass;
 %ECLSS_Volume = ECLSS_Consumables_Volume;
 ECLSS_Power = 247164.17/1000; %Units: kW
 
-Results.ECLSS.Mass = 10000; %BS Number, need real sizing data.
+Results.ECLSS.Mass = 10000*Food_Supply; %BS Number, need real sizing data, should be based on %food?
 Results.ECLSS.Volume = 30; %BS Number, need real sizing data
 Results.ECLSS.Power = ECLSS_Power;
 end
