@@ -17,7 +17,7 @@ switch Cur_Arch.OrbitCapture
     case EntryType.AEROCAPTURE   %Based on AeroCapture AeroShell Mass
         Capture_Time = 30; %days based on DRA 5.0?
         Cap_Stage.Bus_Mass = 4000; %based on DRA5.0 ADD 1 pg.99
-    case EntryType.PROPULSIVECAPTURE %Based on Propulsive Capture Engines
+    case EntryType.PROPULSIVE %Based on Propulsive Capture Engines
         Capture_Time = 0; %Don't need to wait in circularization
         Cap_Stage = Propellant_Mass(Cur_Arch.Propulsion, Cap_Stage, Hohm('TMI','LMO'), spacecraft.Mass);
 end
@@ -25,13 +25,13 @@ spacecraft.Add_Craft = Cap_Stage;
 
 
 %% Transit Engines
-switch Cur_Trajectory
-    case TrajectoryType.HOHMANN
+switch Cur_Trajectory.Type
+    case TrajectoryType.HOHMANN.Type
         Rotation_Period = 540; %days based on DRA 5.0 Exec Summary
         Trans_Eng = SC_Class('Transit Engines');
         Trans_Eng = Propellant_Mass(Cur_Arch.PropulsionType,Trans_Eng,Hohm_Chart('EML1','TMI'),spacecraft.Mass);
         spacecraft.Add_Craft = Trans_Eng;
-    case TrajectoryType.ELLIPTICAL
+    case TrajectoryType.ELLIPTICAL.Type
         disp('too bad')
 end
 
