@@ -99,6 +99,7 @@ classdef OverallSC < dynamicprops
             for i=1:num
                 current = obj.SC{i,1}; %extract the current SC element
                 current.Ox_Mass = 0; %set ox to 0
+                current.Prop_Mass = current.Fuel_Mass; %reset Prop_mass without Ox.
                 obj.SC{i,1} = current; %and put it back
             end
         end

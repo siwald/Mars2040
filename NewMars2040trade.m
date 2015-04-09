@@ -1,18 +1,28 @@
 
 %setup morphological matrix
 %Morph = MarsArchitecture(all);
-Morph{1} = MarsArchitecture.DEFAULT;
-Morph{2} = MarsArchitecture.DEFAULT;
+test_size = 48;
+Morph = cell(test_size,1);
+for i=1:test_size
+Morph{i} = MarsArchitecture.DEFAULT;
+end
 [Num_Arches, ~] = size(Morph);
 
 %Preallocate the results array
 All_Results = cell(Num_Arches,4); %1 row for every architectureal combo, 4 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C
-
+tic
 parfor i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
     Cur_Arch = Morph{i};
     %initialize the Results Object for this run
     Results = Results_Class(i); %with the Arch_Num of i
+    %initialize the Results Lists, must clear these each run
+    Results.Surface_Habitat = Results_List;
+    Results.ECLSS = Results_List;
+    Results.Mars_ISRU = Results_List;
+    Results.Lunar_ISRU = Results_List;
+    Results.ISFR = Results_List;
+    Results.PowerPlant = Results_List;
     
     %% Logistics Setup %%
     
@@ -259,7 +269,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     [FerrySpacecraft, HumanSpacecraft, CargoSpacecraft, Results] = Lunar_ISRU (Cur_Arch, HumanSpacecraft, CargoSpacecraft, Results);
         
     %% --- Staging Module --- %%
-    HumanStageing = SC_Class('Staging Engines');
+    HumanStageing = SC_Class('Staging Engines'); %should Initialize
     HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO','EML1'),HumanSpacecraft.Mass);
     HumanSpacecraft.Add_Craft = HumanStageing;
     
@@ -269,13 +279,14 @@ parfor i=1:Num_Arches %begin looping for each architecture
     CargoSpacecraft.Add_Craft = CargoStageing;
     
     Results.IMLEO = HumanSpacecraft.Mass + CargoSpacecraft.Mass;
+    disp(Results.IMLEO)
     
     %% --- Science Module --- %%
     %{
     Inputs:
-        Astronaut_Sci_Time
-        Site_Sci_Value
         Results
+            Astronaut_Sci_Time
+            Site_Sci_Value
     Output:
         Results
             Science
@@ -291,8 +302,9 @@ parfor i=1:Num_Arches %begin looping for each architecture
     Results_Row{1,3} = CargoSpacecraft;
     Results_Row{1,4} = FerrySpacecraft;
     %Index into All_Results
-    All_Results{i,:} = Results_Row; 
+    All_Results(i,:) = Results_Row; 
     %% End Main Loop
 end %end main loop
+time_per_run = toc / Num_Arches
 %% --- Results Managment --- %%
 All_Results;

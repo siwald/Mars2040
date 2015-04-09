@@ -89,7 +89,7 @@ end
 %     ISRU_upkeep = 0;
 % end
 
-spent_time = ISRU_upkeep + power_upkeep + food_time + general_repairs + personal;
+spent_time = nansum([ISRU_upkeep, power_upkeep, food_time, general_repairs, personal]);
 
 Astronaut_Daily_Time = 24.5 - spent_time; % in Hours per Astronaut
 
