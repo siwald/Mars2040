@@ -17,7 +17,7 @@ function [SpaceCraft] = Transit_Habitat(Cur_Arch, SpaceCraft)
  Num_Crew = Cur_Arch.TransitCrew.Size;           % Reference architecture
 %%%%NATHAN-remove:Num_Crew = Cur_Arch.TransitCrew.Size;
 % Days_to_Mars = 180;     % Approx
-switch Cur_Arch.Trajectory
+switch Cur_Arch.CrewTrajectory
     case TrajectoryType.HOHMANN
             Days_to_Mars = 259; % HSMAD pg.255, minimum energy orbits
             Days_to_Earth = 258; % HSMAD pg.255, minimum energy orbits

@@ -15,7 +15,7 @@ Cur_Prop = Cur_Arch.PropulsionType;
 
 %% Get the spacecraft at departure based on the selected transit orbit
 
-switch Cur_Arch.Trajectory
+switch Cur_Arch.CrewTrajectory
     case TrajectoryType.HOHMANN
         switch Cur_Arch.OrbitCapture
        %switch Cur_Arch.EarthCapture

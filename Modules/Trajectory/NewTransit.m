@@ -5,11 +5,9 @@ function [ spacecraft, Results ] = NewTransit( Cur_Arch, spacecraft, type, Resul
 %swap trajectory based on type
 switch type
     case 'Human'
-        Cur_Trajectory = Cur_Arch.Trajectory;
-%         Cur_Trajectory = Cur_Arch.HumanTrajectory;
+        Cur_Trajectory = Cur_Arch.CrewTrajectory;
     case 'Cargo'
-        Cur_Trajectory = Cur_Arch.Trajectory;
-%         Cur_Trajectory = Cur_Arch.CargoTrajectory;
+        Cur_Trajectory = Cur_Arch.CargoTrajectory;
 end
 
 %% Mars Capture
