@@ -17,12 +17,12 @@ function [SpaceCraft] = Transit_Habitat(Cur_Arch, SpaceCraft)
  Num_Crew = Cur_Arch.TransitCrew.Size;           % Reference architecture
 %%%%NATHAN-remove:Num_Crew = Cur_Arch.TransitCrew.Size;
 % Days_to_Mars = 180;     % Approx
-switch Cur_Arch.CrewTrajectory
-    case TrajectoryType.HOHMANN
+switch Cur_Arch.CrewTrajectory.Type
+    case TrajectoryType.HOHMANN.Type
             Days_to_Mars = 259; % HSMAD pg.255, minimum energy orbits
             Days_to_Earth = 258; % HSMAD pg.255, minimum energy orbits
             Days_Contingency = 455;
-    case TrajectoryType.ELLIPTICAL
+    case TrajectoryType.ELLIPTICAL.Type
 end
 % Days_to_Earth = 180;    % Approx
 % Days_Contingency = 700; % Approx for contingency flyby & return to Earth; also include stage
