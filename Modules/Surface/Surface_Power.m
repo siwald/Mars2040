@@ -55,9 +55,12 @@ S_Reactor_Mass = 4610; %Units: kg; SP-100 US Research group for nuclear reactors
 S_Reactor_Volume = 36.77; %Units: m^3;
 M_Reactor_Volume = (S_Reactor_Mass + L_Reactor_Mass)/2; %Units: m^3
 
+%{
+Defined later
 PowerPlant_Mass = 1; %Units: kg; Overall Power plant mass
 Power_Mass = 0;
 Power_Volume = 0;
+%}
 
 %------------------------------------------------------------------------
 

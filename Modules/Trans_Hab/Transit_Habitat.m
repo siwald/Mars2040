@@ -51,7 +51,11 @@ m_food = Cur_Arch.TransitCrew.FoodKgMassPerDay * crew_day;
 p_ECLSS = (4.2 + 0.18 + 0.575)/6*4;     % HSMAD, Table 31-7 (scaled), ECLSS air, water, thermal 
 p_food = m_food * 0.91;
 
+%{
+Should be in transit module
 m_aero_shield = 66100;                  % Based on DRA 5.0, including payload fairing & adapter
+%}
+
 m_transhab_dry = 20000;                 % Based on BA330, incl. 1 airlock
 
 v_food = v_food_CM_Day & crew_day;
@@ -59,12 +63,16 @@ v_waste = 20;        % WAG
 m_spare = 500;       % WAG on spare
 v_spare = 1;         % WAG on spare
 
-m_lander = 10000;    % Based on Dragon
-m_prop_lander = 500; % Guess
+%{
+Don't Need Lander stuff, that's in Descent and Ascent Modules
+% m_lander = 10000;    % Based on Dragon
+% m_prop_lander = 500; % Guess
+%}
 
 p_transhab = p_crew_sys + 20;
-m_transhab = m_transhab_dry + m_lander + m_crew + m_aero_shield + m_crew_sys;
-v_crew = 330 - (v_crew_sys + v_waste + v_spare);
+m_transhab = m_transhab_dry + m_crew + m_crew_sys; %+ m_lander+ m_aero_shield
+v_crew = v_Pressurized - (v_crew_sys + v_waste + v_spare); %Assumes BA330
+
 margin = m_MOI_max - m_transhab;
 
 Trans_SC = SC_Class('Transit Habitat');
