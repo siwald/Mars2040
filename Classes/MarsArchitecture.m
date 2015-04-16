@@ -710,7 +710,7 @@ classdef MarsArchitecture < handle
         %% Orbit capture setter
         function set.OrbitCapture(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalEntry')
                 % get orbit capture from architecture object
                 obj.orbitCapture = value;
             else

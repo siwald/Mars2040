@@ -14,10 +14,10 @@ end
 Cap_Stage = SC_Class('Mars Capture');
 switch Cur_Arch.OrbitCapture
 % switch Cur_Arch.MarsCapture %Define Capture Stage craft     
-    case EntryType.AEROCAPTURE   %Based on AeroCapture AeroShell Mass
+    case ArrivalEntry.AEROCAPTURE   %Based on AeroCapture AeroShell Mass
         Capture_Time = 30; %days based on DRA 5.0?
         Cap_Stage.Bus_Mass = 66100; % Based on DRA 5.0, including payload fairing & adapter
-    case EntryType.PROPULSIVE %Based on Propulsive Capture Engines
+    case ArrivalEntry.PROPULSIVE %Based on Propulsive Capture Engines
         Capture_Time = 0; %Don't need to wait in circularization
         Cap_Stage = Propellant_Mass(Cur_Arch.PropulsionType, Cap_Stage, Hohm_Chart('TMI','LMO'), spacecraft.Mass);
 end

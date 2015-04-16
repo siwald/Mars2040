@@ -60,9 +60,9 @@ for i=1:Num_Arches
             prop(i) = 3;
     end
     switch Morph{i}.OrbitCapture
-        case EntryType.AEROCAPTURE
+        case ArrivalEntry.AEROCAPTURE
             cap(i) = 1;
-        case EntryType.PROPULSIVE
+        case ArrivalEntry.PROPULSIVE
             cap(i) = 2;
     end
     if Morph{i}.TransitFuel == [TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2]
