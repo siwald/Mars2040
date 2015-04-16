@@ -26,8 +26,18 @@ classdef Site < handle
     end
     
     enumeration
-        HOLDEN_CRATER ('Holden Crater')
-        GALE_CRATER ('Gale Crater')
+        HOLDEN ('Holden Crater')
+        GALE ('Gale Crater')
+        MERIDIANI ('Meridiani Planum')
+        GUSEV ('Gusev Crater')
+        ISIDIS ('Isidis Planitia')
+        ELYSIUM ('')
+        MAWRTH ('Mawrth Vallis')
+        EBERSWALDE ('Eberswalde Ellipse')
+        UTOPIA ('Utopia Planitia')
+        PLANUS_BOREUM ('Planus Boreum')
+        HELLAS ('Hellas Planitia')
+        AMAZONIS ('Amazonis Planitia')
     end
 end
 

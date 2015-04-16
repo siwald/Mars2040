@@ -30,10 +30,42 @@ function [Site_Sci_Value] = Site_Selection(Cur_Arch)
 %------------------------------------------------------------------------
 
 switch Cur_Arch.SurfaceSites
-    case Site.HOLDEN_CRATER
-        Site_Sci_Value = 62; %Based on internal Site selection document
-    case Site.GALE_CRATER
-        Site_Sci_Value = 57; %Based on internal Site selection document
+    case Site.HOLDEN
+        Site_Sci_Value = 7.25; %Based on internal Site selection document
+        Site_Elevation = -4.5;
+    case Site.GALE
+        Site_Sci_Value = 6.5; %Based on internal Site selection document
+         Site_Elevation = -4.5;
+    case Site.MERIDIANI
+        Site_Sci_Value = 5.25;
+         Site_Elevation = -1.3;
+    case Site.GUSEV
+        Site_Sci_Value = 9;
+         Site_Elevation = -1.9;
+    case Site.ISIDIS
+        Site_Sci_Value = 3.75;
+         Site_Elevation = -4.0;
+    case Site.ELYSIUM
+        Site_Sci_Value = 3.75;
+         Site_Elevation = -3.0;
+    case Site.MAWRTH
+        Site_Sci_Value = 6.5;
+         Site_Elevation = -2.2;
+    case Site.EBERSWALDE
+        Site_Sci_Value = 7;
+         Site_Elevation = -1.4;
+    case Site.UTOPIA
+        Site_Sci_Value = 5.75;
+         Site_Elevation = -5.0;
+    case Site.PLANUS_BOREUM
+        Site_Sci_Value = 5;
+         Site_Elevation = -5.0;
+    case Site.HELLAS
+        Site_Sci_Value = 5.75;
+         Site_Elevation = -7.2;
+    case Site.AMAZONIS
+        Site_Sci_Value = 3.75;
+         Site_Elevation = -3.5;
 end
 
 %Calculations begin
