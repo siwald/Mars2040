@@ -204,12 +204,14 @@ parfor i=1:Num_Arches %begin looping for each architecture
         Results
             Surface_Habitat, ECLSS, Mars_ISRU, PowerPlant.Spares
     %}
-    SparesRatio = 0.05; %percentage of Mass
+    SparesRatio = 0.05; %percentage of Mass per Year, Leath and Green, 1993
+    %Years per Synodic Cycle = 1.881, be able to convert to % mass per
+    %resupply
     
-    Results.Surface_Habitat.Spares = Results.Surface_Habitat.Mass * SparesRatio;
-    Results.ECLSS.Spares = Results.ECLSS.Mass * SparesRatio;
-    Results.Mars_ISRU.Spares = Results.Mars_ISRU.Mass * SparesRatio;
-    Results.PowerPlant.Spares = Results.PowerPlant.Mass * SparesRatio;
+    Results.Surface_Habitat.Spares = Results.Surface_Habitat.Mass * SparesRatio * 1.881;
+    Results.ECLSS.Spares = Results.ECLSS.Mass * SparesRatio * 1.881;
+    Results.Mars_ISRU.Spares = Results.Mars_ISRU.Mass * SparesRatio * 1.881;
+    Results.PowerPlant.Spares = Results.PowerPlant.Mass * SparesRatio * 1.881;
     
     %% --- Site Selection Module --- %%
     %{
