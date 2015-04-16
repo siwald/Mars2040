@@ -13,7 +13,7 @@ classdef MarsArchitecture < handle
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = ArrivalEntry.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
         entryDescent = ArrivalDescent.PROPULSIVE;
-        siteSelection = Site.HOLDEN_CRATER;
+        siteSelection = Site.HOLDEN;
         surfaceCrew = SurfaceCrew.TARGET_SURFACE;
         isruBase = {cellstr('Atmospheric')};
         isruUse = {cellstr('Fuel')}; % almost feel this should be generated from fuel, food, etc.
@@ -314,11 +314,11 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.TransitFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray{1}, 'ReturnFuel')
+                               if isa(optionArray{1}, 'FuelSource')
                                    tempArray{newIndex}.ReturnFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray{1}, 'ArrivalEntry')
+                               if isa(optionArray{1}, 'EntryType')
                                    tempArray{newIndex}.OrbitCapture = optionArray{optionIndex};
                                    continue;
                                end
@@ -680,7 +680,7 @@ classdef MarsArchitecture < handle
         %% Return fuel setter
         function set.ReturnFuel(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ReturnFuel')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'FuelSource')
                 % get return fuel object from architecture object
                 obj.returnFuel = value;
             else
@@ -710,7 +710,7 @@ classdef MarsArchitecture < handle
         %% Orbit capture setter
         function set.OrbitCapture(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalEntry')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
                 % get orbit capture from architecture object
                 obj.orbitCapture = value;
             else

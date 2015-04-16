@@ -1,4 +1,4 @@
-function [Crew_Time, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, Crew_Activity)
+function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, Crew_Activity)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -9,13 +9,9 @@ function [Crew_Time, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, Crew
 
 %---Testing Section
 
-Cur_Arch = MarsArchitecture.DEFAULT;
-Results = Results_Class(1);
 Crew_Activity.EVA_Freq = 5;
 Crew_Activity.CM_EVA = 10;
 Crew_Activity.EVA_Dur = 6;
-
-Results.Surface_Habitat.Volume = 5750;
 
 %------Inputs------
 
@@ -142,13 +138,13 @@ end
 %Calculations to determine the amount of Water that is required from ISRU. 
 EMU_EVA_Loss = (EVA_Cooling_Loss*EVA_Weekly_Rate/7)+(EVA_Water_Consumption*EVA_Weekly_Rate/7);
 Crew_Water = ECLSS_Water(Crew_Size);
-Crop_Water_Requirement = Crop_Transportation+(88.60*(Crop_FoodProcessor_Efficiency/100))-Crop_Water
+Crop_Water_Requirement = Crop_Transportation+(88.60*(Crop_FoodProcessor_Efficiency/100))-Crop_Water;
 Habitat_Water_CCAA = Crew_Water.Vapor_Water;
 Portable_Water_Crew = EMU_EVA_Loss+Crew_Water.Drink_Water+Crew_Water.Urine_Flush+Crew_Water.Hygiene+Crew_Water.Shower+Crew_Water.Laundry_In+(Crop_Water_Requirement*-1);
 Habitat_DirtyUrine_Water = Crew_Water.Urine_Water_Flush - (Crew_Water.Urine_Water_Flush*(UPA_Efficiency/100));
-Habitat_Clean_Water = (Habitat_Water_CCAA+(Crew_Water.Urine_Water_Flush*(UPA_Efficiency/100))+Crew_Water.Hygiene+Crew_Water.Shower+Crew_Water.Laundry_In)*(WPA_Efficiency/100)
+Habitat_Clean_Water = (Habitat_Water_CCAA+(Crew_Water.Urine_Water_Flush*(UPA_Efficiency/100))+Crew_Water.Hygiene+Crew_Water.Shower+Crew_Water.Laundry_In)*(WPA_Efficiency/100);
 
-ISRU_Requirements.Water = Habitat_Clean_Water - Portable_Water_Crew
+ISRU_Requirements.Water = Habitat_Clean_Water - Portable_Water_Crew;
 if ISRU_Requirements.Water < 0
     ISRU_Requirements.Water = ISRU_Requirements.Water * -1;
 else
@@ -177,6 +173,7 @@ ISRU_Requirements.CO2 = CO2_Loss.Breathing + CO2_Loss.Leakage + CO2_Loss.Airlock
 CrewTime_FoodPrep = (Mars_Food_Prep*Food_Supply)+(Earth_Food_Prep*(1-Food_Supply));
 Crew_Time.FoodGrowth = Crop_Area * CrewTime_FoodGrowth / 365;
 Crew_Time.Cooking = CrewTime_FoodPrep * Crew_Size;
+Crew_Time_Total = Crew_Time.FoodGrowth + Crew_Time.Cooking; %in Unit, %.
 
 %Calculations to determine the amount of Mass required for consumables and
 %spares

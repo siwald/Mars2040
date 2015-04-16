@@ -2,17 +2,17 @@ tic
 %setup morphological matrix
 Morph = ...
 MarsArchitecture.Enumerate( ...
-        {Propulsion.LH2,Propulsion.NTR,Propulsion.CH4}, ... Propulsion.SEP,
+        {Propulsion.LH2, Propulsion.CH4, Propulsion.NTR}, ...  Propulsion.SEP,
         {CargoTrajectory.HOHMANN}, ... ,CargoTrajectory.ELLIPTICAL
-        {Location.LEO, Location.EML1, Location.EML2}, ... 
-        {TransitFuel.EARTH_LH2,[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2],[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]}, ...
-        {ReturnFuel.EARTH_LH2,[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
-        {Crew.DEFAULT_TRANSIT,Crew.DRA_CREW}, ... Crew.MIN_CREW,
-        {ArrivalEntry.AEROCAPTURE,ArrivalEntry.PROPULSIVE}, ... ArrivalEntry.AEROBRAKE, ,ArrivalEntry.DIRECT
-        {Site.HOLDEN_CRATER,Site.GALE_CRATER}, ...
+        {Location.LEO, Location.EML1, Location.EML2}, ...  
+        ...{[TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2],[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2],[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]}, ...
+        {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
+        {Crew.DEFAULT_TRANSIT}, ... ,Crew.DRA_CREW Crew.MIN_CREW,
+        {ArrivalEntry.AEROCAPTURE, ArrivalEntry.PROPULSIVE}, ... ArrivalEntry.AEROBRAKE, ,ArrivalEntry.DIRECT
+        {Site.HOLDEN,Site.GALE}, ...
         {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25}, ...
         {SurfaceShielding.REGOLITH}, ...SurfaceShielding.BURIED, SurfaceShielding.DEDICATED,SurfaceShielding.H2O_INSULATION
-        {PowerSource.SOLAR,PowerSource.NUCLEAR,[PowerSource.NUCLEAR, PowerSource.SOLAR, PowerSource.RTG]});%, ...
+        {PowerSource.SOLAR,PowerSource.NUCLEAR,[PowerSource.NUCLEAR, PowerSource.SOLAR], [PowerSource.NUCLEAR, PowerSource.FUEL_CELL]});%, ...
         %{ArrivalDescent.PROPULSIVE,ArrivalDescent.CHUTE,ArrivalDescent.SHOCK_ABSORBTION}, ...
         %{HabitatShielding.DEDICATED,HabitatShielding.H2O_INSULATION}, ...
         %{StructureType.FIXED_SHELL,StructureType.INFLATABLE,{StructureType.FIXED_SHELL, 0.500; StructureType.INFLATABLE, 0.500}}, ...
@@ -22,7 +22,7 @@ MarsArchitecture.Enumerate( ...
 
 %  Morph = {MarsArchitecture.DEFAULT, MarsArchitecture.DRA5};
  
-[~, Num_Arches] = size(Morph);
+[~, Num_Arches] = size(Morph)
 enumeration_time = toc;
 %Preallocate the results array
 All_Results = cell(Num_Arches,4); %1 row for every architectureal combo, 4 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C
@@ -167,8 +167,8 @@ parfor i=1:Num_Arches %begin looping for each architecture
             ECLSS.Mass, Volume & Power
             ISRURequirements object
     %}
-    [ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
-    
+    [Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
+
     %% --- Mars ISRU --- %%
     %{
     Inputs:
@@ -221,7 +221,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     Outputs:
         Site_Sci_Value
     %}
-    Site_Sci_Value = Site_Selection(Cur_Arch);
+    [Site_Sci_Value, Site_Elevation] = Site_Selection(Cur_Arch);
     
     %% --- Astronaut Time Module --- %%
     %{
@@ -233,7 +233,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     Outputs:
         Astronaut_Sci_Time
     %}
-    [Results] = Astronaut_Time(Cur_Arch, Results);
+    [Results] = Astronaut_Time(Cur_Arch, Results, Food_Time);
     
     %% --- Descent --- %%
     %{
@@ -251,7 +251,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
             MEAA Module
             Cargo Descenders
     %}
-    [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft] = Descent(Cur_Arch, AscentSpacecraft, HumanSpacecraft, Results);
+    [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft] = Descent(Cur_Arch, AscentSpacecraft, HumanSpacecraft, Results, Site_Elevation);
 
     %% --- Outgoing Transit --- %%
     %{
@@ -326,20 +326,6 @@ end %end main loop
 time_per_run = toc / Num_Arches;
 runtime_Mins = toc / 60;
 %% --- Results Managment --- %%
-All_Results;
 
 %IMLEO vs Sci_Value Scatter Plot
-val = zeros(1, Num_Arches); %initialize value vector
-Im = zeros(1,Num_Arches); %ititialize IMLEO vector
-LCC_Prox = zeros(1,Num_Arches);
-labels = cell(1,Num_Arches);
-for i=1:Num_Arches
-    val(i) = All_Results{i,1}.Science;
-    Im(i) = All_Results{i,1}.IMLEO;
-    LCC_Prox(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
-        All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
-        All_Results{i,1}.PowerPlant.Mass]) + (10*All_Results{i,1}.IMLEO);
-    labels{i} = num2str(i);
-end
-scatter(Im,val);
-%labelpoints(Im,val,labels);
+run('View_Results')

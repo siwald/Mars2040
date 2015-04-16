@@ -57,6 +57,12 @@ ISRU_Volume = (Oxygen_Moxie_Required * Moxie_Volume);
 ISRU_Mass = (Oxygen_Moxie_Required * Moxie_Mass);
 
 %% BS scaling for other ISRU needs
+%use this if only until ISRU can be based from ECLSS needs too.
+if Results.Mars_ISRU.Oxidizer_Output == 0
+    ISRU_Power = 0;
+    ISRU_Volume = 0;
+    ISRU_Mass = 0;
+else
 ISRU_Power = ISRU_Power / Results.Mars_ISRU.Oxidizer_Output * ...
     nansum([Results.Mars_ISRU.Oxidizer_Output, Results.Mars_ISRU.Fuel_Output, ....
     ECLSS_Requirements.Water, ECLSS_Requirements.Oxygen, ...
@@ -71,7 +77,7 @@ ISRU_Mass = ISRU_Mass / Results.Mars_ISRU.Oxidizer_Output * ...
     nansum([Results.Mars_ISRU.Oxidizer_Output, Results.Mars_ISRU.Fuel_Output, ....
     ECLSS_Requirements.Water, ECLSS_Requirements.Oxygen, ...
     ECLSS_Requirements.Nitrogen, ECLSS_Requirements.CO2]);
-
+end
 %% add to results object
 Results.Mars_ISRU.Mass = ISRU_Mass;
 Results.Mars_ISRU.Volume = ISRU_Volume;
