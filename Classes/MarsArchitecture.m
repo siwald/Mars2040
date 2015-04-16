@@ -314,7 +314,7 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.TransitFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray{1}, 'FuelSource')
+                               if isa(optionArray{1}, 'ReturnFuel')
                                    tempArray{newIndex}.ReturnFuel = optionArray{optionIndex};
                                    continue;
                                end
@@ -680,7 +680,7 @@ classdef MarsArchitecture < handle
         %% Return fuel setter
         function set.ReturnFuel(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'FuelSource')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ReturnFuel')
                 % get return fuel object from architecture object
                 obj.returnFuel = value;
             else
@@ -847,7 +847,7 @@ classdef MarsArchitecture < handle
         DEFAULT = MarsArchitecture();
         DRA5 = MarsArchitecture.Enumerate( ...
             {Propulsion.NTR}, ...
-            {TransitFuel.EARTH_LH2}, ...
+            {[TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2]}, ...
             {HabitatShielding.DEDICATED}, ...
             {ArrivalEntry.PROPULSIVE}, ...
             {ArrivalDescent.PROPULSIVE}, ...

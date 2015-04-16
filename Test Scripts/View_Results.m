@@ -86,9 +86,9 @@ for i=1:Num_Arches
 end
 %% disp
 hold off;
-gscatter(Im,marsh2,returnfuel,'mcrgb','o+xsd');
+gscatter(Im,val,returnfuel,'mcrgb','o+xsd');
 hold on;
-scatter(250000,30000,'d');
+%scatter(250000,30000,'d');
 xlabel('IMLEO');
 ylabel('Scientific Value');
 
