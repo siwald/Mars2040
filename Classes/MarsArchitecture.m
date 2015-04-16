@@ -13,7 +13,7 @@ classdef MarsArchitecture < handle
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = ArrivalEntry.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
         entryDescent = ArrivalDescent.PROPULSIVE;
-        siteSelection = Site.HOLDEN_CRATER;
+        siteSelection = Site.HOLDEN;
         surfaceCrew = SurfaceCrew.TARGET_SURFACE;
         isruBase = {cellstr('Atmospheric')};
         isruUse = {cellstr('Fuel')}; % almost feel this should be generated from fuel, food, etc.
