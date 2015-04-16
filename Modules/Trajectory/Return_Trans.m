@@ -65,13 +65,13 @@ end
 
 %% Fuel Depot Section
 for i=1:2
-    if Cur_Arch.ReturnFuel(i).Location == Location.Mars & ...
+    if Cur_Arch.ReturnFuel(i).Location == Location.MARS & ...
             Cur_Arch.ReturnFuel(i).Name == 'O2'
         Results.Mars_ISRU.Oxidizer_Output = nansum([Results.Mars_ISRU.Oxidizer_Output, Spacecraft.Ox_Mass]); %add O2 to Mars generation
         disp (Results.Mars_ISRU.Oxidizer_Output)
         remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
     end
-    if Cur_Arch.ReturnFuel(i).Location == Location.Mars & ...
+    if Cur_Arch.ReturnFuel(i).Location == Location.MARS & ...
             Cur_Arch.ReturnFuel(i).Name == 'H2'
         if Cur_Arch.PropulsionType ~= Propulsion.CH4; %skip if Methane, can't gen on Mars ISRU
             Results.Mars_ISRU.Fuel_Output = nansum([Results.Mars_ISRU.Fuel_Output, Spacecraft.Fuel_Mass]); %add LH2 to Mars generation
