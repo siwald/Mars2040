@@ -68,7 +68,6 @@ for i=1:2
     if Cur_Arch.ReturnFuel(i).Location == Location.MARS & ...
             Cur_Arch.ReturnFuel(i).Name == 'O2'
         Results.Mars_ISRU.Oxidizer_Output = nansum([Results.Mars_ISRU.Oxidizer_Output, Spacecraft.Ox_Mass]); %add O2 to Mars generation
-        disp (Results.Mars_ISRU.Oxidizer_Output)
         remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
     end
     if Cur_Arch.ReturnFuel(i).Location == Location.MARS & ...
