@@ -19,7 +19,7 @@ switch Cur_Arch.CrewTrajectory
     case TrajectoryType.HOHMANN
         switch Cur_Arch.OrbitCapture
        %switch Cur_Arch.EarthCapture
-            case EntryType.PROPULSIVE
+            case ArrivalEntry.PROPULSIVE
 %                 %arrival stage
 %                 dV = Hohm_Chart('TMI','LEO'); %lookup final (arrival) stage in the dV in the Hohmann chart
 %                 Arrival_SC = Propellant_Mass(Cur_Prop, Arrival_SC, dV); %Calc the S/C
@@ -30,7 +30,7 @@ switch Cur_Arch.CrewTrajectory
 %                 Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
 %                 Mars_Fuel = Return_SC.Fuel_Mass;
 
-            case EntryType.AEROCAPTURE
+            case ArrivalEntry.AEROCAPTURE
 %                 Cap_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99.
 %                 Arrival_SC.Bus_Mass = Cap_Syst_Mass; %Calc the S/C
 %                 origin_calc(Arrival_SC);
@@ -40,7 +40,7 @@ switch Cur_Arch.CrewTrajectory
 %                 Return_SC.Payload_Mass = Arrival_SC.Origin_Mass; %update departure stage payload
 %                 Return_SC = Propellant_Mass(Cur_Prop,Return_SC, dV); %Determine Departure Stage Fuel and Engine masses
             
-            case EntryType.DIRECT
+            case ArrivalEntry.DIRECT
                 %Arrival Stage is just direct Entry by the Earth Entry
                 %module
                 

@@ -5,6 +5,7 @@ classdef Results_Class < dynamicprops
     properties
         %Results
         Arch_Num
+        Arch_Name
         Science
         Risk
         SpaceCraft
