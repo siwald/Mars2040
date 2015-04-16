@@ -318,7 +318,7 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.ReturnFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray{1}, 'ArrivalEntry')
+                               if isa(optionArray{1}, 'EntryType')
                                    tempArray{newIndex}.OrbitCapture = optionArray{optionIndex};
                                    continue;
                                end
@@ -710,7 +710,7 @@ classdef MarsArchitecture < handle
         %% Orbit capture setter
         function set.OrbitCapture(obj, value)
             % verify we have valid input object
-            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalEntry')
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'EntryType')
                 % get orbit capture from architecture object
                 obj.orbitCapture = value;
             else
@@ -847,7 +847,7 @@ classdef MarsArchitecture < handle
         DEFAULT = MarsArchitecture();
         DRA5 = MarsArchitecture.Enumerate( ...
             {Propulsion.NTR}, ...
-            {TransitFuel.EARTH_LH2}, ...
+            {[TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2]}, ...
             {HabitatShielding.DEDICATED}, ...
             {ArrivalEntry.PROPULSIVE}, ...
             {ArrivalDescent.PROPULSIVE}, ...

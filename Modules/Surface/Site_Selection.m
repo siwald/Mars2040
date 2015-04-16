@@ -1,4 +1,4 @@
-function [Site_Sci_Value] = Site_Selection(Cur_Arch)
+function [Site_Sci_Value, Site_Elevation] = Site_Selection(Cur_Arch)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------

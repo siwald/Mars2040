@@ -19,7 +19,7 @@ switch Cur_Arch.OrbitCapture
         Cap_Stage.Bus_Mass = 66100; % Based on DRA 5.0, including payload fairing & adapter
     case EntryType.PROPULSIVE %Based on Propulsive Capture Engines
         Capture_Time = 0; %Don't need to wait in circularization
-        Cap_Stage = Propellant_Mass(Cur_Arch.Propulsion, Cap_Stage, Hohm('TMI','LMO'), spacecraft.Mass);
+        Cap_Stage = Propellant_Mass(Cur_Arch.PropulsionType, Cap_Stage, Hohm_Chart('TMI','LMO'), spacecraft.Mass);
 end
 spacecraft.Add_Craft = Cap_Stage;
 

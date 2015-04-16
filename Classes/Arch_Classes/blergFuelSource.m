@@ -1,5 +1,5 @@
 %% Class representing rocket fuel types and its source (i.e. source location)
-classdef FuelSource < handle
+classdef blergFuelSource < handle
     %% Class enumerations (as constant properties)
     properties (Constant)
         EARTH_LH2 = FuelSource('H2', Location.EARTH);

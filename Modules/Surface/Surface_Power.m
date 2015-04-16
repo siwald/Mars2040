@@ -100,17 +100,19 @@ PowerPlant_Volume = (XL_Reactor_Quantity * XL_Reactor_Volume) + (L_Reactor_Quant
 
 n = length(Cur_Arch.SurfacePower);
 Power_Method = Cur_Arch.SurfacePower;
-
+[~,Power_Size] = size(Power_Method);
+Power_Mass = 0; %Initialize the mass
+Power_Volume = 0; %Initialize the volume
 for m = 1:n
     switch char(Power_Method(m))
         
         case 'SOLAR'
-            Power_Mass = Power_Mass+Solar_Mass + Battery_Mass;
-            Power_Volume = Power_Volume + (Solar_Area * 1) + Battery_Volume; %Assumption made that Solar Panels are 1 meter thick to calculate volume
+            Power_Mass = Power_Mass+ (1/Power_Size)*(Solar_Mass + Battery_Mass);
+            Power_Volume = Power_Volume + (1/Power_Size)*((Solar_Area * 1) + Battery_Volume); %Assumption made that Solar Panels are 1 meter thick to calculate volume
         
-        case 'FUEL_CELLS'
-            Power_Mass = Power_Mass+FuelCell_Mass;
-            Power_Volume = Power_Volume+FuellCell_Volume;
+        case 'FUEL_CELL'
+            Power_Mass = Power_Mass+(1/Power_Size)*FuelCell_Mass;
+            Power_Volume = Power_Volume+(1/Power_Size)*FuelCell_Volume;
     
         case 'RTG'
             %No Equations at this time. Insert equations here
@@ -118,8 +120,8 @@ for m = 1:n
             Power_Volume = Power_Volume;
         
         case 'NUCLEAR'
-            Power_Mass = Power_Mass+PowerPlant_Mass + PowerCable_Mass;
-            Power_Volume = Power_Volume+PowerPlant_Volume;
+            Power_Mass = Power_Mass+(1/Power_Size)*(PowerPlant_Mass + PowerCable_Mass);
+            Power_Volume = Power_Volume+(1/Power_Size)*PowerPlant_Volume;
     
         otherwise
             error('Power poorly defined in Morph Matrix, should be combination of: Solar, Fuel_Cells , RTG, or Nuclear')

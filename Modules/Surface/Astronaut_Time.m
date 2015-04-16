@@ -1,4 +1,4 @@
-function [Results] = Astronaut_Time(Cur_Arch, Results)
+function [Results] = Astronaut_Time(Cur_Arch, Results, food_time)
 %Astronaut_Sci_Time output in units of: CM-days/day
 
 %Cur_Arch = MarsArchitecture.DEFAULT;
@@ -37,24 +37,26 @@ FoodSupply = Cur_Arch.FoodSupply.Amount;
 % else
 %     food_time = 0;
 % end
-food_time = 2*FoodSupply;
+
+%food_time = 2*FoodSupply;
 
 
 n = length(Cur_Arch.SurfacePower);
 Power_Method = Cur_Arch.SurfacePower;
-
+[~,Power_Size] = size(Power_Method);
+power_upkeep = 0; %initialize
 for m = 1:n
     switch char(Power_Method(m))
         
         case 'SOLAR'
-            power_upkeep = power_upkeep + 2;
+            power_upkeep = power_upkeep + 2*(1/Power_Size); 
         case 'FUEL_CELLS'
-            power_upkeep = power_upkeep + 1.5;    
+            power_upkeep = power_upkeep + 1.5*(1/Power_Size);    
         case 'RTG'
             %No Equations at this time. Insert equations here
-            power_upkeep = power_upkeep + 0;
+            power_upkeep = power_upkeep + 1*(1/Power_Size);
         case 'NUCLEAR'
-            power_upkeep = power_upkeep + 1.5;
+            power_upkeep = power_upkeep + 1.5*(1/Power_Size);
         otherwise
             power_upkeep = power_upkeep + 0;
     end
@@ -80,7 +82,7 @@ for m = 1:n
 switch char(Cur_Arch.ISRUBase{1})
     
     case 'NONE'
-        ISRU_upkeep = 1;
+        ISRU_upkeep = Results.Mars_ISRU.Mass * .001 * .15; %for each ton of ISRU mass, assume 1 min a day for maintenance.
     otherwise
         ISRU_upkeep = 0;
 end
