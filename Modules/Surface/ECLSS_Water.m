@@ -28,14 +28,22 @@ function [Crew_Water] = ECLSS_Water(Crew_Size)
 %resources. These values can be changed once further information becomes
 %available on the actual usage that is seen.
 
-Habitat_Water.Drink_Water = 2;
-Habitat_Water.Vapor = 2.277;
-Habitat_Water.Fecal_Water = 0.091;
-Habitat_Water.Urine_Water = 1.5;
-Habitat_Water.Urinal_Flush = 0.5;
-Habitat_Water.Oral_Hygiene = 0.37;
-Habitat_Water.Hand_Wash = 4.08;
-Habitat_Water.Shower = 2.72;
+%Habitat_Water.Drink_Water = 2;
+Habitat_Water.Drink_Water = 2.5; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Vapor = 2.277;
+Habitat_Water.Vapor = 1.9; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Fecal_Water = 0.091;
+Habitat_Water.Fecal_Water = 0.1; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Urine_Water = 1.5;
+Habitat_Water.Urine_Water = 1.6; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Urinal_Flush = 0.5;
+Habitat_Water.Urinal_Flush = 0.5; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Oral_Hygiene = 0.37;
+Habitat_Water.Oral_Hygiene = 0.37; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Hand_Wash = 4.08;
+Habitat_Water.Hand_Wash = 4.08; %Units: kg/CM/day; BVAD 2015 pg. 50
+% Habitat_Water.Shower = 2.72;
+Habitat_Water.Shower = 2.72; %Units: kg/CM/day; BVAD 2015 pg. 50
 Habitat_Water.Laundry_In = 12.47;
 Habitat_Water.Laundry_Out = 11.87;
 
