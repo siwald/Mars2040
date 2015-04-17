@@ -65,20 +65,20 @@ for i=1:Num_Arches
         case ArrivalEntry.PROPULSIVE
             cap(i) = 2;
     end
-    if Morph{i}.TransitFuel == [TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2]
+    if isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2])
             transfuel(i) = 1;
-    elseif Morph{i}.TransitFuel == [TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2]
+    elseif isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2])
             transfuel(i) = 2;
-    elseif Morph{i}.TransitFuel == [TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]
+    elseif isequal(Morph{i}.TransitFuel, [TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2])
             transfuel(i) = 3;
     else
         transfuel(i) = 4;
     end
-    if Morph{i}.ReturnFuel == [ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2]
+    if isequal(Morph{i}.ReturnFuel, [ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2])
             returnfuel(i) = 1;
-    elseif Morph{i}.ReturnFuel ==  [ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2]
+    elseif isequal(Morph{i}.ReturnFuel,  [ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2])
             returnfuel(i) = 2;
-    elseif Morph{i}.ReturnFuel ==  [ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]
+    elseif isequal(Morph{i}.ReturnFuel, [ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2])
             returnfuel(i) = 3;
     else
         returnfuel(i) = 4;
@@ -86,7 +86,7 @@ for i=1:Num_Arches
 end
 %% disp
 hold off;
-gscatter(Im,val,returnfuel,'mcrgb','o+xsd');
+gscatter(Im,val,stage,'mcrgb','o+xsd');
 hold on;
 %scatter(250000,30000,'d');
 xlabel('IMLEO');

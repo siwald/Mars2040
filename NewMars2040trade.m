@@ -2,12 +2,12 @@ tic
 %setup morphological matrix
 Morph = ...
 MarsArchitecture.Enumerate( ...
-        {Propulsion.LH2, Propulsion.CH4, Propulsion.NTR}, ...  Propulsion.SEP,
+        {Propulsion.NTR}, ...  Propulsion.SEP, Propulsion.LH2, Propulsion.CH4, 
         {CargoTrajectory.HOHMANN}, ... ,CargoTrajectory.ELLIPTICAL
         {Location.LEO, Location.EML1, Location.EML2}, ...  
         {[TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2],[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2],[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]}, ...
         {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
-        {Crew.DEFAULT_TRANSIT}, ... ,Crew.DRA_CREW Crew.MIN_CREW,
+        {Crew.DEFAULT_TRANSIT, Crew.DRA_CREW}, ... Crew.MIN_CREW,
         {ArrivalEntry.AEROCAPTURE, ArrivalEntry.PROPULSIVE}, ... ArrivalEntry.AEROBRAKE, ,ArrivalEntry.DIRECT
         {Site.HOLDEN,Site.GALE}, ...
         {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25}, ...
@@ -27,7 +27,7 @@ enumeration_time = toc;
 %Preallocate the results array
 All_Results = cell(Num_Arches,5); %1 row for every architectureal combo, 5 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C, Ascent S/C
 tic
-for i=1:Num_Arches %begin looping for each architecture
+parfor i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
     Cur_Arch = Morph{i};
     %initialize the Results Object for this run
