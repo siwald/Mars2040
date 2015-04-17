@@ -20,14 +20,14 @@ MarsArchitecture.Enumerate( ...
         %{ReturnEntry.AEROCAPTURE,ReturnEntry.AEROBRAKE,ReturnEntry.PROPULSIVE,ReturnEntry.DIRECT}, ...
         %{ReturnDescent.PROPULSIVE,ReturnDescent.CHUTE,ReturnDescent.SHOCK_ABSORBTION});
 
-% Morph = {MarsArchitecture.DEFAULT, MarsArchitecture.DRA5};
+%  Morph = {MarsArchitecture.DEFAULT, MarsArchitecture.DRA5};
  
 [~, Num_Arches] = size(Morph)
 enumeration_time = toc;
 %Preallocate the results array
-All_Results = cell(Num_Arches,4); %1 row for every architectureal combo, 4 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C
+All_Results = cell(Num_Arches,5); %1 row for every architectureal combo, 5 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C, Ascent S/C
 tic
-parfor i=1:Num_Arches %begin looping for each architecture
+for i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
     Cur_Arch = Morph{i};
     %initialize the Results Object for this run
@@ -288,11 +288,11 @@ parfor i=1:Num_Arches %begin looping for each architecture
         
     %% --- Staging Module --- %%
     HumanStageing = SC_Class('Staging Engines'); %should Initialize
-    HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO','EML1'),HumanSpacecraft.Mass);
+    HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),HumanSpacecraft.Mass);
     HumanSpacecraft.Add_Craft = HumanStageing;
     
     CargoStageing = SC_Class('Staging Engines');
-    CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO','EML1'),(CargoSpacecraft.Mass ...
+    CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),(CargoSpacecraft.Mass ...
         + FerrySpacecraft.Prop_Mass)); %Needs to bring the non-Lunar ISRU prop mass to staging point for the Ferry
     CargoSpacecraft.Add_Craft = CargoStageing;
     
@@ -314,11 +314,13 @@ parfor i=1:Num_Arches %begin looping for each architecture
     %% Fill out Results Row
     %Create comeplete row first, so there's only 1 index into the global
     %All_Rdesults outside the parfor
-    Results_Row = cell(1,4); %init Results Row
+    %1 row for every architectureal combo, 5 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C, Ascent S/C
+    Results_Row = cell(1,5); %init Results Row
     Results_Row{1,1} = Results;
     Results_Row{1,2} = HumanSpacecraft;
     Results_Row{1,3} = CargoSpacecraft;
     Results_Row{1,4} = FerrySpacecraft;
+    Results_Row{1,5} = AscentSpacecraft;
     %Index into All_Results
     All_Results(i,:) = Results_Row; 
     %% End Main Loop

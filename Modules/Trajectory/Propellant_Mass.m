@@ -23,6 +23,7 @@ end
 SC_Module.Bus_Mass = SC_Module.Bus_Mass + prop_inst.StaticMass; %add engine Static Mass to bus mass.
 
 %tic
+if dV ~= 0 %skip the rest if dV = 0
 %Convergent loop
 converge_to = 0.0000001; %set convergence limit in difference percent
 converge = 1; %initialize convergence factor
@@ -55,7 +56,7 @@ end
 %fill out the fuel vs ox split
 SC_Module.Ox_Mass = SC_Module.Prop_Mass * (prop_inst.FuelOxRatio / (1 + prop_inst.FuelOxRatio));
 SC_Module.Fuel_Mass = SC_Module.Prop_Mass * (1 / (1 + prop_inst.FuelOxRatio));
-
+end %end dV = 0 loop
 %{
 %----debugging outputs
 Prop_Loop_time_in_seconds = toc
