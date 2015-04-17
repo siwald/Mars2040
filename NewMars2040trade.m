@@ -32,18 +32,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     Cur_Arch = Morph{i};
     %initialize the Results Object for this run
     Results = Results_Class(i); %with the Arch_Num of i
-    %initialize the Results Lists, must clear these each run
-    Results.Surface_Habitat = Results_List;
-    Results.ECLSS = Results_List;
-    Results.Mars_ISRU = Results_List;
-    Results.Lunar_ISRU = Results_List;
-    Results.ISFR = Results_List;
-    Results.PowerPlant = Results_List;
-    
     %% Logistics Setup %%
-    
-    %Initialize the Overall Spacecraft for the Human legs
-    HumanSpacecraft = OverallSC;
     
     %% --- Duration Module --- %%
     %{
@@ -78,7 +67,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
                 Power
                 Volume
     %}
-    HumanSpacecraft = Transit_Habitat(Cur_Arch, HumanSpacecraft);
+    Results.HumanSpacecraft = Transit_Habitat(Cur_Arch, Results.HumanSpacecraft);
     
     %% --- Earth Entry Module --- %%
     %{
@@ -104,7 +93,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     Earth_Entry.volume_calc; %populate the total volume
     Earth_Entry.Bus_Mass = Earth_Entry.Volume * 81.73; %size of HeatSheild, kg, based on Apollo, per total module volume
     Earth_Entry.drymass_calc; %populate the overall mass numbers
-    HumanSpacecraft.Add_Craft = Earth_Entry; %Add entry module to the S/C
+    Results.HumanSpacecraft.Add_Craft = Earth_Entry; %Add entry module to the S/C
     
     %% --- Return Transit Module --- %%
     %{
@@ -122,7 +111,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
             Mars ISRU requirements
     %}
     
-    [HumanSpacecraft, Results] = Return_Trans (Cur_Arch, HumanSpacecraft, Results);
+    [Results.HumanSpacecraft, Results] = Return_Trans (Cur_Arch, Results.HumanSpacecraft, Results);
     
     %% --- Ascent Module --- %%
     %{
@@ -141,7 +130,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
         Results with updated ISRU fuel
     %}
     
-    [AscentSpacecraft, HumanSpacecraft, Results] = Ascent (Cur_Arch, HumanSpacecraft, Results);
+    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results] = Ascent (Cur_Arch, Results.HumanSpacecraft, Results);
        
     %% --- Surf Structure --- %%
     %{
@@ -251,7 +240,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
             MEAA Module
             Cargo Descenders
     %}
-    [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft] = Descent(Cur_Arch, AscentSpacecraft, HumanSpacecraft, Results, Site_Elevation);
+    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
 
     %% --- Outgoing Transit --- %%
     %{
@@ -265,8 +254,8 @@ parfor i=1:Num_Arches %begin looping for each architecture
         HumanSpacecraft
         CargoSpacecraft
     %}
-    [HumanSpacecraft] = NewTransit(Cur_Arch, HumanSpacecraft, 'Human', Results);
-    [CargoSpacecraft] = NewTransit(Cur_Arch, CargoSpacecraft, 'Cargo', Results);
+    [Results.HumanSpacecraft] = NewTransit(Cur_Arch, Results.HumanSpacecraft, 'Human', Results);
+    [Results.CargoSpacecraft] = NewTransit(Cur_Arch, Results.CargoSpacecraft, 'Cargo', Results);
     %% --- Lunar ISRU --- %%
     %{
     Inputs:
@@ -275,7 +264,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
         HumanSpacecraft
             Fuel_Mass
             Ox_Mass
-        CargoSpacecraft
+        Results.CargoSpacecraft
             Fuel_Mass
             Ox_Mass
         Results
@@ -284,19 +273,19 @@ parfor i=1:Num_Arches %begin looping for each architecture
         FerrySpacecraft
     %}
     
-    [FerrySpacecraft, HumanSpacecraft, CargoSpacecraft, Results] = Lunar_ISRU (Cur_Arch, HumanSpacecraft, CargoSpacecraft, Results);
+    [Results.FerrySpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, Results] = Lunar_ISRU (Cur_Arch, Results.HumanSpacecraft, Results.CargoSpacecraft, Results);
         
     %% --- Staging Module --- %%
     HumanStageing = SC_Class('Staging Engines'); %should Initialize
-    HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),HumanSpacecraft.Mass);
-    HumanSpacecraft.Add_Craft = HumanStageing;
+    HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),Results.HumanSpacecraft.Mass);
+    Results.HumanSpacecraft.Add_Craft = HumanStageing;
     
     CargoStageing = SC_Class('Staging Engines');
-    CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),(CargoSpacecraft.Mass ...
-        + FerrySpacecraft.Prop_Mass)); %Needs to bring the non-Lunar ISRU prop mass to staging point for the Ferry
-    CargoSpacecraft.Add_Craft = CargoStageing;
+    CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),(Results.CargoSpacecraft.Mass ...
+        + Results.FerrySpacecraft.Prop_Mass)); %Needs to bring the non-Lunar ISRU prop mass to staging point for the Ferry
+    Results.CargoSpacecraft.Add_Craft = CargoStageing;
     
-    Results.IMLEO = HumanSpacecraft.Mass + CargoSpacecraft.Mass;
+    Results.IMLEO = Results.HumanSpacecraft.Mass + Results.CargoSpacecraft.Mass;
 %     disp(Results.IMLEO)
     
     %% --- Science Module --- %%

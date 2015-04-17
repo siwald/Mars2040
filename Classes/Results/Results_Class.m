@@ -8,23 +8,31 @@ classdef Results_Class < dynamicprops
         Arch_Name
         Science
         Risk
-        SpaceCraft
-        Food
-        SC_Drymass
-        Propellant
-        Fuel
-        Oxidizer
+        % replace with space craft objects
+        %SpaceCraft
+        %Food
+        %SC_Drymass
+        %Propellant
+        %Fuel
+        %Oxidizer
         Regolith
         Science_Time
         IMLEO
         
+        % Spacecraft breakdowns
+        HumanSpacecraft;
+        CargoSpacecraft;
+        FerrySpacecraft;
+        AscentSpacecraft;
+        
         %Module Breakdowns
-        Surface_Habitat = Results_List;
-        ECLSS = Results_List;
-        Mars_ISRU = Results_List;
-        Lunar_ISRU = Results_List;
-        ISFR = Results_List;
-        PowerPlant = Results_List;
+        Transit_Habitat;
+        Surface_Habitat;
+        ECLSS;
+        Mars_ISRU;
+        Lunar_ISRU;
+        ISFR;
+        PowerPlant;
     end
     properties (SetAccess = private) %thus GetAccess is public, for access to aggregate lists
         Consumables
@@ -36,6 +44,18 @@ classdef Results_Class < dynamicprops
         %Constructor with Arch Number
         function obj = Results_Class(num)
             obj.Arch_Num = num;
+            % initialize objects
+            obj.HumanSpacecraft = OverallSC();
+            obj.CargoSpacecraft = OverallSC();
+            obj.FerrySpacecraft = OverallSC();
+            obj.AscentSpacecraft = OverallSC();
+            obj.Transit_Habitat = Results_List();
+            obj.Surface_Habitat = Results_List();
+            obj.ECLSS = Results_List();
+            obj.Mars_ISRU = Results_List();
+            obj.Lunar_ISRU = Results_List();
+            obj.ISFR = Results_List();
+            obj.PowerPlant = Results_List();
         end
         
         %Getter for total Consumables
