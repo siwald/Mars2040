@@ -39,7 +39,7 @@
                 Power
                 Volume
     %}
-    Results.HumanSpacecraft = Transit_Habitat(Cur_Arch, Results.HumanSpacecraft);
+    Results.HumanSpacecraft = Transit_Habitat(Cur_Arch, Results.HumanSpacecraft, Results);
     
     %% --- Earth Entry Module --- %%
     %{
@@ -102,7 +102,7 @@
         Results with updated ISRU fuel
     %}
     
-    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results] = Ascent (Cur_Arch, Results.HumanSpacecraft, Results);
+    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results] = Ascent (Cur_Arch, Results.HumanSpacecraft, Results, 'DRA5');
        
     %% --- Surf Structure --- %%
     %{
@@ -274,69 +274,77 @@
 
 Results.Arch_Name = strcat('Model ', Results.Arch_Num);
 
-% build DRA 5.0 results
+%% build DRA 5.0 results
 DRA5_Results = Results_Class(0);
 DRA5_Results.Arch_Name = 'DRA 5.0';
-% primarily result values
-DRA5_Results.IMLEO = 800000;
-DRA5_Results.Science = -1;
-DRA5_Results.Risk = -1;
-DRA5_Results.Regolith = -1;
-DRA5_Results.Science_Time = -1;
-% surface habitat
-DRA5_Results.Surface_Habitat.Consumables = -1;
-DRA5_Results.Surface_Habitat.Spares = -1;
-DRA5_Results.Surface_Habitat.Replacements = -1;
-DRA5_Results.Surface_Habitat.Mass = -1;
-DRA5_Results.Surface_Habitat.Power = -1;
-DRA5_Results.Surface_Habitat.Volume = -1;
-DRA5_Results.Surface_Habitat.Fuel_Output = -1;
-DRA5_Results.Surface_Habitat.Oxidizer_Output = -1;
-% ECLSS
-DRA5_Results.ECLSS.Consumables = -1;
-DRA5_Results.ECLSS.Spares = -1;
-DRA5_Results.ECLSS.Replacements = -1;
-DRA5_Results.ECLSS.Mass = -1;
-DRA5_Results.ECLSS.Power = -1;
-DRA5_Results.ECLSS.Volume = -1;
-DRA5_Results.ECLSS.Fuel_Output = -1;
-DRA5_Results.ECLSS.Oxidizer_Output = -1;
-% ISRU
-DRA5_Results.Mars_ISRU.Consumables = -1;
-DRA5_Results.Mars_ISRU.Spares = -1;
-DRA5_Results.Mars_ISRU.Replacements = -1;
-DRA5_Results.Mars_ISRU.Mass = -1;
-DRA5_Results.Mars_ISRU.Power = -1;
-DRA5_Results.Mars_ISRU.Volume = -1;
-DRA5_Results.Mars_ISRU.Fuel_Output = -1;
-DRA5_Results.Mars_ISRU.Oxidizer_Output = -1;
-% Lunar ISRU
-DRA5_Results.Lunar_ISRU.Consumables = -1;
-DRA5_Results.Lunar_ISRU.Spares = -1;
-DRA5_Results.Lunar_ISRU.Replacements = -1;
-DRA5_Results.Lunar_ISRU.Mass = -1;
-DRA5_Results.Lunar_ISRU.Power = -1;
-DRA5_Results.Lunar_ISRU.Volume = -1;
-DRA5_Results.Lunar_ISRU.Fuel_Output = -1;
-DRA5_Results.Lunar_ISRU.Oxidizer_Output = -1;
-% ISFR
-DRA5_Results.ISFR.Consumables = -1;
-DRA5_Results.ISFR.Spares = -1;
-DRA5_Results.ISFR.Replacements = -1;
-DRA5_Results.ISFR.Mass = -1;
-DRA5_Results.ISFR.Power = -1;
-DRA5_Results.ISFR.Volume = -1;
-DRA5_Results.ISFR.Fuel_Output = -1;
-DRA5_Results.ISFR.Oxidizer_Output = -1;
-% Power plant
-DRA5_Results.PowerPlant.Consumables = -1;
-DRA5_Results.PowerPlant.Spares = -1;
-DRA5_Results.PowerPlant.Replacements = -1;
-DRA5_Results.PowerPlant.Mass = -1;
-DRA5_Results.PowerPlant.Power = -1;
-DRA5_Results.PowerPlant.Volume = -1;
-DRA5_Results.PowerPlant.Fuel_Output = -1;
-DRA5_Results.PowerPlant.Oxidizer_Output = -1;
+%% primarily result values
+DRA5_Results.IMLEO = 848700; %DRA5 T4-1
+DRA5_Results.Science = 0;
+DRA5_Results.Risk = 0;
+DRA5_Results.Regolith = 0;
+DRA5_Results.Science_Time = 0;
+%% surface habitat
+% DRA5_Results.Surface_Habitat.Consumables = -1;
+% DRA5_Results.Surface_Habitat.Spares = 989; %ADD1 T6-4
+% DRA5_Results.Surface_Habitat.Replacements = -1;
+DRA5_Results.Surface_Habitat.Mass = 29447*0.8; %ADD1 T6-4
+DRA5_Results.Surface_Habitat.Power = 12.1; %ADD1 T6-4
+DRA5_Results.Surface_Habitat.Volume = 0;
+% DRA5_Results.Surface_Habitat.Fuel_Output = -1;
+% DRA5_Results.Surface_Habitat.Oxidizer_Output = -1;
+%% Transit habitat
+% DRA5_Results.Transit_Habitat.Consumables = -1;
+% DRA5_Results.Transit_Habitat.Spares = -1;
+% DRA5_Results.Transit_Habitat.Replacements = -1;
+DRA5_Results.Transit_Habitat.Mass = 41340; %DRA5 T4-4
+DRA5_Results.Transit_Habitat.Power = 50; %DRA5 pg 26, 3rd paragraph
+DRA5_Results.Transit_Habitat.Volume = 65.8 + 39.4; %DRA5 T4-4
+% DRA5_Results.Transit_Habitat.Fuel_Output = -1;
+% DRA5_Results.Transit_Habitat.Oxidizer_Output = -1;
+%% ECLSS
+% DRA5_Results.ECLSS.Consumables = 0;
+DRA5_Results.ECLSS.Spares = 0; %included below!
+% DRA5_Results.ECLSS.Replacements = 0;
+DRA5_Results.ECLSS.Mass = 16500; %ADD1 T6-2 and T4-2  MIGHT NOT be CORRECT
+DRA5_Results.ECLSS.Power = 0;
+DRA5_Results.ECLSS.Volume = 0;
+% DRA5_Results.ECLSS.Fuel_Output = 0;
+% DRA5_Results.ECLSS.Oxidizer_Output = 0;
+%% ISRU
+% DRA5_Results.Mars_ISRU.Consumables = 0;
+% DRA5_Results.Mars_ISRU.Spares = 0;
+% DRA5_Results.Mars_ISRU.Replacements = 0;
+DRA5_Results.Mars_ISRU.Mass = 7512 + 554.92;%ADD1 T3-23 + ADD1 T6-9
+DRA5_Results.Mars_ISRU.Power = 26.08 + 23.69;%ADD1 T3-23 + ADD1 T6-9
+DRA5_Results.Mars_ISRU.Volume = 9.59 + 0.84;%ADD1 T3-23 + ADD1 T6-9
+DRA5_Results.Mars_ISRU.Fuel_Output = 0;
+DRA5_Results.Mars_ISRU.Oxidizer_Output = 24891; %ADD1 T3-18 O2 prop only 6567 CH4 from Earth
+%% Lunar ISRU
+% DRA5_Results.Lunar_ISRU.Consumables = 0;
+% DRA5_Results.Lunar_ISRU.Spares = 0;
+% DRA5_Results.Lunar_ISRU.Replacements = 0;
+DRA5_Results.Lunar_ISRU.Mass = 0;
+DRA5_Results.Lunar_ISRU.Power = 0;
+DRA5_Results.Lunar_ISRU.Volume = 0;
+DRA5_Results.Lunar_ISRU.Fuel_Output = 0;
+DRA5_Results.Lunar_ISRU.Oxidizer_Output = 0;
+%% ISFR
+% DRA5_Results.ISFR.Consumables = -1;
+% DRA5_Results.ISFR.Spares = -1;
+% DRA5_Results.ISFR.Replacements = -1;
+% DRA5_Results.ISFR.Mass = -1;
+% DRA5_Results.ISFR.Power = -1;
+% DRA5_Results.ISFR.Volume = -1;
+% DRA5_Results.ISFR.Fuel_Output = -1;
+% DRA5_Results.ISFR.Oxidizer_Output = -1;
+%% Power plant
+% DRA5_Results.PowerPlant.Consumables = -1;
+% DRA5_Results.PowerPlant.Spares = -1;
+% DRA5_Results.PowerPlant.Replacements = -1;
+DRA5_Results.PowerPlant.Mass = 7800*0.8; %ADD1 T6-17 <includes 20% mass margin>
+DRA5_Results.PowerPlant.Power = -30;
+DRA5_Results.PowerPlant.Volume = 0;
+% DRA5_Results.PowerPlant.Fuel_Output = -1;
+% DRA5_Results.PowerPlant.Oxidizer_Output = -1;
 
 results = ResultsCompare(Results,DRA5_Results);
-

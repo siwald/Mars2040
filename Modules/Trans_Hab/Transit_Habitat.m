@@ -5,7 +5,7 @@
 %   p_transhab - units?
 %   v_crew - units?
 %   m_transhab - units?
-function [SpaceCraft] = Transit_Habitat(Cur_Arch, SpaceCraft)
+function [SpaceCraft] = Transit_Habitat(Cur_Arch, SpaceCraft, Results)
 
 %----------------------Code Definition-----------------------------------
 % Mass, Volume, and power required to
@@ -78,8 +78,10 @@ margin = m_MOI_max - m_transhab;
 Trans_SC = SC_Class('Transit Habitat');
 Trans_SC.Hab_Vol = v_crew;
 Trans_SC.Volume = v_crew_sys;
+Results.Transit_Habitat.Volume = Trans_SC.Volume;
 Trans_SC.Hab_Power = p_transhab;
+Results.Transit_Habitat.Power = Trans_SC.Hab_Power;
 Trans_SC.Hab_Mass = m_transhab;
-
+Results.Transit_Habitat.Mass = Trans_SC.Hab_Mass;
 SpaceCraft.Add_Craft = Trans_SC;
 end

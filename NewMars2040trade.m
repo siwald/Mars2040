@@ -25,7 +25,7 @@ MarsArchitecture.Enumerate( ...
 [~, Num_Arches] = size(Morph)
 enumeration_time = toc;
 %Preallocate the results array
-All_Results = cell(Num_Arches,5); %1 row for every architectureal combo, 5 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C, Ascent S/C
+All_Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 cols: Results object
 tic
 parfor i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
@@ -67,7 +67,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
                 Power
                 Volume
     %}
-    Results.HumanSpacecraft = Transit_Habitat(Cur_Arch, Results.HumanSpacecraft);
+    Results.HumanSpacecraft = Transit_Habitat(Cur_Arch, Results.HumanSpacecraft, Results);
     
     %% --- Earth Entry Module --- %%
     %{
@@ -304,14 +304,8 @@ parfor i=1:Num_Arches %begin looping for each architecture
     %Create comeplete row first, so there's only 1 index into the global
     %All_Rdesults outside the parfor
     %1 row for every architectureal combo, 5 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C, Ascent S/C
-    Results_Row = cell(1,5); %init Results Row
-    Results_Row{1,1} = Results;
-    Results_Row{1,2} = HumanSpacecraft;
-    Results_Row{1,3} = CargoSpacecraft;
-    Results_Row{1,4} = FerrySpacecraft;
-    Results_Row{1,5} = AscentSpacecraft;
     %Index into All_Results
-    All_Results(i,:) = Results_Row; 
+    All_Results(i,1) = Results; 
     %% End Main Loop
 end %end main loop
 time_per_run = toc / Num_Arches;

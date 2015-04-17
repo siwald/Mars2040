@@ -1,4 +1,4 @@
-function [ Ascent_Vehicle, HumanSpacecraft, Results ] = Ascent( Cur_Arch, HumanSpacecraft, Results )
+function [ Ascent_Vehicle, HumanSpacecraft, Results ] = Ascent( Cur_Arch, HumanSpacecraft, Results, varargin)
 %ASCENT Design the Ascent_Vehicle
 % 
 %     [AscentSpacecraft, HumanSpacecraft, Results] = Ascent (Cur_Arch, HumanSpacecraft, Results);
@@ -72,6 +72,11 @@ for i=1:2
             remove_fuel(Ascent_Vehicle); %remove all LH2 from Spacecraft Modules
         end
     end
+end
+if ~isempty(varargin) %Move ascent O2 prod to Mars
+    Results.Mars_ISRU.Oxidizer_Output = nansum([Results.Mars_ISRU.Oxidizer_Output, Ascent_Vehicle.Ox_Mass]); %add O2 to Mars generation
+    remove_ox(Ascent_Vehicle); %remove all O2 from Spacecraft Modules
+    disp('good')
 end
 end
 

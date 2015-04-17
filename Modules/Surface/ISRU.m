@@ -40,12 +40,14 @@ Time_Between_Missions = 26; %Units: months
 
 %------------------------------------------------------------------------
 
-%Calculations for Moxie Oxygen
+%Calculations for Moxie Oxygen for Fuel
 Oxygen_Daily_Generation = (Moxie_Oxygen_Rate/1000)*24; %Units: kg/day
 if nansum([Results.Mars_ISRU.Oxidizer_Output]) > 1
     Required_Daily_Ox_Mars = Results.Mars_ISRU.Oxidizer_Output / (Time_Between_Missions * 30);
 elseif nansum([Results.Mars_ISRU.Oxidizer_Output]) == 0
-    Required_Daily_Ox_Mars = 0;
+    Required_Daily_Ox_Mars = 0;        
+else
+    disp ('Error, ISRU lines 44-51')
 end
 Required_Oxygen = ECLSS_Requirements.Oxygen + Required_Daily_Ox_Mars; %Units: kg/day
 Oxygen_Moxie_Required = Required_Oxygen/Oxygen_Daily_Generation; %Units: whole number of Moxie units required

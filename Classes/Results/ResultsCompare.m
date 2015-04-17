@@ -229,5 +229,18 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2 )
     results_table{52,2} = results_obj1.PowerPlant.Oxidizer_Output;
     results_table{52,3} = results_obj2.PowerPlant.Oxidizer_Output;
     results_table{52,4} = results_obj1.PowerPlant.Oxidizer_Output - results_obj2.PowerPlant.Oxidizer_Output;
+    %Transit Hab
+        results_table{53,1} = 'Transit_Habitat.Mass';
+    results_table{53,2} = results_obj1.Transit_Habitat.Mass;
+    results_table{53,3} = results_obj2.Transit_Habitat.Mass;
+    results_table{53,4} = results_obj1.Transit_Habitat.Mass - results_obj2.Transit_Habitat.Mass;
+    results_table{54,1} = 'Transit_Habitat.Power';
+    results_table{54,2} = results_obj1.Transit_Habitat.Power;
+    results_table{54,3} = results_obj2.Transit_Habitat.Power;
+    results_table{54,4} = results_obj1.Transit_Habitat.Power - results_obj2.Transit_Habitat.Power;
+    results_table{55,1} = 'Transit_Habitat.Volume';
+    results_table{55,2} = results_obj1.Transit_Habitat.Volume;
+    results_table{55,3} = results_obj2.Transit_Habitat.Volume;
+    results_table{55,4} = results_obj1.Transit_Habitat.Volume - results_obj2.Transit_Habitat.Volume;
 end
 
