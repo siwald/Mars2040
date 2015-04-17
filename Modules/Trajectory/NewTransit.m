@@ -25,23 +25,17 @@ spacecraft.Add_Craft = Cap_Stage;
 
 
 %% Transit Engines
-%set Earth staging location
-switch Cur_Arch.Staging
-    case Location.LEO
-        stage = 'LEO';
-    case Location.EML1
-        stage = 'EML1';
-    case Location.EML2
-        stage = 'EML2';
-end
+
 switch Cur_Trajectory.Type
     case TrajectoryType.HOHMANN.Type
         Rotation_Period = 540; %days based on DRA 5.0 Exec Summary
         Trans_Eng = SC_Class('Transit Engines');
-        Trans_Eng = Propellant_Mass(Cur_Arch.PropulsionType,Trans_Eng,Hohm_Chart(stage,'TMI'),spacecraft.Mass);
+        Trans_Eng = Propellant_Mass(Cur_Arch.PropulsionType,Trans_Eng,Hohm_Chart(Cur_Arch.Staging.Code,'TMI'),spacecraft.Mass);
         spacecraft.Add_Craft = Trans_Eng;
     case TrajectoryType.ELLIPTICAL.Type
         disp('too bad')
+    otherwise
+        disp('NewTransit error, line 29 switch case')
 end
 
 %% Update to Astronaut_Sci_Time
