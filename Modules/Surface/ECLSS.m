@@ -1,5 +1,5 @@
-function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, Crew_Activity)
-
+function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, ~)
+%~ should be Crew_Activity from something else?
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
 %ECLSS is solving for the life supporting systems. This function will pass
@@ -7,28 +7,22 @@ function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results
 %ISRU. This function also passes the resources required to sustain life 
 %(grow food) to the ISRU function.
 
-%---Testing Section
+%% Setup
 
-Crew_Activity.EVA_Freq = 5;
-Crew_Activity.CM_EVA = 10;
-Crew_Activity.EVA_Dur = 6;
+%---Testing Section
+Crew_Activity = Crew_Act_Class; %Constructor uses defaults (below)
+%{
+Crew_Activity.EVA_Freq = 5
+Crew_Activity.CM_EVA = 10
+Crew_Activity.EVA_Dur = 6
+%}
 
 %------Inputs------
-
-% Percentage of food supply grown on Mars
-%Food_Supply = 50; 
 
 %Total Cabin Volume for the habitat on Mars. Used for calculating the air
 %requied inside the habitat.
 Habitat_Volume = Results.Surface_Habitat.Volume;
 
-%Crew Activities on Mars. EVA_Freq is the amount of EVA trips expected per 
-%week. CM_EVA is the number of crew members per EVA. EVA_Dur is the 
-%duration of each EVA per crew member.
-% Crew_Activity.EVA_Freq = 5;
-% Crew_Activity.CM_EVA = 10;
-% Crew_Activity.EVA_Dur = 8;
-%Find the total time budget of time on Mars
 
 %------Outputs------
 
@@ -48,19 +42,12 @@ Habitat_Volume = Results.Surface_Habitat.Volume;
 %CrewTime_FoodGrowth = Crew time required for growing food. Units: CM-hr/day
 %CrewTime_Cooking = Crew time required for cooking. Units: CM-hr/day
 
-%------Constants------
 
-%The following are constants that are used in equating the requried
-%resources. These values can be changed once further information becomes
-%available on the actual usage that is seen.
-
-%-------------------------------------------------------------------------
-
-%----------------------------General--------------------------------------
+%% ----------------------------General--------------------------------------
 Crew_Size = Cur_Arch.SurfaceCrew.Size; %Units: Crew Members; Mission Decision
 Mission_Duration = 780; %Units: days; Mission Decision
 
-%----------------------------Habitat--------------------------------------
+%% ----------------------------Habitat--------------------------------------
 Cabin_Pressure = 70.3; %Units: kPa; Architectural Decision by Team
 Gas_Constant = 8.31451; %Units: J/K*mol
 O2_Mol_Ratio = 26.5; %Units: %; Architectural Decision from BVAD pg. 28
@@ -74,7 +61,7 @@ Habitat_O2_Consumption = 0.816; %Units: kg/CM/day; BVAD 2015 pg. 50
 UPA_Efficiency = 74; %Units: %; Efficency to reuse water from urine flush
 WPA_Efficiency = 100; %Units: %; Efficiency to reuse water from waste water
 
-%----------------------------Food-----------------------------------------
+%% ----------------------------Food-----------------------------------------
 Earth_Food_Mass = 2.3; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
 Earth_Food_Volume = 0.00657; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
 Crop_O2_Generation = 19.46; %units: kg/day;
@@ -82,12 +69,13 @@ Crop_Water = 3032.79; %Units: kg/day;
 Crop_Transportation = 2941.62; %Units: kg/day
 Food_Supply = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
 Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from inedible crops
-CrewTime_FoodGrowth = 13.1; %Units: CM-hr/m3/yr; BVAD 2015 p.163
+%WRONG this is use & Maintenance of the growth System, not the act of growing. CrewTime_FoodGrowth = 13.1; %Units: CM-hr/m^2/yr; BVAD 2015 p.163 
+CrewTime_FoodGrowth = .75;
 Mars_Food_Prep = 0.83; %Units: CM-hr/CM-day; This is the amount of preparation time required to prepare fod that is grown on Mars; BVAD 2015 p.109
 Earth_Food_Prep = 0.17; %Units: CM-hr/CM-day; This is the amount of preparation time required to prepare food that is brought to Mars from Earth; BVAD 2015 p.109
 Crop_Area = 500; %Units: m2; This is the amount of space allowed for growing crops; Assumption from MarsOne
 
-%-----------------------------EVA-----------------------------------------
+%% -----------------------------EVA-----------------------------------------
 %EVA_Oxygen_Loss_Rate = 0.15; %Units: kg/CM/hr; BVAD pg 139
 EVA_Oxygen_Loss_Rate = 0.092; %Units: kg/CM/hr; BVAD 2015 p.131
 %EVA_Airlock_Volume = 3.7; % units: m^3; BVAD pg 139
@@ -105,11 +93,7 @@ ECLSS_Consumables_Mass = 30424.00; %Units: kg/mission
 ECLSS_Spares_Volume = 52.80; %Units: m^3/mission
 ECLSS_Consumables_Volume = 149.77; %Units: m^3/mission
 
-
-%------------------------------------------------------------------------
-%------------------------------------------------------------------------
-
-%Calculations begin
+%% Calculations begin
 
 %Calculations to determine the amount of oxygen required from ISRU. The
 %structure ISRU_Requirements will be sent to the ISRU function. All
@@ -171,7 +155,7 @@ ISRU_Requirements.CO2 = CO2_Loss.Breathing + CO2_Loss.Leakage + CO2_Loss.Airlock
 %and cook food. 
 
 CrewTime_FoodPrep = (Mars_Food_Prep*Food_Supply)+(Earth_Food_Prep*(1-Food_Supply));
-Crew_Time.FoodGrowth = Crop_Area * CrewTime_FoodGrowth / 365;
+Crew_Time.FoodGrowth = Crop_Area * CrewTime_FoodGrowth;
 Crew_Time.Cooking = CrewTime_FoodPrep * Crew_Size;
 Crew_Time_Total = Crew_Time.FoodGrowth + Crew_Time.Cooking; %in Unit, %.
 

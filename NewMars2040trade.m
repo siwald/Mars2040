@@ -1,8 +1,7 @@
-tic
 %setup morphological matrix
 Morph = ...
 MarsArchitecture.Enumerate( ...
-        {Propulsion.NTR}, ...  Propulsion.SEP, Propulsion.LH2, Propulsion.CH4, 
+        {Propulsion.LH2, Propulsion.CH4, Propulsion.NTR}, ...  Propulsion.SEP, 
         {CargoTrajectory.HOHMANN}, ... ,CargoTrajectory.ELLIPTICAL
         {Location.LEO, Location.EML1, Location.EML2}, ...  
         {[TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2],[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2],[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]}, ...
@@ -26,6 +25,7 @@ MarsArchitecture.Enumerate( ...
 enumeration_time = toc;
 %Preallocate the results array
 All_Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 cols: Results object
+%% Begin Main Loop
 tic
 parfor i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
@@ -305,7 +305,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
     %All_Rdesults outside the parfor
     %1 row for every architectureal combo, 5 cols: Results object, Human S/C, 1 array of Cargo S/C, Ferry S/C, Ascent S/C
     %Index into All_Results
-    All_Results(i,1) = Results; 
+    All_Results{i,1} = Results; 
     %% End Main Loop
 end %end main loop
 time_per_run = toc / Num_Arches;
@@ -313,4 +313,5 @@ runtime_Mins = toc / 60;
 %% --- Results Managment --- %%
 
 %IMLEO vs Sci_Value Scatter Plot
-run('View_Results')
+ 
+%See View_Results.m in Test Script

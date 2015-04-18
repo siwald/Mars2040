@@ -1,5 +1,38 @@
 function [ Results ] = ISRU(Cur_Arch, ECLSS_Requirements, Results)
 
+%%Fuel Section
+%1Mol O2 = 31.9988g = .0319988 kg
+%1Mol H2 = 2.02g = .00202 kg
+%1Mol H2O = 18.01528g = .01801528 kg
+% 2H2O -> 2H2 + O2
+%H2O Need from Oxidizer needs
+Moles_O2 = Results.Mars_ISRU.Oxidizer_Output / .0319988;
+Needed_Moles_H2O_Ox = Moles_O2 * 2;
+Needed_H2O_From_Ox = Needed_Moles_H2O_Ox * 0.01801528;
+%H2O Need from Fuel needs
+Moles_H2 = Results.Mars_ISRU.Oxidizer_Output / .00202;
+Needed_H2O_From_Fuel = Moles_H2 * 0.01801528;
+
+%Use the H2O needs that's the biggest
+Needed_H2O = max(Needed_H2O_From_Ox, Needed_H2O_From_Fuel);
+
+
+%%Generate the H2O
+%From DRA5.0 ADD1 Table 6-12
+H2O_Mass = Needed_H2O * 0.00895343 + 98.57292095; %kg
+H2O_Vol = Needed_H2O * 0.000216553 + 0.274405239; %m^3
+H2O_Power = Needed_H2O * 0.0000334109 + 1.319195545; %kW
+
+
+
+%% add to results object
+Results.Mars_ISRU.Mass = H2O_Mass; %ISRU_Mass;
+Results.Mars_ISRU.Volume = H2O_Vol; %ISRU_Volume;
+Results.Mars_ISRU.Power = H2O_Power; %ISRU_Power;
+end
+
+
+%{
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
 %ISRU is solving for the in-situ resource utilization equipment. This will
@@ -89,4 +122,4 @@ Results.Mars_ISRU.Mass = ISRU_Mass;
 Results.Mars_ISRU.Volume = ISRU_Volume;
 Results.Mars_ISRU.Power = ISRU_Power;
 end
-
+%}
