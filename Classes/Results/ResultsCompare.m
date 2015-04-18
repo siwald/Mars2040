@@ -1,4 +1,4 @@
-function [ results_table ] = ResultsCompare( results_obj1, results_obj2 )
+function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_cargo)
 %RESULTSCOMPARE Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -242,5 +242,23 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2 )
     results_table{55,2} = results_obj1.Transit_Habitat.Volume;
     results_table{55,3} = results_obj2.Transit_Habitat.Volume;
     results_table{55,4} = results_obj1.Transit_Habitat.Volume - results_obj2.Transit_Habitat.Volume;
+    %IMLEO Breakdown
+    	results_table{56,1} = 'Crew_Spacecraft.Mass';
+    results_table{56,2} = results_obj1.HumanSpacecraft.Mass;
+    results_table{56,3} = 333000;
+    results_table{56,4} = results_obj1.HumanSpacecraft.Mass - 33000;
+    results_table{57,1} = 'Cargo_Spacecraft.Mass';
+    results_table{57,2} = results_obj1.CargoSpacecraft.Mass / num_cargo;
+    results_table{57,3} = 246000;
+    results_table{57,4} = (results_obj1.CargoSpacecraft.Mass / num_cargo) - 246000;
+    results_table{58,1} = 'Cargo_Spacecraft.Landed_Mass';
+    temp = results_obj1.CargoSpacecraft.Get_Craft('Cargo Lander');
+    results_table{58,2} = temp.Payload_Mass;
+    results_table{58,3} = 36000;
+    results_table{58,4} = (results_obj1.CargoSpacecraft.Mass / num_cargo) - 246000;
+    results_table{59,1} = 'Cargo_Spacecraft.Number';
+    results_table{59,2} = num_cargo;
+    results_table{59,3} = 2;
+    results_table{59,4} = num_cargo - 2;
 end
 

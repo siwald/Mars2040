@@ -212,7 +212,7 @@
             MEAA Module
             Cargo Descenders
     %}
-    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
+    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, num_cargo] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
 
     %% --- Outgoing Transit --- %%
     %{
@@ -347,4 +347,5 @@ DRA5_Results.PowerPlant.Volume = 0;
 % DRA5_Results.PowerPlant.Fuel_Output = -1;
 % DRA5_Results.PowerPlant.Oxidizer_Output = -1;
 
-results = ResultsCompare(Results,DRA5_Results);
+
+results = ResultsCompare(Results,DRA5_Results,num_cargo);

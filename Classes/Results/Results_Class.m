@@ -56,32 +56,33 @@ classdef Results_Class < dynamicprops
             obj.Lunar_ISRU = Results_List();
             obj.ISFR = Results_List();
             obj.PowerPlant = Results_List();
+            obj.IMLEO = IMLEO_Split();
         end
         
         %Getter for total Consumables
         function out = get.Consumables(obj)
-            out = obj.ECLSS.Consumables + ...
-                obj.Mars_ISRU.Consumables + ...
-                obj.Lunar_ISRU.Consumables + ...
-                obj.ISFR.Consumables + ...
-                obj.PowerPlant.Consumables; %sum Consumables from each Module
+            out = nansum([obj.ECLSS.Consumables,
+                obj.Mars_ISRU.Consumables,
+                obj.Lunar_ISRU.Consumables,
+                obj.ISFR.Consumables,
+                obj.PowerPlant.Consumables]); %sum Consumables from each Module
         end
 
         %Getter for total Spares
         function out = get.Spares(obj)
-            out = obj.ECLSS.Spares + ...
-                obj.Mars_ISRU.Spares + ...
-                obj.Lunar_ISRU.Spares + ...
-                obj.ISFR.Spares + ...
-                obj.PowerPlant.Spares; %sum Spares from each Module
+            out = nansum([obj.ECLSS.Spares,
+                obj.Mars_ISRU.Spares,
+                obj.Lunar_ISRU.Spares,
+                obj.ISFR.Spares,
+                obj.PowerPlant.Spares]); %sum Spares from each Module
         end
                 %Getter for total Replacements
         function out = get.Replacements(obj)
-            out = obj.ECLSS.Replacements + ...
-                obj.Mars_ISRU.Replacements + ...
-                obj.Lunar_ISRU.Replacements + ...
-                obj.ISFR.Replacements + ...
-                obj.PowerPlant.Replacements; %sum Replacements from each Module
+            out = nansum([obj.ECLSS.Replacements,
+                obj.Mars_ISRU.Replacements,
+                obj.Lunar_ISRU.Replacements,
+                obj.ISFR.Replacements,
+                obj.PowerPlant.Replacements]); %sum Replacements from each Module
         end
         
     end

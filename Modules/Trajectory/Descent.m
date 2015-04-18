@@ -1,4 +1,4 @@
-function [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft] = Descent(Cur_Arch, AscentSpacecraft, HumanSpacecraft, Results, Site_Elevation)
+function [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft, Num_Landers] = Descent(Cur_Arch, AscentSpacecraft, HumanSpacecraft, Results, Site_Elevation)
 %ASCENT Design the Ascent_Vehicle
 % 
 %     
@@ -38,4 +38,5 @@ Max_AeroB_Mass = 40000; %kg
         for i=1:Num_Landers %add a Cargo_Lander Module until number of landers is reached
             CargoSpacecraft.Add_Craft = Cargo_Lander;
         end
+        
 end
