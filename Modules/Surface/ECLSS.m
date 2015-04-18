@@ -70,7 +70,7 @@ Crop_Transportation = 2941.62; %Units: kg/day
 Food_Supply = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
 Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from inedible crops
 %WRONG this is use & Maintenance of the growth System, not the act of growing. CrewTime_FoodGrowth = 13.1; %Units: CM-hr/m^2/yr; BVAD 2015 p.163 
-CrewTime_FoodGrowth = .75;
+CrewTime_FoodGrowth = .038;
 Mars_Food_Prep = 0.83; %Units: CM-hr/CM-day; This is the amount of preparation time required to prepare fod that is grown on Mars; BVAD 2015 p.109
 Earth_Food_Prep = 0.17; %Units: CM-hr/CM-day; This is the amount of preparation time required to prepare food that is brought to Mars from Earth; BVAD 2015 p.109
 Crop_Area = 500; %Units: m2; This is the amount of space allowed for growing crops; Assumption from MarsOne
@@ -155,9 +155,9 @@ ISRU_Requirements.CO2 = CO2_Loss.Breathing + CO2_Loss.Leakage + CO2_Loss.Airlock
 %and cook food. 
 
 CrewTime_FoodPrep = (Mars_Food_Prep*Food_Supply)+(Earth_Food_Prep*(1-Food_Supply));
-Crew_Time.FoodGrowth = Crop_Area * CrewTime_FoodGrowth;
-Crew_Time.Cooking = CrewTime_FoodPrep * Crew_Size;
-Crew_Time_Total = Crew_Time.FoodGrowth + Crew_Time.Cooking; %in Unit, %.
+Crew_Time.FoodGrowth = Crop_Area * CrewTime_FoodGrowth; %now in crew hours per team
+Crew_Time.Cooking = CrewTime_FoodPrep * Crew_Size; %now in crew hours per team
+Crew_Time_Total = Crew_Time.FoodGrowth + Crew_Time.Cooking; %in Unit, Crew Hours per total Hours
 
 %Calculations to determine the amount of Mass required for consumables and
 %spares
