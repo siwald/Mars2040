@@ -21,8 +21,7 @@ tic
 %         %{ReturnDescent.PROPULSIVE,ReturnDescent.CHUTE,ReturnDescent.SHOCK_ABSORBTION});
 
 %  Morph = {MarsArchitecture.DEFAULT, MarsArchitecture.DRA5};
-Morph = MarsArchitecture.Enumerate({[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.MARS_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
-    {Propulsion.LH2});
+Morph = MarsArchitecture.Enumerate({Site.HOLDEN,Site.GALE});
 
 [~, Num_Arches] = size(Morph)
 enumeration_time = toc;
@@ -33,9 +32,6 @@ tic
 for i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
     Cur_Arch = Morph{i};
-    Num = i
-    LH2loc = Cur_Arch.ReturnFuel(1).Location
-    Oxloc = Cur_Arch.ReturnFuel(2).Location
     %initialize the Results Object for this run
     Results = Results_Class(i); %with the Arch_Num of i
     %% Logistics Setup %%
