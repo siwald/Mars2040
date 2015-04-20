@@ -260,5 +260,22 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
     results_table{59,2} = num_cargo;
     results_table{59,3} = 2;
     results_table{59,4} = num_cargo - 2;
+    
+    %% clean empty
+    ind = [];
+    [numrows, ~] = size(results_table);
+    for i=1:numrows
+        if (isempty(results_table{i,2}) && isempty(results_table{i,3}))
+            ind(end+1) = i;
+        end
+    end
+    results_table = removerows(results_table,ind);
+    
+    %% add percent
+    results_table{1,5} = 'percent off';
+    [numrows , ~] = size(results_table);
+    for i = 2:numrows
+        results_table{i,5} = 100*(results_table{i,3}-results_table{i,2})/results_table{i,3};
+    end
 end
 

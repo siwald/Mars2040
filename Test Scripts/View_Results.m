@@ -32,6 +32,7 @@ val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 
 crew = zeros(1,Num_Arches);
+sufcrew = zeros(1,Num_Arches);
 crater = zeros(1,Num_Arches);
 food = zeros(1,Num_Arches);
 stage = zeros(1,Num_Arches);
@@ -46,6 +47,7 @@ for i=1:Num_Arches
     Im(i) = All_Results{i,1}.IMLEO;
 
     crew(i) = Morph{i}.TransitCrew.Size;
+    surfcrew(i) = Morph{i}.SurfaceCrew.Size;
 	switch Morph{i}.SurfaceSites
         case Site.HOLDEN
             crater(i) = 1;
@@ -111,7 +113,7 @@ end
 hold off;
 yaxis = val;
 ylab = 'Science Value';
-gscatter(Im,val,returnfuel,'mcrgb','o+xsd');
+gscatter(Im,val,surfcrew,'mcrgb','o+xsd');
 hold on;
 %scatter(250000,30000,'d');
 xlabel('IMLEO');
