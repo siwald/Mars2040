@@ -318,7 +318,7 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.ReturnFuel = optionArray{optionIndex};
                                    continue;
                                end
-                               if isa(optionArray{1}, 'EntryType')
+                               if isa(optionArray{1}, 'ArrivalEntry')
                                    tempArray{newIndex}.OrbitCapture = optionArray{optionIndex};
                                    continue;
                                end
