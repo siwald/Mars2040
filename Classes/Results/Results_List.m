@@ -3,8 +3,10 @@ classdef Results_List < handle
     %   Detailed explanation goes here
     
     properties
-        Consumables
-        Spares
+        Consumables_Mass
+        Consumables_Volume
+        Spares_Mass
+        Spares_Volume
         Replacements
         Mass
         Power
@@ -12,9 +14,27 @@ classdef Results_List < handle
         Fuel_Output
         Oxidizer_Output
     end
+    properties
+        Consumables
+        Spares
+    end
     
     methods
-        
+        %setters for Consumables_Mass and Spares_Mass by usintg
+        %just Consumables and Spares
+        function obj = set.Consumables(obj,in)
+            obj.Consumables_Mass = in;
+        end
+        function obj = set.Spares(obj,in)
+            obj.Spares_Mass = in;
+        end
+        %getters just like that too.
+        function out = get.Consumables(obj)
+            out = obj.Consumables_Mass;
+        end
+        function out = get.Spares(obj)
+            out = obj.Spares_Mass;
+        end
     end
     
 end

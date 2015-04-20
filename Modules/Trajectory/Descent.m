@@ -12,7 +12,7 @@ function [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft, Num_Landers] = Des
 %   from Mars ISRU
 %    
 %% Inputs
-Landing_Cargo = nansum([Results.Consumables, Results.Spares, Results.Replacements]);
+Landing_Cargo = nansum([Results.Consumables, Results.Spares, Results.Replacements, AscentSpacecraft.Mass]);
 
 %% Constants
 Max_AeroB_Mass = 40000; %kg
@@ -28,6 +28,8 @@ Max_AeroB_Mass = 40000; %kg
     HumanSpacecraft.Add_Craft = MEAA;
     
 %% Cargo Descenders
+    Cargo_Manifest = [Results.Consumables, Results.Spares, Results.Replacements, AscentSpacecraft.Mass]
+    Landing_Cargo = nansum([Results.Consumables, Results.Spares, Results.Replacements, AscentSpacecraft.Mass]);
     CargoSpacecraft = OverallSC; %Initialize the Cargo Spacecraft
     Num_Landers = ceil(Landing_Cargo / Max_AeroB_Mass); %determine needed number of landers based on Mars Descent size practicality
 

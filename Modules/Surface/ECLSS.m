@@ -1,5 +1,5 @@
-function [Crew_Time, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, Crew_Activity)
-
+function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, ~)
+% Crew_Activity
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
 %ECLSS is solving for the life supporting systems. This function will pass
@@ -31,9 +31,9 @@ function [Crew_Time, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results, Crew
 %Crew Activities on Mars. EVA_Freq is the amount of EVA trips expected per 
 %week. CM_EVA is the number of crew members per EVA. EVA_Dur is the 
 %duration of each EVA per crew member.
-% Crew_Activity.EVA_Freq = 5;
-% Crew_Activity.CM_EVA = 10;
-% Crew_Activity.EVA_Dur = 8;
+Crew_Activity.EVA_Freq = 5;
+Crew_Activity.CM_EVA = 10;
+Crew_Activity.EVA_Dur = 8;
 %Find the total time budget of time on Mars
 
 %------Outputs------
@@ -192,6 +192,7 @@ MARS_2040.Packed_Food_Volume = Earth_Food_Volume;
 CrewTime_FoodPrep = (Mars_Food_Prep*MARS_2040.Food_Supply)+(Earth_Food_Prep*(1-MARS_2040.Food_Supply));
 Crew_Time.FoodGrowth = ECLSS_Crop.Crop_Grow_Area * CrewTime_FoodGrowth / 365;
 Crew_Time.Cooking = CrewTime_FoodPrep * MARS_2040.Crew_Size;
+Crew_Time_Total = Crew_Time.FoodGrowth + Crew_Time.Cooking;
 
 %Calculations to determine the amount of Mass required for consumables and
 %spares

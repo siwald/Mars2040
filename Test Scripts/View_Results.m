@@ -19,8 +19,8 @@ for i=1:Num_Arches
 end
 %disp
 hold off;
-yaxis = val
-ylab = 'Science Value'
+yaxis = val;
+ylab = 'Science Value';
 scatter(Im,yaxis);
 hold on;
 %scatter(250000,30000,'d');
@@ -97,18 +97,21 @@ for i=1:Num_Arches
     if isequal(Morph{i}.ReturnFuel, [ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2])
             returnfuel(i) = 1;
 		elseif isequal(Morph{i}.ReturnFuel,  [ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2])
-            returnfuel(i) = 2;
-		elseif isequal(Morph{i}.ReturnFuel, [ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2])
             returnfuel(i) = 3;
-		else
-			returnfuel(i) = 4;
-    end
+		elseif isequal(Morph{i}.ReturnFuel, [ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2])
+            returnfuel(i) = 4;
+        elseif isequal(Morph{i}.ReturnFuel, [ReturnFuel.MARS_LH2, ReturnFuel.EARTH_O2])
+			returnfuel(i) = 2;
+    else
+        returnfuel{i} = 5;
+end
+
 end
 %% disp
 hold off;
 yaxis = val;
 ylab = 'Science Value';
-gscatter(Im,val,power,'mcrgb','o+xsd');
+gscatter(Im,val,returnfuel,'mcrgb','o+xsd');
 hold on;
 %scatter(250000,30000,'d');
 xlabel('IMLEO');

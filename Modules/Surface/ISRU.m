@@ -1,34 +1,58 @@
 function [ Results ] = ISRU(Cur_Arch, ECLSS_Requirements, Results)
 
-%%Fuel Section
+%% Propellant Section
+%Soil Based ISRU for Fuel Needs.
+
 %1Mol O2 = 31.9988g = .0319988 kg
 %1Mol H2 = 2.02g = .00202 kg
 %1Mol H2O = 18.01528g = .01801528 kg
 % 2H2O -> 2H2 + O2
-%H2O Need from Oxidizer needs
-Moles_O2 = Results.Mars_ISRU.Oxidizer_Output / .0319988;
-Needed_Moles_H2O_Ox = Moles_O2 * 2;
-Needed_H2O_From_Ox = Needed_Moles_H2O_Ox * 0.01801528;
+
+%H2O Need from Ox Needs
+if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_O2, ... skip if no Mars_ISRU ox.
+        Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_O2) 
+	Moles_O2 = Results.Mars_ISRU.Oxidizer_Output / .0319988;
+	Needed_Moles_H2O_Ox = Moles_O2 * 2;
+	Needed_H2O_From_Oxidizer = Needed_Moles_H2O_Ox * 0.01801528;
+else
+	Needed_H2O_From_Oxidizer = 0;
+end
 %H2O Need from Fuel needs
-Moles_H2 = Results.Mars_ISRU.Oxidizer_Output / .00202;
-Needed_H2O_From_Fuel = Moles_H2 * 0.01801528;
+if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_LH2, ... skip if no Mars_ISRU fuel.
+        Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_LH2) 
+	Moles_H2 = Results.Mars_ISRU.Fuel_Output / .00202;
+	Needed_H2O_From_Fuel = Moles_H2 * 0.01801528;
+else
+	Needed_H2O_From_Fuel = 0;
+end
 
-%Use the H2O needs that's the biggest
-Needed_H2O = max(Needed_H2O_From_Ox, Needed_H2O_From_Fuel);
+%% ECLSS Section
+
+%Find the oxygen needed, as above
+Moles_O2 = ECLSS_Requirements.Oxygen / .0319988;
+Needed_Moles_H2O_for_ECLSS_O2 = Moles_O2 * 2;
+Needed_H2O_for_ECLSS_O2 = Needed_Moles_H2O_for_ECLSS_O2 * 0.01801528;
 
 
+%Use the H2O needs that's the biggest, since if you need more H2O for O2,
+%then you'll automatically have the amount you need for LH2 as well.
+Needed_H2O = max((Needed_H2O_From_Oxidizer + Needed_H2O_for_ECLSS_O2), Needed_H2O_From_Fuel);
+
+Needed_H2O = Needed_H2O + ECLSS_Requirements.Water; %add the molecular water needed.
 %%Generate the H2O
 %From DRA5.0 ADD1 Table 6-12
 H2O_Mass = Needed_H2O * 0.00895343 + 98.57292095; %kg
 H2O_Vol = Needed_H2O * 0.000216553 + 0.274405239; %m^3
 H2O_Power = Needed_H2O * 0.0000334109 + 1.319195545; %kW
 
-
-
 %% add to results object
+%Since this is a simple extension of DRA5.0 plan, ISRU system is H2O only,
+%thus:
 Results.Mars_ISRU.Mass = H2O_Mass; %ISRU_Mass;
 Results.Mars_ISRU.Volume = H2O_Vol; %ISRU_Volume;
 Results.Mars_ISRU.Power = H2O_Power; %ISRU_Power;
+Results.Mars_ISRU.Consumables_Mass = ECLSS_Requirements.Nitrogen + ECLSS_Requirements.CO2; %mass of gasses shipped in.
+
 end
 
 

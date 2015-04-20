@@ -38,7 +38,8 @@ classdef OverallSC < dynamicprops
             masses = zeros(num,1); %initialize array of masses
             for i=1:num
                 current = obj.SC{i,1}; %extract the current SC element
-                masses(i,1) = nansum([current.Ox_Mass]); %set Ox_Mass to current col
+                masses(i,1) = nansum([current.Ox_Mass]);%set Ox_Mass to current col
+                current.origin_calc; %recalc origin of current SC element
             end
             out = sum(masses); %deliver the sum of masses for all SC elements
         end
@@ -49,6 +50,7 @@ classdef OverallSC < dynamicprops
             for i=1:num
                 current = obj.SC{i,1}; %extract the current SC element
                 masses(i,1) = nansum([current.Fuel_Mass]); %set Fuel_Mass to current col
+                current.origin_calc; %recalc origin of current SC element
             end
             out = sum(masses); %deliver the sum of masses for all SC elements
         end
@@ -99,7 +101,7 @@ classdef OverallSC < dynamicprops
             for i=1:num
                 current = obj.SC{i,1}; %extract the current SC element
                 current.Ox_Mass = 0; %set ox to 0
-                current.Prop_Mass = current.Fuel_Mass; %reset Prop_mass without Ox.
+                current.Prop_Mass = current.Fuel_Mass + 0; %reset Prop_mass without Ox.
                 obj.SC{i,1} = current; %and put it back
             end
         end
@@ -110,6 +112,7 @@ classdef OverallSC < dynamicprops
             for i=1:num
                 current = obj.SC{i,1}; %extract the current SC element
                 current.Fuel_Mass = 0; %set fuel to 0
+                current.Prop_Mass = current.Ox_Mass + 0; %reset Prop_mass without fuel.
                 obj.SC{i,1} = current; %and put it back
             end
         end

@@ -37,7 +37,8 @@ while converge > converge_to
     Final_Mass = nansum([SC_Module.Eng_Mass, SC_Module.Payload_Mass, SC_Module.Hab_Mass, SC_Module.Bus_Mass, AdditionalSC_Mass]);
     
     %evaluate the rocket equation for fuel mass
-    SC_Module.Prop_Mass=e^(((dV)/(g0*prop_inst.Isp)))*(Final_Mass)-Final_Mass;
+    Mass_Ratio=e^((dV)/(g0*prop_inst.Isp));
+    SC_Module.Prop_Mass = (Final_Mass * Mass_Ratio) - Final_Mass;
     
     %evaluate engine mass %determine SpaceCraft Origin Mass
     if (SC_Module.Eng_Mass < (SC_Module.Prop_Mass * prop_inst.InertMassRatio)) %don't overwrite if engine is already big enough

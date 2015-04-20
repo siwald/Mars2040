@@ -42,7 +42,8 @@ classdef SC_Class < handle
         %% Populators for aggregate properties
         function origin_calc(this) %calc the origin mass by adding all the components
             this.Origin_Mass = nansum( ... nansum ignores empty or NaN values.
-                [this.Prop_Mass, ...
+                [this.Fuel_Mass, ...
+                 this.Ox_Mass, ...
                  this.Eng_Mass, ...
                  this.Bus_Mass, ...
                  this.Payload_Mass, ...
@@ -70,8 +71,8 @@ classdef SC_Class < handle
         end
         %% Setters
         
-        %% Getters
-                %Total Volume getter, will populate if as-yet undefined
+        %% Getters 
+        %Total Volume getter, will populate if as-yet undefined
         function out = get.Volume(obj)
             if isempty(obj.Volume)
                 obj.volume_calc;
@@ -81,12 +82,11 @@ classdef SC_Class < handle
         
         %Origin Mass getter, will popelate if as-yet undefined
         function out = get.Origin_Mass(obj)
-            if isempty(obj.Origin_Mass)
-                obj.origin_calc;
-            end
+            %if isempty(obj.Origin_Mass)
+                obj.origin_calc; %just run it first.
+            %end
             out = obj.Origin_Mass;
-        end
-
+        end  
     end
     
 end
