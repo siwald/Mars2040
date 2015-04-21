@@ -841,8 +841,29 @@ classdef MarsArchitecture < handle
                 warning('Setting architecture return descent not possible because of invalid input.');
             end
         end
-    end
     
+    %% display the key points
+    function display(obj)
+        disp('Propulsion Type:')
+        disp(obj.PropulsionType)
+        disp('Staging point:')
+        disp(obj.Staging)
+        disp('TranO2--TranFuel')
+        disp(strcat(char(obj.TransitFuel(1).Location),'----',char(obj.TransitFuel(2).Location)))
+        disp('RetO2---RetFuel')
+        disp(strcat(char(obj.ReturnFuel(1).Location),'----',char(obj.ReturnFuel(2).Location)))
+        disp('Transit Crew')
+        disp(obj.TransitCrew.Size)
+        disp('Surface Crew')
+        disp(obj.SurfaceCrew.Size)
+        disp(obj.SurfaceSites)
+        disp(obj.OrbitCapture)
+        disp(obj.SurfacePower)
+        disp('% food grown on Mars')
+        disp(obj.FoodSupply(2).Amount*100)
+    end
+    end
+    %% standard arches
     properties (Constant)
         DEFAULT = MarsArchitecture();
         DRA5 = MarsArchitecture.Enumerate( ...

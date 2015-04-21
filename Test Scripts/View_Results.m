@@ -19,13 +19,15 @@ for i=1:Num_Arches
 end
 %disp
 hold off;
-yaxis = val;
-ylab = 'Science Value';
-scatter(Im,yaxis);
+xaxis = val;
+xlab = 'Science Value';
+scatter(xaxis,Im);
 hold on;
 %scatter(250000,30000,'d');
-xlabel('IMLEO');
-ylabel(ylab);
+ylabel('IMLEO');
+xlabel(xlab);
+
+
 
 %% Morph Section
 val = zeros(1, Num_Arches); %initialize value vector
@@ -63,14 +65,13 @@ for i=1:Num_Arches
         case Location.EML2
             stage(i) = 3;
     end
-	switch char(Morph{i}.SurfacePower)
-        case char(PowerSource.SOLAR)
+	if Morph{i}.SurfacePower == PowerSource.SOLAR
             power(i) = 1;
-        case char(PowerSource.NUCLEAR)
+    elseif Morph{i}.SurfacePower == PowerSource.NUCLEAR
             power(i) = 2;
-        case char([PowerSource.NUCLEAR, PowerSource.SOLAR])
+    elseif Morph{i}.SurfacePower ==  [PowerSource.NUCLEAR, PowerSource.SOLAR]
             power(i) = 3;
-        case char([PowerSource.NUCLEAR, PowerSource.FUEL_CELL])
+    elseif Morph{i}.SurfacePower == [PowerSource.NUCLEAR, PowerSource.FUEL_CELL]
             power(i) = 4;
     end
     switch char(Morph{i}.PropulsionType)
@@ -111,10 +112,38 @@ end
 end
 %% disp
 hold off;
-yaxis = val;
-ylab = 'Science Value';
-gscatter(Im,val,surfcrew,'mcrgb','o+xsd');
+gscatter(val,Im,power,'mcrgb','o+xsd');
 hold on;
 %scatter(250000,30000,'d');
-xlabel('IMLEO');
-ylabel(ylab);
+xlabel('Science Value');
+ylabel('IMLEO');
+
+%% isolate utopian corner
+ind = [];
+Im = transpose(Im);
+val = transpose(val);
+for i=1:length(Im)
+    if or(Im(i) > 0.5e6, val(i) < 3.2e4)
+        ind(end+1) = i;
+    end
+end
+Im = removerows(Im,ind);
+val = removerows(val,ind);
+Im = transpose(Im);
+val = transpose(val);
+
+%% Find most utopian (if un-dominated)
+bestim = min(Im);
+bestsci = max(val);
+bestind = 0;
+for i=1:Num_Arches
+    if and(All_Results{i}.IMLEO == bestim, All_Results{i}.Science == bestsci)
+        bestind = i;
+    end
+end
+if ~(bestind == 0)
+disp('Best Architecture')
+disp(bestind)
+elseif bestind == 0
+    disp('No Utopian Architecture')
+end
