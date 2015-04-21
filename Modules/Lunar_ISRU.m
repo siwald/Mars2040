@@ -21,7 +21,7 @@ end
 Prop_Mass = nansum([Results.Lunar_ISRU.Fuel_Output, Results.Lunar_ISRU.Oxidizer_Output]);
 FerrySpacecraft = OverallSC; %initialize the Ferry Craft
 Tank = SC_Class ('Lunar ISRU Tank');
-Tank.Bus_Mass = .005 * Prop_Mass; %Example Number
+Tank.Bus_Mass = .05 * Prop_Mass; %MAE 4262, Florida Institude of Tech, Accessed 4-21-15, http://my.fit.edu/~dkirk/4262/Lectures/Propellant%20Tank%20Design.doc
 FerrySpacecraft.Add_Craft = Tank;
 
 %Get tank back from staging point
