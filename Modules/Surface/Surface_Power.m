@@ -90,6 +90,7 @@ Remaining_Power = Results.Cum_Surface_Power - (XL_Reactor_Quantity * XL_Reactor_
 if (Remaining_Power/L_Reactor_Size) > 1 %add another XL_Reactor instead of 2 Larges, Mass Savings!
     XL_Reactor_Quantity = XL_Reactor_Quantity + 1;
     Remaining_Power = Remaining_Power - (1 * XL_Reactor_Size);
+    L_Reactor_Quantity = 0; %set as 0 for later calcs
 else
 L_Reactor_Quantity = floor(Remaining_Power/L_Reactor_Size);
 Remaining_Power = Remaining_Power - (L_Reactor_Quantity * L_Reactor_Size);
@@ -97,11 +98,11 @@ end
 %Don't use M reactor, 2X as heavy as Large.
 % M_Reactor_Quantity = floor(Remaining_Power/M_Reactor_Size);
 % Remaining_Power = Remaining_Power - (M_Reactor_Quantity * M_Reactor_Size);
-M_Reactor_Quantity =0;
+M_Reactor_Quantity =0; %set as 0 for later calcs.
 
 if (Remaining_Power / S_Reactor_Size) > 5 %Use another L rather than 6+ S, mass savings!
     L_Reactor_Quantity = L_Reactor_Quantity + 1;
-    S_Reactor_Quantity = 0; %define for later calcs
+    S_Reactor_Quantity = 0; %set as for later calcs
     Remaining_Power = Remaining_Power - (1 * L_Reactor_Size);
 else
     S_Reactor_Quantity = floor(Remaining_Power/S_Reactor_Size);

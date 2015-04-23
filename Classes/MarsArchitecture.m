@@ -12,7 +12,7 @@ classdef MarsArchitecture < handle
         transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = ArrivalEntry.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
-        entryDescent = ArrivalDescent.PROPULSIVE;
+        entryDescent = ArrivalDescent.AEROENTRY;
         siteSelection = Site.HOLDEN;
         surfaceCrew = SurfaceCrew.TARGET_SURFACE;
         isruBase = {cellstr('Atmospheric')};
@@ -25,6 +25,7 @@ classdef MarsArchitecture < handle
         returnFuel = [ReturnFuel.EARTH_LH2, ReturnFuel.MARS_O2];
         returnCapture = ReturnEntry.DIRECT;
         returnDescent = ReturnDescent.CHUTE;
+        index = 0;
         
         %% validation indicator
         isValid = false;
@@ -54,6 +55,7 @@ classdef MarsArchitecture < handle
         SurfacePower;
         ReturnCapture;
         ReturnDescent;
+        Index;
         %% Indicates whether or not architecture is valid and doesn't contain any contrary decisions
         IsValid;
     end
@@ -590,23 +592,15 @@ classdef MarsArchitecture < handle
                 returnEDL = obj.returnDescent;
             end
         end
-        %% ReturnFuel Setter
-        %function returnFuel = set.ReturnFuel(obj, now)
-        %    obj.returnFuel = now;
-        %end
-        %% TransitFuel Setter
-        %function transitFuel = set.TransitFuel(obj, now)
-        %    obj.transitFuel = now;
-        %end
-        %%% StageLoc Setter
-        %function stageLocation = set.Staging(obj, now)
-        %    obj.stageLocation = now;
-        %end
-        %%% OrbitCapture Setter
-        %function orbitCapture = set.OrbitCapture(obj, now)
-        %    obj.orbitCapture = now;
-        %end
-        
+        %% Index getter
+        function out = get.Index(obj)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture')
+                % get return from destinations list
+                % get return EDL from architecture object
+                out = obj.index;
+            end
+        end
         %% Origin setter
         function set.Origin(obj, value)
             % verify we have valid input object
@@ -841,7 +835,16 @@ classdef MarsArchitecture < handle
                 warning('Setting architecture return descent not possible because of invalid input.');
             end
         end
-    
+        %% Index setter
+        function set.Index(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'double')
+                % get transit crew object from architecture object
+                obj.index = value;
+            else
+                warning('Setting architecture transit crew not possible because of invalid input.');
+            end
+        end
     %% display the key points
     function display(obj)
         disp('Propulsion Type:')

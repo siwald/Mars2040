@@ -22,12 +22,12 @@ Max_AeroB_Mass = 40000; %kg
     %Get out the Multiple Entry And Ascent vehicle
     MEAA = AscentSpacecraft.Get_Craft('Ascent and Earth Entry Module');
     MEAA.Description = 'Multiple Entry and Ascent Module';
-    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
+%    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
         MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
         MEAA.Bus_Mass = MEAA.Bus_Mass + MEAA_Aeroshell;
-    else
-        warning('alternative descents not yet programmed')
-    end
+%     else
+%         warning('alternative descents not yet programmed')
+%     end
     %Add it to the Human Spacecraft
     HumanSpacecraft.Add_Craft = MEAA;
     
@@ -43,14 +43,14 @@ Max_AeroB_Mass = 40000; %kg
 
     Cargo_Lander = SC_Class('Cargo Lander');
     Cargo_Lander.Payload_Mass = Landing_Cargo / Num_Landers;
-    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY 
+%     if Cur_Arch.EDL == ArrivalDescent.AEROENTRY 
         %Descent_Dry_Mass = Cargo_Lander.Payload_Mass * (0.10 + (0.01*Site_Elevation)) % 10% mass in Descent System, + 1% for each km altitude
         Descent_Dry_Mass = 16400; %kg, DRA 5.0 T4-3 EDL summary
         Entry_Mass = 62900; %kg, DRA 5.0 T4-3 EDL summary
         Cargo_Lander.Bus_Mass = Descent_Dry_Mass + Entry_Mass;
-    else
-        warning('alternative entry types not yet programmed')
-    end
+%     else
+%         warning('alternative entry types not yet programmed')
+%     end
         for i=1:Num_Landers %add a Cargo_Lander Module until number of landers is reached
             CargoSpacecraft.Add_Craft = Cargo_Lander;
         end
