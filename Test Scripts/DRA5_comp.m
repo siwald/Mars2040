@@ -58,9 +58,9 @@
     %}
     
     Earth_Entry = SC_Class('Earth Entry Module'); %initialize the Earth Entry Module
-    %Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size * 1570; %kg, based on (Apollo CM Mass - heat sheild mass) / astronaut
+    %Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size * 1570 %kg, based on (Apollo CM Mass - heat sheild mass) / astronaut
     Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size *(14000/6); %kg, based on DRA5, assume 10t + 4t for 'bookeeping'
-    %Earth_Entry.Hab_Vol = Cur_Arch.TransitCrew.Size * 2.067; %based on Apollo hab vol / astronaut
+    Earth_Entry.Hab_Vol = Cur_Arch.TransitCrew.Size * 2.067; %based on Apollo hab vol / astronaut
     Earth_Entry.Payload_Vol = 0; %As yet undefined, and not a trade
     Earth_Entry.Payload_Mass = 0; %As yet undefined, and not a trade
     Earth_Entry.volume_calc; %populate the total volume

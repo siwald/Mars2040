@@ -55,6 +55,11 @@ classdef FoodSource < handle
                 amt = obj.amount;
             end
         end
+        %% Display
+        function display(obj)
+            obj.Location
+            obj.Amount
+        end
     end
 end
 

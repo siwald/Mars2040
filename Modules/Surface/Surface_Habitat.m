@@ -40,6 +40,7 @@ Inflatable_Ratio = 21.13; %Units: kg/m^3; This is based off the Transhab used fo
 Inflatable_Weight_Advantage = 50;  %Units: %; Source:http://www.marshome.org/files2/Fisher.pdf. Inflatable habitats are 30-50% lighter than Hard Aluminum structures 
 Internal_Thermal = 0.040; %Units: kW/kg; This is from BVAD table 3.2.9
 External_Thermal = 0.0083; %Units: kW/kg; This is from BVAD table 3.2.9. Worst case for first spiral
+Mars_Surf_Thermal = 0.0069; %Units: kW/kg; BVAD 2015 table 3.17
 
 %Surface_Radiation = 0.7; %Units: msv/day; This is based off the curiosity rover
 Regolith_Constant = 9.157; %Units: kg/m^3; BVAD study
@@ -86,14 +87,21 @@ Surf_Mass = Solid_Mass + Inflatable_Mass;
 %         
 % end
 
-Surf_Power = (Internal_Thermal * Surf_Mass) + (External_Thermal * Surf_Mass) + (0.019*Surf_Mass); %Units: kW; 0.019 is worst case value from BVAD table 3.2.2 for surface power.
+Surf_Power = (0.019*Surf_Mass); %Units: kW; 0.019 is worst case value from BVAD table 3.2.2 for surface power.
 Regolith_Mass = Regolith_Constant * Surf_Volume;
 
+MMSEV_Mass = 4000; %kg SEV total mass
+UtiliRover_Mass = 4000; %kg SEV Chassis + full payload of utility equipment
+Num_Sci_Rovers = ceil(Cur_Arch.SurfaceCrew.Size * 0.34); %based on DRA5, 2 rovers per 6 crew
+Num_Util_Rovers = floor(Cur_Arch.SurfaceCrew.Size * 0.34); %based on DRA5, 2 rovers per 6 crew
+BOM_Mass = 56.4; %kg, Bennet, 2006 pg. 13, RTG
+BOM_Power = 596/1000; %kW, Bennet, 2006, RTG
 
+Rovers_Mass = (MMSEV_Mass * Num_Sci_Rovers) + (UtiliRover_Mass * Num_Util_Rovers) + (BOM_Mass * (Num_Sci_Rovers + Num_Util_Rovers));
 
 %% put into results
 Results.Surface_Habitat.Volume = Surf_Volume;
-Results.Surface_Habitat.Mass = Surf_Mass;
+Results.Surface_Habitat.Mass = Surf_Mass + Rovers_Mass;
 Results.Surface_Habitat.Power = Surf_Power;
 Results.Regolith = Regolith_Mass;
 end
