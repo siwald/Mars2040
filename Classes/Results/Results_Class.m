@@ -18,6 +18,7 @@ classdef Results_Class < dynamicprops
         Regolith
         Science_Time
         IMLEO
+        Cum_Surface_Power
         
         % Spacecraft breakdowns
         HumanSpacecraft;

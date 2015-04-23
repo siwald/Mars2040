@@ -65,15 +65,15 @@ for i=1:Num_Arches
         case Location.EML2
             stage(i) = 3;
     end
-	if Morph{i}.SurfacePower == PowerSource.SOLAR
-            power(i) = 1;
-    elseif Morph{i}.SurfacePower == PowerSource.NUCLEAR
-            power(i) = 2;
-    elseif Morph{i}.SurfacePower ==  [PowerSource.NUCLEAR, PowerSource.SOLAR]
-            power(i) = 3;
-    elseif Morph{i}.SurfacePower == [PowerSource.NUCLEAR, PowerSource.FUEL_CELL]
-            power(i) = 4;
-    end
+% 	if Morph{i}.SurfacePower == PowerSource.SOLAR
+%             power(i) = 1;
+%     elseif Morph{i}.SurfacePower == PowerSource.NUCLEAR
+%             power(i) = 2;
+%     elseif Morph{i}.SurfacePower ==  [PowerSource.NUCLEAR, PowerSource.SOLAR]
+%             power(i) = 3;
+%     elseif Morph{i}.SurfacePower == [PowerSource.NUCLEAR, PowerSource.FUEL_CELL]
+%             power(i) = 4;
+%    end
     switch char(Morph{i}.PropulsionType)
         case char(Propulsion.LH2)
             prop(i) = 1;
@@ -88,11 +88,14 @@ for i=1:Num_Arches
         case ArrivalEntry.PROPULSIVE
             cap(i) = 2;
     end
-	if isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2])
+	if or(isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2]),...
+            isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_O2, TransitFuel.EARTH_LH2]))
             transfuel(i) = 1;
-		elseif isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2])
+		elseif or(isequal(Morph{i}.TransitFuel, [TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2]),...
+                isequal(Morph{i}.TransitFuel, [TransitFuel.LUNAR_O2,TransitFuel.EARTH_LH2]))
             transfuel(i) = 2;
-		elseif isequal(Morph{i}.TransitFuel, [TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2])
+		elseif or(isequal(Morph{i}.TransitFuel, [TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]),...
+                isequal(Morph{i}.TransitFuel, [TransitFuel.LUNAR_O2,TransitFuel.LUNAR_LH2]))
             transfuel(i) = 3;
 		else
 			transfuel(i) = 4;
@@ -108,11 +111,11 @@ for i=1:Num_Arches
     else
         returnfuel{i} = 5;
 end
-
 end
+
 %% disp
 hold off;
-gscatter(val,Im,power,'mcrgb','o+xsd');
+gscatter(val,Im,transfuel,'mcrgb','o+xsd');
 hold on;
 %scatter(250000,30000,'d');
 xlabel('Science Value');
@@ -146,4 +149,26 @@ disp('Best Architecture')
 disp(bestind)
 elseif bestind == 0
     disp('No Utopian Architecture')
+end
+%% Find Best IMLEO of the Best Sci
+bestim = min(Im);
+bestsci = max(val);
+bestind = 0;
+sciim = [];
+for i=1:length(Im)
+    if val(i) == bestsci;
+        sciim(end+1) = Im(i);
+    end
+end
+bestimleft = min(sciim);
+for i=1:Num_Arches
+    if and(All_Results{i}.IMLEO == bestimleft, All_Results{i}.Science == bestsci)
+        bestind = i;
+    end
+end
+if ~(bestind == 0)
+disp('Best Architecture')
+disp(bestind)
+elseif bestind == 0
+    disp('No best IMLEO for best Science')
 end

@@ -5,6 +5,7 @@ classdef DescentType < handle
         PROPULSIVE = DescentType('Propulsive');
         CHUTE = DescentType('Chute');
         SHOCK_ABSORBTION = DescentType('Shock');
+        AEROENTRY = DescentType('Aero Entry');
     end
     
     %% private class members

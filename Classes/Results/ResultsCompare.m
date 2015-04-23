@@ -1,4 +1,4 @@
-function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_cargo)
+function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_cargo, Ascent_mass)
 %RESULTSCOMPARE Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -196,7 +196,7 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
     results_table{44,2} = results_obj1.ISFR.Oxidizer_Output;
     results_table{44,3} = results_obj2.ISFR.Oxidizer_Output;
     results_table{44,4} = results_obj1.ISFR.Oxidizer_Output - results_obj2.ISFR.Oxidizer_Output;
-    % power plance
+    % power plant
     results_table{45,1} = 'PowerPlant.Consumables';
     results_table{45,2} = results_obj1.PowerPlant.Consumables;
     results_table{45,3} = results_obj2.PowerPlant.Consumables;
@@ -260,7 +260,18 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
     results_table{59,2} = num_cargo;
     results_table{59,3} = 2;
     results_table{59,4} = num_cargo - 2;
+    results_table{60,1} = 'Ascent Spacecraft Mass';
+    results_table{60,2} = Ascent_mass;
+    results_table{60,3} = 42783; %kg, DRA ADD1, T3-26
+    results_table{60,4} = Ascent_mass - 42783;
     
+    power = cell(1,4);
+    power{1,1} = 'Surface_Power_Needs';
+    power{1,2} = results_obj1.Cum_Surface_Power;
+    power{1,3} = results_obj2.Cum_Surface_Power;
+    power{1,4} = results_obj1.Cum_Surface_Power - results_obj2.Cum_Surface_Power;
+    results_table(53:end+1,:) = results_table(52:end,:);
+    results_table(52,:) = power;
     %% clean empty
     ind = [];
     [numrows, ~] = size(results_table);
@@ -275,7 +286,7 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
     results_table{1,5} = 'percent off';
     [numrows , ~] = size(results_table);
     for i = 2:numrows
-        results_table{i,5} = 100*(results_table{i,3}-results_table{i,2})/results_table{i,3};
+        results_table{i,5} = 100*(results_table{i,2}-results_table{i,3})/results_table{i,3};
     end
 end
 

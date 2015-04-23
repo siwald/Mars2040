@@ -1,4 +1,4 @@
-function [Results] = Surface_Power(Cur_Arch,Results)
+function [Results] = Surface_Power(Cur_Arch,Results, varargin)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -12,9 +12,12 @@ function [Results] = Surface_Power(Cur_Arch,Results)
 %Cumulative Power that is required for all other modules on the surface of
 %Mars. 
 %Cur_Arch = 'Solar'; 
-Cumulative_Power = nansum([Results.Surface_Habitat.Power, ...
+Results.Cum_Surface_Power = nansum([Results.Surface_Habitat.Power, ...
     Results.ECLSS.Power, ...
     Results.Mars_ISRU.Power]); %Units: kW 
+if ~isempty(varargin)%DRA5 comparison
+    %Results.Cum_Surface_Power = 26; %kW, use DRA5 number.
+end
 
 %------Outputs------
 
@@ -40,7 +43,7 @@ Cumulative_Power = nansum([Results.Surface_Habitat.Power, ...
 Solar_Size = 1.3; %Units: m^2; Size of solar panels that were used for Spirit and Opportunity
 Solar_Output = 450; %Units: W/hr; Lowest power output for solar panels from Spirit and Opportunity Missions. Worst case was asuumed for this study.
 Panel_Mass = 2.5; %Units: kg/m^2; Mass of solar panels used for Spirit and Opportunity
-PowerPlant_Distance = 1000; %Units: m; distance from power plant to habitat
+PowerPlant_Distance = 3000; %Units: m; distance from power plant to habitat, DRA5, no sheild
 
 XL_Reactor_Size = 10; %Units: MW; Rocketdyne reactor, liquid cooled
 L_Reactor_Size = 5; %Units: MW; ORNL reactor, UN pellet fuel pin w/T-111 alloy
@@ -54,6 +57,8 @@ M_Reactor_Mass = 41510; %Units: kg; 1993 DRM derived from NTP and SP-100
 S_Reactor_Mass = 4610; %Units: kg; SP-100 US Research group for nuclear reactors in space
 S_Reactor_Volume = 36.77; %Units: m^3;
 M_Reactor_Volume = (S_Reactor_Mass + L_Reactor_Mass)/2; %Units: m^3
+DRA_Reactor_Size = 40; %units kW
+DRA_Reactor_Mass = 8800; %units kg
 
 %{
 Defined later
@@ -65,13 +70,13 @@ Power_Volume = 0;
 %------------------------------------------------------------------------
 
 %Calculations begin 
-Solar_Area = (Cumulative_Power/(Solar_Output/1000)) * Solar_Size;
+Solar_Area = (Results.Cum_Surface_Power/(Solar_Output/1000)) * Solar_Size;
 Solar_Mass = Solar_Area * Panel_Mass;
 
-Battery_Volume = (4.66*Cumulative_Power)/1000;
-Battery_Mass = (7*Cumulative_Power);
-FuelCell_Volume = ((1.4*Cumulative_Power)/1000)+0.1;
-FuelCell_Mass = (0.9*Cumulative_Power)+100;
+Battery_Volume = (4.66*Results.Cum_Surface_Power)/1000;
+Battery_Mass = (7*Results.Cum_Surface_Power);
+FuelCell_Volume = ((1.4*Results.Cum_Surface_Power)/1000)+0.1;
+FuelCell_Mass = (0.9*Results.Cum_Surface_Power)+100;
 
 PowerCable_Mass = (0.11446*PowerPlant_Distance);
 
@@ -80,19 +85,33 @@ L_Reactor_Size = L_Reactor_Size * 1000; %Units: kW; convert MW to kW
 M_Reactor_Size = M_Reactor_Size * 1000; %Units: kW; convert MW to kW
 S_Reactor_Size = S_Reactor_Size * 1000; %Units: kW; convert MW to kW
 
-XL_Reactor_Quantity = floor(Cumulative_Power/XL_Reactor_Size);
-Remaining_Power = Cumulative_Power - (XL_Reactor_Quantity * XL_Reactor_Size);
+XL_Reactor_Quantity = floor(Results.Cum_Surface_Power/XL_Reactor_Size);
+Remaining_Power = Results.Cum_Surface_Power - (XL_Reactor_Quantity * XL_Reactor_Size);
+if (Remaining_Power/L_Reactor_Size) > 1 %add another XL_Reactor instead of 2 Larges, Mass Savings!
+    XL_Reactor_Quantity = XL_Reactor_Quantity + 1;
+    Remaining_Power = Remaining_Power - (1 * XL_Reactor_Size);
+else
 L_Reactor_Quantity = floor(Remaining_Power/L_Reactor_Size);
 Remaining_Power = Remaining_Power - (L_Reactor_Quantity * L_Reactor_Size);
-M_Reactor_Quantity = floor(Remaining_Power/M_Reactor_Size);
-Remaining_Power = Remaining_Power - (M_Reactor_Quantity * M_Reactor_Size);
-S_Reactor_Quantity = floor(Remaining_Power/S_Reactor_Size);
-Remaining_Power = Remaining_Power - (S_Reactor_Quantity * S_Reactor_Size);
+end
+%Don't use M reactor, 2X as heavy as Large.
+% M_Reactor_Quantity = floor(Remaining_Power/M_Reactor_Size);
+% Remaining_Power = Remaining_Power - (M_Reactor_Quantity * M_Reactor_Size);
+M_Reactor_Quantity =0;
+
+if (Remaining_Power / S_Reactor_Size) > 5 %Use another L rather than 6+ S, mass savings!
+    L_Reactor_Quantity = L_Reactor_Quantity + 1;
+    S_Reactor_Quantity = 0; %define for later calcs
+    Remaining_Power = Remaining_Power - (1 * L_Reactor_Size);
+else
+    S_Reactor_Quantity = floor(Remaining_Power/S_Reactor_Size);
+    Remaining_Power = Remaining_Power - (S_Reactor_Quantity * S_Reactor_Size);
+end
 
 if Remaining_Power > 0
-    S_Reactor_Quantity = S_Reactor_Quantity + 1;
+    S_Reactor_Quantity = S_Reactor_Quantity + 1; 
 else
-    %do not add anything to Small Reactor Quantity
+    %do not add anything to Small Reactor Quantity, we have a power margin!
 end
 
 PowerPlant_Mass = (XL_Reactor_Quantity * XL_Reactor_Mass) + (L_Reactor_Quantity * L_Reactor_Mass)+(M_Reactor_Quantity * M_Reactor_Mass)+(S_Reactor_Quantity * S_Reactor_Mass);
@@ -120,8 +139,8 @@ for m = 1:n
             Power_Volume = Power_Volume;
         
         case 'NUCLEAR'
-            Power_Mass = Power_Mass+(1/Power_Size)*(PowerPlant_Mass + PowerCable_Mass);
-            Power_Volume = Power_Volume+(1/Power_Size)*PowerPlant_Volume;
+            Power_Mass = (PowerPlant_Mass + PowerCable_Mass);
+            Power_Volume = PowerPlant_Volume;
     
         otherwise
             error('Power poorly defined in Morph Matrix, should be combination of: Solar, Fuel_Cells , RTG, or Nuclear')
@@ -130,5 +149,6 @@ end
 %% add to results object
 Results.PowerPlant.Volume = Power_Volume;
 Results.PowerPlant.Mass = Power_Mass;
+Results.PowerPlant.Power = Results.Cum_Surface_Power - Remaining_Power;
 end
 

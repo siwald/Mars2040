@@ -31,7 +31,6 @@ dV = 4.41; % total km/s, Mars Surface to LMO (500 km). est. from HSMAD Fig. 10-2
 
 %% Ascent Taxi Definition
 Ascent_Vehicle = OverallSC; %initialize the Ascent Vehicle
-
 Ascent_Hab = HumanSpacecraft.Get_Craft('Earth Entry Module');
 
 %% Add Ascent Hab to the Ascent Vehicle
@@ -48,7 +47,14 @@ Ascent_Vehicle.Add_Craft = Fuel_Payload;
 
 %% Ascent Vehicle  propulsion
 Ascent_Rocket = SC_Class('Ascent Propulsion Module');
-Ascent_Rocket = Propellant_Mass(Cur_Arch.PropulsionType, Ascent_Rocket, dV, Ascent_Vehicle.Mass);
+if isempty(varargin) %standard
+    Ascent_Rocket = Propellant_Mass(Cur_Arch.PropulsionType, Ascent_Rocket, dV, Ascent_Vehicle.Mass);
+elseif ~isempty(varargin) %for DRA comparison Only, use CH4, O2 prod on Mars ISRU
+    Ascent_Rocket = Propellant_Mass(Propulsion.CH4, Ascent_Rocket, dV, Ascent_Vehicle.Mass);
+    Results.Mars_ISRU.Oxidizer_Output = Ascent_Rocket.Ox_Mass;
+    Ascent_Rocket.Ox_Mass = 0;
+    Ascent_Rocket.Prop_Mass = Ascent_Rocket.Fuel_Mass;
+end
 Ascent_Vehicle.Add_Craft = Ascent_Rocket;
 
 %% Fuel Depot Section
@@ -72,12 +78,6 @@ if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_LH2, ...
         Results.Mars_ISRU.Fuel_Output = Results.Mars_ISRU.Fuel_Output + Ascent_Vehicle.Fuel_Mass; %add LH2 to Mars generation
         remove_fuel(Ascent_Vehicle); %remove all LH2 from Spacecraft Modules
     end
-end
-
-if ~isempty(varargin) %Move ascent O2 prod to Mars, for DRA comparison Only
-    Results.Mars_ISRU.Oxidizer_Output = nansum([Results.Mars_ISRU.Oxidizer_Output, Ascent_Vehicle.Ox_Mass]); %add O2 to Mars generation
-    remove_ox(Ascent_Vehicle); %remove all O2 from Spacecraft Modules
-    disp('good')
 end
 end
 

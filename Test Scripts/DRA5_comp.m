@@ -58,8 +58,9 @@
     %}
     
     Earth_Entry = SC_Class('Earth Entry Module'); %initialize the Earth Entry Module
-    Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size * 1570; %kg, based on (Apollo CM Mass - heat sheild mass) / astronaut
-    Earth_Entry.Hab_Vol = Cur_Arch.TransitCrew.Size * 2.067; %based on Apollo hab vol / astronaut
+    %Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size * 1570; %kg, based on (Apollo CM Mass - heat sheild mass) / astronaut
+    Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size *(14000/6); %kg, based on DRA5, assume 10t + 4t for 'bookeeping'
+    %Earth_Entry.Hab_Vol = Cur_Arch.TransitCrew.Size * 2.067; %based on Apollo hab vol / astronaut
     Earth_Entry.Payload_Vol = 0; %As yet undefined, and not a trade
     Earth_Entry.Payload_Mass = 0; %As yet undefined, and not a trade
     Earth_Entry.volume_calc; %populate the total volume
@@ -103,7 +104,7 @@
     %}
     
     [Results.AscentSpacecraft, Results.HumanSpacecraft, Results] = Ascent (Cur_Arch, Results.HumanSpacecraft, Results, 'DRA5');
-       
+    Ascent_mass = Results.AscentSpacecraft.Mass;   
     %% --- Surf Structure --- %%
     %{
     Inputs:
@@ -154,7 +155,7 @@
         Results
             Surface_PowerPlant.Mass & Volume
     %}
-    Results = Surface_Power (Cur_Arch, Results);
+    Results = Surface_Power (Cur_Arch, Results, 'DRA5');
     
     %% --- ISFR and Sparing Module --- %%
     %{
@@ -212,7 +213,7 @@
             MEAA Module
             Cargo Descenders
     %}
-    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, num_cargo] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
+    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, num_cargo] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation, 'DRAcomp');
 
     %% --- Outgoing Transit --- %%
     %{
@@ -323,11 +324,11 @@ DRA5_Results.Mars_ISRU.Oxidizer_Output = 24891; %ADD1 T3-18 O2 prop only 6567 CH
 % DRA5_Results.Lunar_ISRU.Consumables = 0;
 % DRA5_Results.Lunar_ISRU.Spares = 0;
 % DRA5_Results.Lunar_ISRU.Replacements = 0;
-DRA5_Results.Lunar_ISRU.Mass = 0;
-DRA5_Results.Lunar_ISRU.Power = 0;
-DRA5_Results.Lunar_ISRU.Volume = 0;
-DRA5_Results.Lunar_ISRU.Fuel_Output = 0;
-DRA5_Results.Lunar_ISRU.Oxidizer_Output = 0;
+% DRA5_Results.Lunar_ISRU.Mass = 0;
+% DRA5_Results.Lunar_ISRU.Power = 0;
+% DRA5_Results.Lunar_ISRU.Volume = 0;
+% DRA5_Results.Lunar_ISRU.Fuel_Output = 0;
+% DRA5_Results.Lunar_ISRU.Oxidizer_Output = 0;
 %% ISFR
 % DRA5_Results.ISFR.Consumables = -1;
 % DRA5_Results.ISFR.Spares = -1;
@@ -344,8 +345,9 @@ DRA5_Results.Lunar_ISRU.Oxidizer_Output = 0;
 DRA5_Results.PowerPlant.Mass = 7800*0.8; %ADD1 T6-17 <includes 20% mass margin>
 DRA5_Results.PowerPlant.Power = -30;
 DRA5_Results.PowerPlant.Volume = 0;
+DRA5_Results.Cum_Surface_Power= 26; %kW, DRA5 6.6.1 O2 ISRU, 24-hour
 % DRA5_Results.PowerPlant.Fuel_Output = -1;
 % DRA5_Results.PowerPlant.Oxidizer_Output = -1;
 
 
-results = ResultsCompare(Results,DRA5_Results,num_cargo);
+results = ResultsCompare(Results,DRA5_Results,num_cargo,Ascent_mass);
