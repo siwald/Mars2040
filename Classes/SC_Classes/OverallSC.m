@@ -94,6 +94,16 @@ classdef OverallSC < dynamicprops
                 end
             end
         end
+        %% Copy an element
+        function out = Copy_Craft(obj, name)
+            [num, ~] = size(obj.SC);
+            for i=1:num
+                if strcmp(obj.SC{i,1}.Description, name)
+                    out = obj.SC{i,1}; %copy out the entry module
+                    break
+                end
+            end
+        end
         %% Remove Propellents for ISRU generation
         %Clear all oxidizer from SC elements
         function remove_ox(obj)

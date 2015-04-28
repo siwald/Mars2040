@@ -245,7 +245,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
             MEAA Module
             Cargo Descenders
     %}
-    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, ~] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
+    [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, Results.Num_CargoSpacecraft] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
 
     %% --- Outgoing Transit --- %%
     %{
@@ -283,14 +283,18 @@ parfor i=1:Num_Arches %begin looping for each architecture
     %% --- Staging Module --- %%
     HumanStageing = SC_Class('Staging Engines'); %should Initialize
     HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),Results.HumanSpacecraft.Mass);
-    Results.HumanSpacecraft.Add_Craft = HumanStageing;
+    if HumanStageing.Prop_Mass > 0 %if staging is LEO, skip the add
+        Results.HumanSpacecraft.Add_Craft = HumanStageing;
+    end
     
     CargoStageing = SC_Class('Staging Engines');
     CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),(Results.CargoSpacecraft.Mass ...
         + Results.FerrySpacecraft.Prop_Mass)); %Needs to bring the non-Lunar ISRU prop mass to staging point for the Ferry
+    if CargoStageing.Prop_Mass > 0 %if staging is LEO, skip the add
     Results.CargoSpacecraft.Add_Craft = CargoStageing;
+    end
     
-    Results.IMLEO = Results.HumanSpacecraft.Mass + Results.CargoSpacecraft.Mass;
+    Results.IMLEO = Results.HumanSpacecraft.Mass + (Results.CargoSpacecraft.Mass*Results.Num_CargoSpacecraft);
 %     disp(Results.IMLEO)
     
     %% --- Science Module --- %%

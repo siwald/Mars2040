@@ -34,8 +34,8 @@ Max_AeroB_Mass = 40000; %kg
 %% Cargo Descenders
     Cargo_Manifest = [Results.Consumables, Results.Spares, Results.Replacements, AscentSpacecraft.Mass];
     if ~isempty(varargin)
-        Cargo_Manifest = [Cargo_Manifest [AscentSpacecraft.Mass, Results.ECLSS.Mass, Results.PowerPlant.Mass, Results.Mars_ISRU.Mass]];
-        %Cargo_Manifest = [36000, 36000];
+        %Cargo_Manifest = [Cargo_Manifest [AscentSpacecraft.Mass, Results.ECLSS.Mass, Results.PowerPlant.Mass, Results.Mars_ISRU.Mass]];
+        Cargo_Manifest = [36000, 36000];
     end
     Landing_Cargo = nansum(Cargo_Manifest);
     CargoSpacecraft = OverallSC; %Initialize the Cargo Spacecraft
@@ -51,8 +51,12 @@ Max_AeroB_Mass = 40000; %kg
 %     else
 %         warning('alternative entry types not yet programmed')
 %     end
-        for i=1:Num_Landers %add a Cargo_Lander Module until number of landers is reached
+%{
+Comment for loop out.  We'll have one Cargo Spacecraft pulled back, then
+multiply by Results.Num_CargoSpacecraft, since they're all alike.
+%}
+        %for i=1:Num_Landers %add a Cargo_Lander Module until number of landers is reached
             CargoSpacecraft.Add_Craft = Cargo_Lander;
-        end
-        
+        %end
+        %}
 end

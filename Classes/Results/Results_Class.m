@@ -23,6 +23,7 @@ classdef Results_Class < dynamicprops
         % Spacecraft breakdowns
         HumanSpacecraft;
         CargoSpacecraft;
+        Num_CargoSpacecraft;
         FerrySpacecraft;
         AscentSpacecraft;
         

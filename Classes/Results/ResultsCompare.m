@@ -248,11 +248,11 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
     results_table{56,3} = 333000;
     results_table{56,4} = results_obj1.HumanSpacecraft.Mass - 33000;
     results_table{57,1} = 'Cargo_Spacecraft.Mass';
-    results_table{57,2} = results_obj1.CargoSpacecraft.Mass / num_cargo;
+    results_table{57,2} = results_obj1.CargoSpacecraft.Mass;
     results_table{57,3} = 246000;
-    results_table{57,4} = (results_obj1.CargoSpacecraft.Mass / num_cargo) - 246000;
+    results_table{57,4} = results_obj1.CargoSpacecraft.Mass - 246000;
     results_table{58,1} = 'Cargo_Spacecraft.Landed_Mass';
-    temp = results_obj1.CargoSpacecraft.Get_Craft('Cargo Lander');
+    temp = results_obj1.CargoSpacecraft.Copy_Craft('Cargo Lander');
     results_table{58,2} = temp.Payload_Mass;
     results_table{58,3} = 36000;
     results_table{58,4} = (results_obj1.CargoSpacecraft.Mass / num_cargo) - 246000;
@@ -288,5 +288,33 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
     for i = 2:numrows
         results_table{i,5} = 100*(results_table{i,2}-results_table{i,3})/results_table{i,3};
     end
+    
+    %% add S/C report
+    results_table{end+1,1} = 'Crew';
+    results_table{end,2} = 'Payload';
+    results_table{end,3} = 'Engines and Bus';
+    results_table{end,4} = 'Propellant';
+    results_table{end,5} = 'Habitat';
+    for i = 1:length(results_obj1.HumanSpacecraft.SC)
+        results_table{end+1,1} = results_obj1.HumanSpacecraft.SC{i}.Description;
+        results_table{end,2} = results_obj1.HumanSpacecraft.SC{i}.Payload_Mass;
+        results_table{end,3} = nansum([results_obj1.HumanSpacecraft.SC{i}.Eng_Mass, results_obj1.HumanSpacecraft.SC{i}.Bus_Mass]);
+        results_table{end,4} = results_obj1.HumanSpacecraft.SC{i}.Prop_Mass;
+        results_table{end,5} = results_obj1.HumanSpacecraft.SC{i}.Hab_Mass;
+    end
+    results_table{end+1,1} = 'Cargo';
+    results_table{end,2} = 'Quantity:';
+    results_table{end,3} = results_obj1.Num_CargoSpacecraft;
+    for i = 1:length(results_obj1.CargoSpacecraft.SC)
+        results_table{end+1,1} = results_obj1.CargoSpacecraft.SC{i}.Description;
+        results_table{end,2} = results_obj1.CargoSpacecraft.SC{i}.Payload_Mass;
+        results_table{end,3} = nansum([results_obj1.CargoSpacecraft.SC{i}.Eng_Mass, results_obj1.CargoSpacecraft.SC{i}.Bus_Mass]);
+        results_table{end,4} = results_obj1.CargoSpacecraft.SC{i}.Prop_Mass;
+    end
+%     results_table{end+1,1} = 'Lunar Ferry';
+%     for i = 1:length(results_obj1.FerrySpacecraft.SC)
+%         results_table{end+1,1} = results_obj1.FerrySpacecraft.SC{i}.Description;
+%         results_table{end,2} = results_obj1.FerrySpacecraft.SC{i}.Origin_Mass;
+%     end
 end
 

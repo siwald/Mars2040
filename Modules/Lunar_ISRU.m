@@ -8,6 +8,9 @@ function [FerrySpacecraft, HumanSpacecraft, CargoSpacecraft, Results] = ...
 [CargoSpacecraft, Results] = Lunar_Move(Cur_Arch, CargoSpacecraft, Results);
 
 %% Ferry craft
+FerrySpacecraft = OverallSC; %initialize the Ferry Craft
+if or(Results.Lunar_ISRU.Fuel_Output < 0, ... do only if there is Lunar ISRU
+        Results.Lunar_ISRU.Oxidizer_Output < 0) 
 %set stage location
 switch Cur_Arch.Staging
     case Location.LEO
@@ -19,7 +22,7 @@ switch Cur_Arch.Staging
 end
 %sum the Lunar ISRU mass
 Prop_Mass = nansum([Results.Lunar_ISRU.Fuel_Output, Results.Lunar_ISRU.Oxidizer_Output]);
-FerrySpacecraft = OverallSC; %initialize the Ferry Craft
+
 Tank = SC_Class ('Lunar ISRU Tank');
 Tank.Bus_Mass = .05 * Prop_Mass; %MAE 4262, Florida Institude of Tech, Accessed 4-21-15, http://my.fit.edu/~dkirk/4262/Lectures/Propellant%20Tank%20Design.doc
 FerrySpacecraft.Add_Craft = Tank;
@@ -36,7 +39,7 @@ FerrySpacecraft.Add_Craft = Ferry_Eng;
 
 %Add Ferry Fuel Needs to Lunar ISRU
 [FerrySpacecraft, Results] = Lunar_Move(Cur_Arch, FerrySpacecraft, Results);
-
+end
 %% Lunar ISRU results
 Results.Lunar_ISRU.Mass = 50 * Results.Lunar_ISRU.Fuel_Output + 25 * Results.Lunar_ISRU.Oxidizer_Output;
 Results.Lunar_ISRU.Power = 600 *(Results.Lunar_ISRU.Fuel_Output + Results.Lunar_ISRU.Oxidizer_Output);
