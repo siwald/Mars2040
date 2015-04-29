@@ -31,7 +31,7 @@ classdef Site < handle
         MERIDIANI ('Meridiani Planum')
         GUSEV ('Gusev Crater')
         ISIDIS ('Isidis Planitia')
-        ELYSIUM ('')
+        ELYSIUM ('Elysium')
         MAWRTH ('Mawrth Vallis')
         EBERSWALDE ('Eberswalde Ellipse')
         UTOPIA ('Utopia Planitia')

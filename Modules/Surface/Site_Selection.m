@@ -1,4 +1,4 @@
-function [Site_Sci_Value, Site_Elevation] = Site_Selection(Cur_Arch)
+function [Site_Sci_Value, Site_Elevation, Site_Water_Percent] = Site_Selection(Cur_Arch)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -33,39 +33,51 @@ switch Cur_Arch.SurfaceSites
     case Site.HOLDEN
         Site_Sci_Value = 7.25; %Based on internal Site selection document
         Site_Elevation = -4.5;
+        Site_Water_Percent = 3;
     case Site.GALE
         Site_Sci_Value = 6.5; %Based on internal Site selection document
          Site_Elevation = -4.5;
+        Site_Water_Percent = 3;
     case Site.MERIDIANI
         Site_Sci_Value = 5.25;
          Site_Elevation = -1.3;
+        Site_Water_Percent = 3;
     case Site.GUSEV
         Site_Sci_Value = 9;
          Site_Elevation = -1.9;
+        Site_Water_Percent = 3;
     case Site.ISIDIS
         Site_Sci_Value = 3.75;
          Site_Elevation = -4.0;
+        Site_Water_Percent = 3;
     case Site.ELYSIUM
         Site_Sci_Value = 3.75;
          Site_Elevation = -3.0;
+        Site_Water_Percent = 3;
     case Site.MAWRTH
         Site_Sci_Value = 6.5;
          Site_Elevation = -2.2;
+        Site_Water_Percent = 3;
     case Site.EBERSWALDE
         Site_Sci_Value = 7;
          Site_Elevation = -1.4;
+        Site_Water_Percent = 3;
     case Site.UTOPIA
         Site_Sci_Value = 5.75;
          Site_Elevation = -5.0;
+        Site_Water_Percent = 3;
     case Site.PLANUS_BOREUM
         Site_Sci_Value = 5;
          Site_Elevation = -5.0;
+        Site_Water_Percent = 3;
     case Site.HELLAS
         Site_Sci_Value = 5.75;
          Site_Elevation = -7.2;
+        Site_Water_Percent = 3;
     case Site.AMAZONIS
         Site_Sci_Value = 3.75;
          Site_Elevation = -3.5;
+        Site_Water_Percent = 3;
 end
 
 %Calculations begin

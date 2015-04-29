@@ -21,20 +21,20 @@ classdef Results_Class < dynamicprops
         Cum_Surface_Power
         
         % Spacecraft breakdowns
-        HumanSpacecraft;
-        CargoSpacecraft;
+        HumanSpacecraft = OverallSC();
+        CargoSpacecraft = OverallSC();
         Num_CargoSpacecraft;
-        FerrySpacecraft;
-        AscentSpacecraft;
+        FerrySpacecraft  = OverallSC();
+        AscentSpacecraft = OverallSC();
         
         %Module Breakdowns
-        Transit_Habitat;
-        Surface_Habitat;
-        ECLSS;
-        Mars_ISRU;
-        Lunar_ISRU;
-        ISFR;
-        PowerPlant;
+        Transit_Habitat = Results_List();
+        Surface_Habitat = Results_List();
+        ECLSS = Results_List();
+        Mars_ISRU = Results_List();
+        Lunar_ISRU = Results_List();
+        ISFR = Results_List();
+        PowerPlant = Results_List();
     end
     properties (SetAccess = private) %thus GetAccess is public, for access to aggregate lists
         Consumables
@@ -46,7 +46,7 @@ classdef Results_Class < dynamicprops
         %Constructor with Arch Number
         function obj = Results_Class(num)
             obj.Arch_Num = num;
-            % initialize objects
+            %initialize objects
             obj.HumanSpacecraft = OverallSC();
             obj.CargoSpacecraft = OverallSC();
             obj.FerrySpacecraft = OverallSC();

@@ -1,4 +1,4 @@
-function [ Results ] = ISRU(Cur_Arch, ECLSS_Requirements, Results)
+function [ Results ] = ISRU(Cur_Arch, ECLSS_Requirements, Water_Percent, Results)
 
 %% Propellant Section
 %Soil Based ISRU for Fuel Needs.

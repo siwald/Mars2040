@@ -9,7 +9,10 @@ spent_time = nansum([food_time, general_repairs, personal]);
 
 Astronaut_Daily_Time = 24.66 - spent_time; % in Hours per Astronaut
 
-Results.Science_Time = (Astronaut_Daily_Time * Cur_Arch.SurfaceCrew.Size) / 24; %in days per Team
+Astronaut_Days_on_Surf = ...%in Total Astronaut-Days per Synod
+    (Cur_Arch.SurfaceCrew.Size * 780)... Base crew size for full Synod
+    - (Cur_Arch.TransitCrew.Size * 280); %minus rotation crew size until next arrival
+Results.Science_Time = (Astronaut_Daily_Time * Astronaut_Days_on_Surf) / 24; %in Science-Days per Synod
 % science_fraction = spent_time/24;
 % days_of_scientific_output = science_fraction*time_on_Mars;
 % days_of_scientific_output = days_of_scientific_output - .1*time_on_Mars; %Budget 10% of time as reserve for emergencies 

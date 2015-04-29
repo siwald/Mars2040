@@ -2,7 +2,7 @@
     % set to run DRA5.0 model architecture
     Cur_Arch = MarsArchitecture.DRA5;
     %initialize the Results Object for this run
-    Results = Results_Class(1); %with the Arch_Num of i
+    Results = Results_Class(1); 
     
     %% Logistics Setup %%
     
@@ -130,7 +130,16 @@
             ISRURequirements object
     %}
     [Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
-
+ %% --- Site Selection Module --- %%
+    %{
+    Inputs:
+        Cur_Arch
+            SiteSelection
+    Outputs:
+        Site_Sci_Value
+    %}
+    [Site_Sci_Value, Site_Elevation, Site_Water_Percent] = Site_Selection(Cur_Arch);
+    
     %% --- Mars ISRU --- %%
     %{
     Inputs:
@@ -142,7 +151,7 @@
         Results
             ISRU.Mass, Volume & Power
     %}
-    Results = ISRU(Cur_Arch, ECLSS_ISRU, Results);
+    Results = ISRU(Cur_Arch, ECLSS_ISRU, Site_Water_Percent, Results);
     
     %% --- Surface Power Module --- %%
     %{
@@ -174,16 +183,6 @@
     Results.ECLSS.Spares = Results.ECLSS.Mass * SparesRatio * 1.881;
     Results.Mars_ISRU.Spares = Results.Mars_ISRU.Mass * SparesRatio * 1.881;
     Results.PowerPlant.Spares = Results.PowerPlant.Mass * SparesRatio * 1.881;
-    
-    %% --- Site Selection Module --- %%
-    %{
-    Inputs:
-        Cur_Arch
-            SiteSelection
-    Outputs:
-        Site_Sci_Value
-    %}
-    [Site_Sci_Value, Site_Elevation] = Site_Selection(Cur_Arch);
     
     %% --- Astronaut Time Module --- %%
     %{

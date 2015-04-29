@@ -163,6 +163,16 @@ parfor i=1:Num_Arches %begin looping for each architecture
     %}
     [Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
 
+  %% --- Site Selection Module --- %%
+    %{
+    Inputs:
+        Cur_Arch
+            SiteSelection
+    Outputs:
+        Site_Sci_Value
+    %}
+    [Site_Sci_Value, Site_Elevation, Site_Water_Percent] = Site_Selection(Cur_Arch);
+    
     %% --- Mars ISRU --- %%
     %{
     Inputs:
@@ -174,8 +184,8 @@ parfor i=1:Num_Arches %begin looping for each architecture
         Results
             ISRU.Mass, Volume & Power
     %}
-    Results = ISRU(Cur_Arch, ECLSS_ISRU, Results);
-    
+    Results = ISRU(Cur_Arch, ECLSS_ISRU, Site_Water_Percent, Results);
+  
     %% --- Surface Power Module --- %%
     %{
     Inputs:
@@ -206,16 +216,6 @@ parfor i=1:Num_Arches %begin looping for each architecture
     Results.ECLSS.Spares = Results.ECLSS.Mass * SparesRatio * 1.881;
     Results.Mars_ISRU.Spares = Results.Mars_ISRU.Mass * SparesRatio * 1.881;
     Results.PowerPlant.Spares = Results.PowerPlant.Mass * SparesRatio * 1.881;
-    
-    %% --- Site Selection Module --- %%
-    %{
-    Inputs:
-        Cur_Arch
-            SiteSelection
-    Outputs:
-        Site_Sci_Value
-    %}
-    [Site_Sci_Value, Site_Elevation] = Site_Selection(Cur_Arch);
     
     %% --- Astronaut Time Module --- %%
     %{
