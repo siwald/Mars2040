@@ -27,6 +27,9 @@ function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results
 %requied inside the habitat.
  Habitat_Volume = Results.Surface_Habitat.Volume;
  Habitat_Mass = Results.Surface_Habitat.Mass;
+%  Habitat_Volume = 1320;
+%  Habitat_Mass = 4580;
+ 
 
 %Crew Activities on Mars. EVA_Freq is the amount of EVA trips expected per 
 %week. CM_EVA is the number of crew members per EVA. EVA_Dur is the 
@@ -65,14 +68,14 @@ Crew_Activity.EVA_Dur = 8;
 %----------------------------General--------------------------------------
 MARS_2040.Crew_Size = Cur_Arch.SurfaceCrew.Size; %Units: Crew Members; Mission Decision
 %MARS_2040.Crew_Size = 4; %DRA5.0 Testing Condition
-MARS_2040.Surface_Duration = 500; %Units: days; Mission Decision
+MARS_2040.Surface_Duration = 500;
 
 %----------------------------Habitat--------------------------------------
 Cabin_Pressure = 70.3; %Units: kPa; Architectural Decision by Team
 Gas_Constant = 8.31451; %Units: J/K*mol
 O2_Mol_Ratio = 26.5; %Units: %; Architectural Decision from BVAD pg. 28
 CO2_Mol_Ratio = 0.57; %Units: %; Architectural Decision from BVAD pg. 28
-Temperature = 295.2; % Units: K; Architectural Decision from BVAD pg. 28
+Temperature = 296; % Units: K; Architectural Decision from BVAD pg. 28
 Habitat_Leakage_Rate = 0.05; %Units: %/day; BVAD pg 28; Did not change in BVAD 2015
 %Habitat_CO2_Generation = 0.998; %Units: kg/CM/day; BVAD pg 28
 Habitat_CO2_Generation = 1.04; %Units: kg/CM/day; BVAD 2015 pg. 50
@@ -84,11 +87,7 @@ WPA_Efficiency = 100; %Units: %; Efficiency to reuse water from waste water
 %----------------------------Food-----------------------------------------
 Earth_Food_Mass = 2.3; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
 Earth_Food_Volume = 0.00657; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
-Crop_O2_Generation = 19.46; %units: kg/day;
-Crop_CO2_Generation = 26.76;
-Crop_Water = 3032.79; %Units: kg/day;
-Crop_Transportation = 2941.62; %Units: kg/day
-Food_Supply = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
+[a,Food_Supply] = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
 MARS_2040.Food_Supply = Food_Supply;
 Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from inedible crops
 CrewTime_FoodGrowth = 13.1; %Units: CM-hr/m3/yr; BVAD 2015 p.163
@@ -117,10 +116,11 @@ EVA_Water_Consumption = 0.24; %Units: kg/CM/day; BVAD p139; Did not change in BV
 %structure ISRU_Requirements will be sent to the ISRU function. All
 %equations derived in the Habitat Resource Analysis_v2.xlsx. 
 
+ECLSS_Crop = ECLSS_Crop_Function(MARS_2040);
+
 EVA_Weekly_Rate = Crew_Activity.EVA_Freq * Crew_Activity.CM_EVA * Crew_Activity.EVA_Dur;
-Cabin_Air = Cabin_Pressure*10^3*Habitat_Volume/Gas_Constant/Temperature; %Units: mol
+Cabin_Air = Cabin_Pressure*1000*Habitat_Volume/Gas_Constant/Temperature; %Units: mol
 N2_Pressure = 1-(O2_Mol_Ratio/100) - (CO2_Mol_Ratio/100); %Units: %
-Crop_Area = 200*(MARS_2040.Crew_Size/4)*(MARS_2040.Food_Supply); %Units: m^2
 Airlock_Gas_Loss = 13.8*10^3*EVA_Airlock_Volume/(Gas_Constant*Temperature);
 EVA_O2_Loss = (EVA_Oxygen_Loss_Rate+EVA_Oxygen_Consumption)*EVA_Weekly_Rate/7;
 Oxygen_Loss.Airlock = (EVA_Airlock_Gas_Loss*(O2_Mol_Ratio/100)/100*32)*(Crew_Activity.CM_EVA/2)*Crew_Activity.EVA_Freq/1000/7;
@@ -128,30 +128,23 @@ Habitat_Gas_Loss = Cabin_Air * (Habitat_Leakage_Rate/100);
 Oxygen_Loss.Leakage = Habitat_Gas_Loss*(O2_Mol_Ratio/100)*32/1000;
 Oxygen_Loss.Breathing = Habitat_O2_Consumption*MARS_2040.Crew_Size;
 EMU_O2_Supply = EVA_O2_Loss+Oxygen_Loss.Airlock;
-Oxygen_Storage = Crop_O2_Generation - EMU_O2_Supply;
+Oxygen_Storage = ECLSS_Crop.Crop_O2_Generation - EMU_O2_Supply;
 
 ISRU_Requirements.Oxygen = Oxygen_Storage - (Oxygen_Loss.Airlock + Oxygen_Loss.Leakage + Oxygen_Loss.Breathing);
-if ISRU_Requirements.Oxygen < 0 
-    ISRU_Requirements.Oxygen = ISRU_Requirements.Oxygen * -1;
-else
-    ISRU_Requirements.Oxygen = 0;
-end
+ISRU_Requirements.Oxygen = ISRU_Requirements.Oxygen * -1;
 
 %Calculations to determine the amount of Water that is required from ISRU. 
 EMU_EVA_Loss = (EVA_Cooling_Loss*EVA_Weekly_Rate/7)+(EVA_Water_Consumption*EVA_Weekly_Rate/7);
 Crew_Water = ECLSS_Water(MARS_2040.Crew_Size);
-Crop_Water_Requirement = Crop_Transportation+(88.60*(Crop_FoodProcessor_Efficiency/100))-Crop_Water;
+Crop_Water_Requirement = ECLSS_Crop.Transportation +(88.60*(Crop_FoodProcessor_Efficiency/100))-ECLSS_Crop.Crop_Water_Generation;
 Habitat_Water_CCAA = Crew_Water.Vapor_Water;
 Portable_Water_Crew = EMU_EVA_Loss+Crew_Water.Drink_Water+Crew_Water.Urine_Flush+Crew_Water.Hygiene+Crew_Water.Shower+Crew_Water.Laundry_In+(Crop_Water_Requirement*-1);
 Habitat_DirtyUrine_Water = Crew_Water.Urine_Water_Flush - (Crew_Water.Urine_Water_Flush*(UPA_Efficiency/100));
 Habitat_Clean_Water = (Habitat_Water_CCAA+(Crew_Water.Urine_Water_Flush*(UPA_Efficiency/100))+Crew_Water.Hygiene+Crew_Water.Shower+Crew_Water.Laundry_In)*(WPA_Efficiency/100);
 
 ISRU_Requirements.Water = Habitat_Clean_Water - Portable_Water_Crew;
-if ISRU_Requirements.Water < 0
-    ISRU_Requirements.Water = ISRU_Requirements.Water * -1;
-else
-    ISRU_Requirements.Water = 0;
-end
+ISRU_Requirements.Water = ISRU_Requirements.Water * -1;
+
 
 %Calculations to determine the amount of Nitrogen that is required from ISRU.
 N2_Loss_Airlock = Airlock_Gas_Loss*N2_Pressure/100*28;
@@ -167,9 +160,7 @@ CO2_Loss.Leakage = Habitat_Gas_Loss * (CO2_Mol_Ratio/100)*44/1000;
 CO2_Loss.Airlock = Airlock_Gas_Loss* (CO2_Mol_Ratio/100)/100*44;
 CO2_Loss.Airlock = CO2_Loss.Airlock*(Crew_Activity.CM_EVA/2)*Crew_Activity.EVA_Freq/1000/7;
 
-ISRU_Requirements.CO2 = CO2_Loss.Breathing + CO2_Loss.Leakage + CO2_Loss.Airlock;
-
-ECLSS_Crop = ECLSS_Crop_Function(MARS_2040);
+ISRU_Requirements.CO2 = (CO2_Loss.Breathing - CO2_Loss.Leakage - CO2_Loss.Airlock)*-1;
 
 MARS_2040.O2_Spec = ISRU_Requirements.Oxygen;
 MARS_2040.CO2_Spec = ISRU_Requirements.CO2;
@@ -199,8 +190,8 @@ Crew_Time_Total = Crew_Time.FoodGrowth + Crew_Time.Cooking;
 
 %ECLSS_Mass = ECLSS_Spares_Mass + ECLSS_Consumables_Mass;
 %ECLSS_Mass = ECLSS_Consumables_Mass;
-Results.ECLSS.Consumables_Mass = Storage_Mass.Consumables_Mass.Overall + Crew_System_Mass.Consumables_Mass.Overall;
-Results.ECLSS.Consumables_Volume = Storage_Mass.Consumables_Volume.Overall + Crew_System_Mass.Consumables_Volume.Overall;
+Results.ECLSS.Consumables_Mass = Storage_Mass.Consumables_Mass.Overall + Crew_System_Mass.Consumables_Mass.Overall + ECLSS_Crop.Consumables_Mass;
+Results.ECLSS.Consumables_Volume = Storage_Mass.Consumables_Volume.Overall + Crew_System_Mass.Consumables_Volume.Overall + ECLSS_Crop.Consumables_Volume;
 Results.ECLSS.Spares_Mass = ECLSS_Mass.Spare_Mass.Overall + Storage_Mass.Spare_Mass.Overall + Crew_System_Mass.Spare_Mass.Overall;
 Results.ECLSS.Spares_Volume = ECLSS_Mass.Spare_Volume.Overall + Storage_Mass.Spare_Volume.Overall + Crew_System_Mass.Spare_Volume.Overall;
 Results.ECLSS.Mass = ECLSS_Mass.Equipment_Mass.Overall + Storage_Mass.Equipment_Mass.Overall + Crew_System_Mass.Equipment_Mass.Overall;
