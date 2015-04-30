@@ -41,8 +41,8 @@ FerrySpacecraft.Add_Craft = Ferry_Eng;
 [FerrySpacecraft, Results] = Lunar_Move(Cur_Arch, FerrySpacecraft, Results);
 end
 %% Lunar ISRU results
-Results.Lunar_ISRU.Mass = 50 * Results.Lunar_ISRU.Fuel_Output + 25 * Results.Lunar_ISRU.Oxidizer_Output;
-Results.Lunar_ISRU.Power = 600 *(Results.Lunar_ISRU.Fuel_Output + Results.Lunar_ISRU.Oxidizer_Output);
+Results.Lunar_ISRU.Mass = nansum([50 * Results.Lunar_ISRU.Fuel_Output, 25 * Results.Lunar_ISRU.Oxidizer_Output]);
+Results.Lunar_ISRU.Power = nansum([600 *Results.Lunar_ISRU.Fuel_Output, 300* Results.Lunar_ISRU.Oxidizer_Output]);
 
 end
 
