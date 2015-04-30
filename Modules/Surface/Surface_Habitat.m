@@ -1,4 +1,4 @@
-function Results = Surface_Habitat(Cur_Arch, Results)
+function [Results,Food_Time,ISRU_Requirements] = Surface_Habitat(Cur_Arch, Results)
 
 %------------------------------------------------------------------------
 %----------------------Code Definition-----------------------------------
@@ -41,8 +41,9 @@ Internal_Thermal = 0.040; %Units: kW/kg; This is from BVAD table 3.2.9
 External_Thermal = 0.0083; %Units: kW/kg; This is from BVAD table 3.2.9. Worst case for first spiral
 
 MARS2040.Crew_Size = Crew_Size;
-FoodSupply = Cur_Arch.FoodSupply.Amount
+[a,FoodSupply] = Cur_Arch.FoodSupply.Amount;
 MARS2040.Food_Supply = FoodSupply;
+MARS2040.Surface_Duration = 500;
 
 GreenHouse_Crop = ECLSS_Crop_Function(MARS2040);
 GreenHouse_Area = GreenHouse_Crop.Crop_Grow_Area;
@@ -56,8 +57,8 @@ LAVAPOLIS.Tunnel = 28.3; %Units: m^3/CM/Hall; Prairie View A&M Mars Habitat stud
 LAVAPOLIS.Airlock = 28.3; %Units: m^3/CM/Airlock; Prairie View A&M Mars Habitat study was used. They designed an inflatable structure for 20 crew.
 
 Marineris.Gym = 137.538; %Units: m^3; This is based off a typical large recreational room. Equipment: 2 Treadmills, 1 Elliptical, 1 Bike, 1 Adjustable Cable Crossover with Chin up Bar, 1 Lat Pulldown/Low Row Combo, 1 Leg Extension/Prone Leg Curl Combo, 1 Flat/Incline Bench, 1 Dumbbell set, 1 dumbbell rack
-Marineris.ECLSS = 37.82295; %Units: m^3; This is based off the ECLSS study and accounts for 20 CM
-Marineris.GreenHouse = GreenHouse_Area * 9 * 0.0283 %Units: m^3; This is from ECLSS and accounts for 20 CM.
+% Marineris.ECLSS = 37.82295; %Units: m^3; This is based off the ECLSS study and accounts for 20 CM
+Marineris.GreenHouse = GreenHouse_Area * 9 * 0.0283; %Units: m^3; This is from ECLSS and accounts for 20 CM.
 Marineris.Airlock = 48; %Units: m^3; This is based of the BVAD value
 Marineris.EVA_Prep = 20.376*2; %Units: m^3/5 CM; This is based off a large utility/mud room, Initial estimate is for 5 crew members and the initial tradespace assumption is to have 10 CM/EVA therefore it will be doubled.
 Marineris.Office = 64.1844; %Units: m^3; This is based off a typcial large Home office/work room
@@ -95,7 +96,7 @@ switch DesignChoice
         end
         Marineris.Medical = ceil(Marineris.Medical/3);
         Marineris.Storage = Marineris.Storage * (Crew_Size/5);
-        Surf_Volume = (Marineris.Gym + (Marineris.ECLSS*Crew_Size) + Marineris.GreenHouse + Marineris.Airlock + Marineris.EVA_Prep + Marineris.Office + Marineris.Medical + Marineris.Lab + Marineris.Kitchen + ((Marineris.Bathroom*(Crew_Size/2+0.5))) + (Marineris.Bedroom*Crew_Size) + Marineris.Entertainment + Marineris.Storage + Marineris.Laundry);
+        Surf_Volume = (Marineris.Gym + Marineris.GreenHouse + Marineris.Airlock + Marineris.EVA_Prep + Marineris.Office + Marineris.Medical + Marineris.Lab + Marineris.Kitchen + ((Marineris.Bathroom*(Crew_Size/2+0.5))) + (Marineris.Bedroom*Crew_Size) + Marineris.Entertainment + Marineris.Storage + Marineris.Laundry);
 end
         
 for n = 1:2
@@ -114,6 +115,24 @@ for n = 1:2
 end
 
 Surf_Mass = Solid_Mass + Inflatable_Mass;
+
+Results.Surface_Habitat.Volume = Surf_Volume;
+Results.Surface_Habitat.Mass = Surf_Mass;
+
+[Food_Time,ISRU_Requirements] = ECLSS (Cur_Arch,Results);
+
+switch DesignChoice
+    case 1
+        Surf_Volume = Surf_Volume;
+        Surf_Mass = Surf_Mass;
+    case 2
+        Surf_Volume = Surf_Volume;
+        Surf_Mass = Surf_Mass;
+    case 3
+        Surf_Volume = Surf_Volume + Results.ECLSS.Volume;
+        Surf_Mass = Surf_Mass + Results.ECLSS.Mass;
+end
+        
 
 % switch Cur_Arch.SurfaceStructure
 %     
@@ -147,6 +166,8 @@ Regolith_Mass = Regolith_Constant * Surf_Volume;
 %Rovers_Mass = (MMSEV_Mass * Num_Sci_Rovers) + (UtiliRover_Mass * Num_Util_Rovers) + (BOM_Mass * (Num_Sci_Rovers + Num_Util_Rovers));
 
 %% put into results
+
+
 Results.Surface_Habitat.Volume = Surf_Volume;
 Results.Surface_Habitat.Mass = Surf_Mass;
 Results.Surface_Habitat.Power = Surf_Power;
