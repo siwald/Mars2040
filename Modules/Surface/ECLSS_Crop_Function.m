@@ -19,7 +19,8 @@ function [ECLSS_Crop] = ECLSS_Crop_Function(MARS_2040)
 %resources. These values can be changed once further information becomes
 %available on the actual usage that is seen.
 
-Crop_Constant_Values = xlsread('Habitat Resource Analysis_v5.xlsx',5,'E4:L16');
+% Crop_Constant_Values = xlsread('Habitat Resource Analysis_v5.xlsx',5,'E4:L16');
+load('Crop_Constant_Values.var')
 
 %------------------------------------------------------------------------
 

@@ -93,10 +93,10 @@ ECLSS.GLS.Power = 0.630;
 ECLSS.GLS.Primary = ceil(MARS_2040.Crop_Area/ECLSS.GLS.Spec);
 ECLSS.GLS.Secondary = 0;
 
-% load('Crew_System_Values.var')
-% load('Storage_Values.var')
- Crew_System_Values = xlsread('Habitat Resource Analysis_v5.xlsx',6,'D121:M152');
- Storage_Values =  xlsread('Habitat Resource Analysis_v5.xlsx',6,'D103:M111');
+load('Crew_System_Values.var')
+load('Storage_Values.var')
+%  Crew_System_Values = xlsread('Habitat Resource Analysis_v5.xlsx',6,'D121:M152');
+%  Storage_Values =  xlsread('Habitat Resource Analysis_v5.xlsx',6,'D103:M111');
 %------------------------------------------------------------------------
 % MARS_2040.O2_Spec
 % MARS_2040.CO2_Spec
