@@ -14,8 +14,8 @@ function [ECLSS,Storage,Crew_System] = ECLSS_Mass_Function(MARS_2040, Spare_Rate
 % MARS_2040.CRA_Spec = 18.69;
 % MARS_2040.CO2_Injector_Spec = 24.09;
 % MARS_2040.Crop_Area = 450;
-% MARS_2040.Habitat_Mass = 4580.00;
-% MARS_2040.Habitat_Volume = 33.33;
+%  MARS_2040.Habitat_Mass = 4580.00;
+%  MARS_2040.Habitat_Volume = 33.33;
 % MARS_2040.Crew_Size = 20;
 % MARS_2040.Surface_Duration = 780;
 % MARS_2040.Food_Supply = 0.5;
@@ -93,8 +93,10 @@ ECLSS.GLS.Power = 0.630;
 ECLSS.GLS.Primary = ceil(MARS_2040.Crop_Area/ECLSS.GLS.Spec);
 ECLSS.GLS.Secondary = 0;
 
-load('Crew_System_Values.var')
-load('Storage_Values.var')
+% load('Crew_System_Values.var')
+% load('Storage_Values.var')
+ Crew_System_Values = xlsread('Habitat Resource Analysis_v5.xlsx',6,'D121:M152');
+ Storage_Values =  xlsread('Habitat Resource Analysis_v5.xlsx',6,'D103:M111');
 %------------------------------------------------------------------------
 % MARS_2040.O2_Spec
 % MARS_2040.CO2_Spec
