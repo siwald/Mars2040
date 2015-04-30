@@ -28,56 +28,70 @@ function [Site_Sci_Value, Site_Elevation, Site_Water_Percent] = Site_Selection(C
 
 
 %------------------------------------------------------------------------
+% Science Value Based on internal Site selection document
+% Regolith Moisture Content extracted from Mars Odyssey: GRS H2O
+% Concentration Map
 
 switch Cur_Arch.SurfaceSites
     case Site.HOLDEN
-        Site_Sci_Value = 7.25; %Based on internal Site selection document
+        Site_Sci_Value = 7.25; 
         Site_Elevation = -4.5;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 2;
+        
     case Site.GALE
         Site_Sci_Value = 6.5; %Based on internal Site selection document
          Site_Elevation = -4.5;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 6;
+        
     case Site.MERIDIANI
         Site_Sci_Value = 5.25;
          Site_Elevation = -1.3;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 7;
+        
     case Site.GUSEV
         Site_Sci_Value = 9;
          Site_Elevation = -1.9;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 8;
+        
     case Site.ISIDIS
         Site_Sci_Value = 3.75;
          Site_Elevation = -4.0;
         Site_Water_Percent = 3;
+        
     case Site.ELYSIUM
         Site_Sci_Value = 3.75;
          Site_Elevation = -3.0;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 5;
+        
     case Site.MAWRTH
         Site_Sci_Value = 6.5;
          Site_Elevation = -2.2;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 3.5;
+        
     case Site.EBERSWALDE
         Site_Sci_Value = 7;
          Site_Elevation = -1.4;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 2.5;
+        
     case Site.UTOPIA
         Site_Sci_Value = 5.75;
          Site_Elevation = -5.0;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 3.75;
+        
     case Site.PLANUS_BOREUM
         Site_Sci_Value = 5;
          Site_Elevation = -5.0;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 64;
+        
     case Site.HELLAS
         Site_Sci_Value = 5.75;
          Site_Elevation = -7.2;
         Site_Water_Percent = 3;
+        
     case Site.AMAZONIS
         Site_Sci_Value = 3.75;
          Site_Elevation = -3.5;
-        Site_Water_Percent = 3;
+        Site_Water_Percent = 4;
 end
 
 %Calculations begin

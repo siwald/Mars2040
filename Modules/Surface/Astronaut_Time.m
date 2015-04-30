@@ -13,12 +13,9 @@ Astronaut_Days_on_Surf = ...%in Total Astronaut-Days per Synod
     (Cur_Arch.SurfaceCrew.Size * 780)... Base crew size for full Synod
     - (Cur_Arch.TransitCrew.Size * 280); %minus rotation crew size until next arrival
 Results.Science_Time = (Astronaut_Daily_Time * Astronaut_Days_on_Surf) / 24; %in Science-Days per Synod
-% science_fraction = spent_time/24;
-% days_of_scientific_output = science_fraction*time_on_Mars;
-% days_of_scientific_output = days_of_scientific_output - .1*time_on_Mars; %Budget 10% of time as reserve for emergencies 
-% total_mission_time = time_on_Mars + time2Mars + time2Earth;
-% Astronaut_Sci_Time = days_of_scientific_output/total_mission_time;
 
+
+if Cur_Arch.EDL == == ArrivalDescent.AEROENTRY %subtract 30 days for each crew member in aerocapture maneuver
+    Results.Science_Time = Results.Science_Time - (Cur_Arch.TransitCrew.Size * 30);
 end
-    
-    
+end
