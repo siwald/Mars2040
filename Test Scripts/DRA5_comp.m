@@ -115,7 +115,7 @@
             Surface Volume
             Surface Power
     %}
-    Results = Surface_Habitat(Cur_Arch, Results);
+    [Results,Food_Time,ECLSS_ISRU] = Surface_Habitat(Cur_Arch, Results);
     
     %% --- ECLSS Module --- %%
     %{
@@ -129,7 +129,7 @@
             ECLSS.Mass, Volume & Power
             ISRURequirements object
     %}
-    [Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
+    %[Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
  %% --- Site Selection Module --- %%
     %{
     Inputs:
