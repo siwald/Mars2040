@@ -15,7 +15,7 @@ Astronaut_Days_on_Surf = ...%in Total Astronaut-Days per Synod
 Results.Science_Time = (Astronaut_Daily_Time * Astronaut_Days_on_Surf) / 24; %in Science-Days per Synod
 
 
-if Cur_Arch.EDL == == ArrivalDescent.AEROENTRY %subtract 30 days for each crew member in aerocapture maneuver
+if Cur_Arch.EDL == ArrivalDescent.AEROENTRY %subtract 30 days for each crew member in aerocapture maneuver
     Results.Science_Time = Results.Science_Time - (Cur_Arch.TransitCrew.Size * 30);
 end
 end
