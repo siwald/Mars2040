@@ -39,18 +39,55 @@ Needed_H2O_for_ECLSS_O2 = Needed_Moles_H2O_for_ECLSS_O2 * 0.01801528;
 Needed_H2O = max((Needed_H2O_From_Oxidizer + Needed_H2O_for_ECLSS_O2), Needed_H2O_From_Fuel);
 
 Needed_H2O = Needed_H2O + ECLSS_Requirements.Water; %add the molecular water needed.
-%%Generate the H2O
-%From DRA5.0 ADD1 Table 6-12
-H2O_Mass = Needed_H2O * 0.00895343 + 98.57292095; %kg
-H2O_Vol = Needed_H2O * 0.000216553 + 0.274405239; %m^3
-H2O_Power = Needed_H2O * 0.0000334109 + 1.319195545; %kW
+
+%% H2O Plant Selection
+
+Daily_H2O = Needed_H2O / 780;
+
+S_Plant_Mass = -(Water_Percent/33 - 844)/5;
+S_Plant_Vol = 0;
+S_Plant_Power = 0;
+S_Plant_Output = 0;
+S_Plant_Qty = 0; %initialize
+
+M_Plant_Mass = -(Water_Percent/49 - 1052);
+M_Plant_Vol = 0;
+M_Plant_Power = 0;
+M_Plant_Output = 0;
+M_Plant_Qty = 0; %initialize
+
+L_Plant_Mass = -(Water_Percent/33 - 512);
+L_Plant_Vol = 0;
+L_Plant_Power = 0;
+L_Plant_Output = 0;
+L_Plant_Qty = 0; %initialize
+
+Remaining_Daily_H2O = Needed_H2O / 780;
+if Remaining_Daily_H2O > L_Plant_Output
+    L_Plant_Qty = floor(Daily_H2O/L_Plant_Output);
+    Remaining_Daily_H2O = Remaining_Daily_H2O - (L_Plant_Qty * L_Plant_Output);
+end
+if Remaining_Daily_H2O > M_Plant_Output
+    M_Plant_Qty = floor(Daily_H2O/M_Plant_Output);
+    Remaining_Daily_H2O = Remaining_Daily_H2O - (M_Plant_Qty * M_Plant_Output);
+end
+if Remaining_Daily_H2O > S_Plant_Output
+    S_Plant_Qty = floor(Daily_H2O/S_Plant_Output);
+    Remaining_Daily_H2O = Remaining_Daily_H2O - (S_Plant_Qty * S_Plant_Output);
+end
+if Remaining_Daily_H2O > 0 
+    S_Plant_Qty = S_Plant_Qty + 1;
+    Remaining_Daily_H2O = Remaining_Daily_H2O - (1 * S_Plant_Output);
+end
+
+
 
 %% add to results object
 %Since this is a simple extension of DRA5.0 plan, ISRU system is H2O only,
 %thus:
-Results.Mars_ISRU.Mass = H2O_Mass; %ISRU_Mass;
-Results.Mars_ISRU.Volume = H2O_Vol; %ISRU_Volume;
-Results.Mars_ISRU.Power = H2O_Power; %ISRU_Power;
+Results.Mars_ISRU.Mass = (S_Plant_Qty * S_Plant_Mass) + (M_Plant_Qty * M_Plant_Mass) + (L_Plant_Qty * L_Plant_Mass); %ISRU_Mass;
+Results.Mars_ISRU.Volume = (S_Plant_Qty * S_Plant_Vol) + (M_Plant_Qty * M_Plant_Vol) + (L_Plant_Qty * L_Plant_Vol);
+Results.Mars_ISRU.Power = (S_Plant_Qty * S_Plant_Power) + (M_Plant_Qty * M_Plant_Power) + (L_Plant_Qty * L_Plant_Power); %ISRU_Power;
 Results.Mars_ISRU.Consumables_Mass = ECLSS_Requirements.Nitrogen + ECLSS_Requirements.CO2; %mass of gasses shipped in.
 
 end
