@@ -56,7 +56,7 @@ LAVAPOLIS.Tunnel = 28.3; %Units: m^3/CM/Hall; Prairie View A&M Mars Habitat stud
 LAVAPOLIS.Airlock = 28.3; %Units: m^3/CM/Airlock; Prairie View A&M Mars Habitat study was used. They designed an inflatable structure for 20 crew.
 
 Marineris.Gym = 137.538; %Units: m^3; This is based off a typical large recreational room. Equipment: 2 Treadmills, 1 Elliptical, 1 Bike, 1 Adjustable Cable Crossover with Chin up Bar, 1 Lat Pulldown/Low Row Combo, 1 Leg Extension/Prone Leg Curl Combo, 1 Flat/Incline Bench, 1 Dumbbell set, 1 dumbbell rack
-Marineris.ECLSS = 22; %Units: m^3; This is based off the ECLSS study and accounts for 20 CM
+Marineris.ECLSS = 37.82295; %Units: m^3; This is based off the ECLSS study and accounts for 20 CM
 Marineris.GreenHouse = GreenHouse_Area * 9 * 0.0283 %Units: m^3; This is from ECLSS and accounts for 20 CM.
 Marineris.Airlock = 48; %Units: m^3; This is based of the BVAD value
 Marineris.EVA_Prep = 20.376*2; %Units: m^3/5 CM; This is based off a large utility/mud room, Initial estimate is for 5 crew members and the initial tradespace assumption is to have 10 CM/EVA therefore it will be doubled.
@@ -95,7 +95,7 @@ switch DesignChoice
         end
         Marineris.Medical = ceil(Marineris.Medical/3);
         Marineris.Storage = Marineris.Storage * (Crew_Size/5);
-        Surf_Volume = (Marineris.Gym + Marineris.ECLSS + Marineris.GreenHouse + Marineris.Airlock + Marineris.EVA_Prep + Marineris.Office + Marineris.Medical + Marineris.Lab + Marineris.Kitchen + ((Marineris.Bathroom*(Crew_Size/2+0.5))) + (Marineris.Bedroom*Crew_Size) + Marineris.Entertainment + Marineris.Storage + Marineris.Laundry);
+        Surf_Volume = (Marineris.Gym + (Marineris.ECLSS*Crew_Size) + Marineris.GreenHouse + Marineris.Airlock + Marineris.EVA_Prep + Marineris.Office + Marineris.Medical + Marineris.Lab + Marineris.Kitchen + ((Marineris.Bathroom*(Crew_Size/2+0.5))) + (Marineris.Bedroom*Crew_Size) + Marineris.Entertainment + Marineris.Storage + Marineris.Laundry);
 end
         
 for n = 1:2
