@@ -147,7 +147,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
             Surface Volume
             Surface Power
     %}
-    Results = Surface_Habitat(Cur_Arch, Results);
+    [Results, Food_Time, ECLSS_ISRU] = Surface_Habitat(Cur_Arch, Results);
     
     %% --- ECLSS Module --- %%
     %{
@@ -161,7 +161,7 @@ parfor i=1:Num_Arches %begin looping for each architecture
             ECLSS.Mass, Volume & Power
             ISRURequirements object
     %}
-    [Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
+    %[Food_Time, ECLSS_ISRU, Results] = ECLSS (Cur_Arch, Results);
 
   %% --- Site Selection Module --- %%
     %{
