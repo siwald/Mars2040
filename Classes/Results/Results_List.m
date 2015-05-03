@@ -17,6 +17,7 @@ classdef Results_List < handle
     properties
         Consumables
         Spares
+        Num
     end
     
     methods

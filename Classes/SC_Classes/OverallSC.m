@@ -8,6 +8,9 @@ classdef OverallSC < dynamicprops
     
     properties (SetAccess = private) %thus GetAccess = public
         Mass %will return the total mass of all S/C elements
+        Eng_Mass
+        Bus_Mass
+        Static_Mass
         ListDescriptions
         Ox_Mass
         Fuel_Mass
@@ -31,8 +34,38 @@ classdef OverallSC < dynamicprops
                 masses(i,1) = nansum([current.Origin_Mass]); %set Origin_Mass to current col
             end
             out = sum(masses); %deliver the sum of masses for all SC elements
+        end 
+        
+        function out = get.Eng_Mass(obj)
+            [num,~] = size(obj.SC); %get number of SC elements
+            masses = zeros(num,1); %initialize array of masses
+            for i=1:num
+                current = obj.SC{i,1}; %extract the current SC element
+                masses(i,1) = nansum([current.Eng_Mass]); %set Origin_Mass to current col
+            end
+            out = sum(masses); %deliver the sum of masses for all SC elements
+        end 
+
+        function out = get.Static_Mass(obj)
+            [num,~] = size(obj.SC); %get number of SC elements
+            masses = zeros(num,1); %initialize array of masses
+            for i=1:num
+                current = obj.SC{i,1}; %extract the current SC element
+                masses(i,1) = nansum([current.Static_Mass]); %set Origin_Mass to current col
+            end
+            out = sum(masses); %deliver the sum of masses for all SC elements
         end
-       
+        
+        function out = get.Bus_Mass(obj)
+            [num,~] = size(obj.SC); %get number of SC elements
+            masses = zeros(num,1); %initialize array of masses
+            for i=1:num
+                current = obj.SC{i,1}; %extract the current SC element
+                masses(i,1) = nansum([current.Bus_Mass]); %set Origin_Mass to current col
+            end
+            out = sum(masses); %deliver the sum of masses for all SC elements
+         end 
+        
         function out = get.Ox_Mass(obj)
             [num,~] = size(obj.SC); %get number of SC elements
             masses = zeros(num,1); %initialize array of masses

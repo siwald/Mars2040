@@ -16,6 +16,7 @@ classdef SC_Class < handle
         Hab_Vol %volume of habitatable area m^3
         Hab_Power %Power needs of habitat kW
         Eng_Mass %Engine Mass, scales with fuel requirement
+        Static_Mass
         Volume % volume estimate of element
         Dry_Mass % Mass of entire S/C less fuel
         Description@char %description of this instance, character string

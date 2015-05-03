@@ -24,27 +24,38 @@ tic
 
 %  Morph = {MarsArchitecture.DEFAULT, MarsArchitecture.DRA5};
 
-% Fixed Main Effects.
+% Morph = MarsArchitecture.Enumerate( ...
+%     {Propulsion.NTR, Propulsion.LH2}, ...
+%     {[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2],[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2],[TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2]});
+
+%Fixed Main Effects.
 Morph = MarsArchitecture.Enumerate( ...
-    {Propulsion.NTR},...
+    {Propulsion.NTR,Propulsion.LH2},...
 	{Location.LEO}, ...
-	{[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]},...
+	{[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2],[TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2]},...
     {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
     {PowerSource.NUCLEAR}, ...
     {SurfaceShielding.REGOLITH}, ...
-    {Crew.DEFAULT_TRANSIT, Crew.DRA_CREW}, ...
+    {Crew.DRA_CREW}, ...
     {ArrivalEntry.AEROCAPTURE, ArrivalEntry.PROPULSIVE}, ...
-    {Site.HOLDEN,Site.GALE}, ...
+    {Site.HOLDEN,Site.GALE,Site.MERIDIANI}, ...
     {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25} ...
     );
 
-[~, Num_Arches] = size(Morph)
+
+% Num_Arches = length(Morph);
+% for i=1:length(Morph)
+%     Morph_temp = Morph{i};
+%     Morph_temp.SurfaceCrew.Size = Morph_temp.TransitCrew.Size * 4;
+%     Morph{i+Num_Arches} = Morph_temp;
+% end
+Num_Arches = length(Morph)
 enumeration_time = toc
 %Preallocate the results array
 All_Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 cols: Results object
 %% Begin Main Loop
 tic
-parfor i=1:Num_Arches %begin looping for each architecture
+for i=1:Num_Arches %begin looping for each architecture
     %extract current archeticture from Morph
     Cur_Arch = Morph{i};
     Cur_Arch.Index = i;
@@ -290,9 +301,10 @@ parfor i=1:Num_Arches %begin looping for each architecture
         Results
         FerrySpacecraft
     %}
-    
-    [Results.FerrySpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, Results] = Lunar_ISRU (Cur_Arch, Results.HumanSpacecraft, Results.CargoSpacecraft, Results);
-        
+    if ~or(isequal(Cur_Arch.TransitFuel, [TransitFuel.EARTH_LH2, TransitFuel.EARTH_O2]),...
+        isequal(Cur_Arch.TransitFuel, [TransitFuel.EARTH_O2, TransitFuel.EARTH_LH2])) % Only go through this if there is Lunar ISRU involved
+        [Results.FerrySpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, Results] = Lunar_ISRU (Cur_Arch, Results.HumanSpacecraft, Results.CargoSpacecraft, Results);
+    end
     %% --- Staging Module --- %%
     HumanStageing = SC_Class('Staging Engines'); %should Initialize
     HumanStageing = Propellant_Mass(Cur_Arch.PropulsionType,HumanStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),Results.HumanSpacecraft.Mass);
@@ -301,13 +313,14 @@ parfor i=1:Num_Arches %begin looping for each architecture
     end
     
     CargoStageing = SC_Class('Staging Engines');
-    CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),(Results.CargoSpacecraft.Mass ...
-        + Results.FerrySpacecraft.Prop_Mass)); %Needs to bring the non-Lunar ISRU prop mass to staging point for the Ferry
+    CargoStageing = Propellant_Mass(Cur_Arch.PropulsionType,CargoStageing,Hohm_Chart('LEO',Cur_Arch.Staging.Code),nansum([Results.CargoSpacecraft.Mass, ...
+        Results.FerrySpacecraft.Prop_Mass, ...%Needs to bring the non-Lunar ISRU prop mass to staging point for the Ferry
+        Results.Lunar_ISRU.Spares])); %Needs to bring the Lunar Spares as well.
     if CargoStageing.Prop_Mass > 0 %if staging is LEO, skip the add
     Results.CargoSpacecraft.Add_Craft = CargoStageing;
     end
     
-    Results.IMLEO = Results.HumanSpacecraft.Mass + (Results.CargoSpacecraft.Mass*Results.Num_CargoSpacecraft);
+    Results.IMLEO = nansum([Results.HumanSpacecraft.Mass, (Results.CargoSpacecraft.Mass*Results.Num_CargoSpacecraft), Results.FerrySpacecraft.Prop_Mass, Results.Lunar_ISRU.Spares]);
 %     disp(Results.IMLEO)
     
     %% --- Science Module --- %%

@@ -28,14 +28,17 @@ classdef Propulsion
     
     %% characteristic properties of propulsion type
     properties (Dependent)
-        %% specific impulse of the propulsion type (or typical average)
+        % specific impulse of the propulsion type (or typical average)
         Isp
-        %% fuel to oxidizer ration, that characterizes the amount of oxider required per part of fuel
+        
+        % fuel to oxidizer ration, that characterizes the amount of oxider required per part of fuel
         % dimensionless since this is a part ratio
         FuelOxRatio
-        %% ratio describing the amount of mass required for engine and fuel storage as compared to propellant mass
+        
+        % ratio describing the amount of mass required for engine and fuel storage as compared to propellant mass
         InertMassRatio
-        %% any fixed amount of mass required for engines, fuel, fuel storage, or anything else specific to propulsion
+        
+        % any fixed amount of mass required for engines, fuel, fuel storage, or anything else specific to propulsion
         StaticMass
     end
     

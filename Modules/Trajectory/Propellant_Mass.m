@@ -17,10 +17,8 @@ e=2.71828182845904523536028747135266249;
 %-----Constants-----
 
 %----Initialize other SC Module stuff
-if isempty(SC_Module.Bus_Mass)
-    SC_Module.Bus_Mass = 0; %initialize Bus Mass if empty
-end
-SC_Module.Bus_Mass = SC_Module.Bus_Mass + prop_inst.StaticMass; %add engine Static Mass to bus mass.
+
+SC_Module.Static_Mass = prop_inst.StaticMass; %add engine Static Mass to bus mass.
 
 %tic
 if dV ~= 0 %skip the rest if dV = 0
@@ -31,10 +29,11 @@ last = 0; %initialize tracking variable
 if isempty(SC_Module.Eng_Mass) %initialize engine mass for 1st iteration, if not re-used
     SC_Module.Eng_Mass = 0;
 end
+
 it = 0;
 while converge > converge_to
     %sum rocket parts to see final mass
-    Final_Mass = nansum([SC_Module.Eng_Mass, SC_Module.Payload_Mass, SC_Module.Hab_Mass, SC_Module.Bus_Mass, AdditionalSC_Mass]);
+    Final_Mass = nansum([SC_Module.Eng_Mass, SC_Module.Static_Mass, SC_Module.Payload_Mass, SC_Module.Hab_Mass, SC_Module.Bus_Mass, AdditionalSC_Mass]);
     
     %evaluate the rocket equation for fuel mass
     Mass_Ratio=e^((dV)/(g0*prop_inst.Isp));
@@ -55,9 +54,15 @@ while converge > converge_to
 end
 
 %fill out the fuel vs ox split
-SC_Module.Ox_Mass = SC_Module.Prop_Mass * (prop_inst.FuelOxRatio / (1 + prop_inst.FuelOxRatio));
-SC_Module.Fuel_Mass = SC_Module.Prop_Mass * (1 / (1 + prop_inst.FuelOxRatio));
-end %end dV = 0 loop
+if prop_inst == Propulsion.NTR
+    SC_Module.Ox_Mass = 0;
+    SC_Module.Fuel_Mass = SC_Module.Prop_Mass;
+else
+    SC_Module.Ox_Mass = SC_Module.Prop_Mass * (prop_inst.FuelOxRatio / (1 + prop_inst.FuelOxRatio));
+    SC_Module.Fuel_Mass = SC_Module.Prop_Mass * (1 / (1 + prop_inst.FuelOxRatio));
+end
+
+end % of dV = 0 loop
 %{
 %----debugging outputs
 Prop_Loop_time_in_seconds = toc
