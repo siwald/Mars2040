@@ -164,11 +164,11 @@ ECLSS.Equipment_Volume.BPS= ECLSS.Equipment_Mass.BPS/MARS_2040.Habitat_Mass*MARS
 ECLSS.Spare_Mass.BPS = ECLSS.Equipment_Mass.BPS * (Spare_Rate/100);
 ECLSS.Spare_Volume.BPS = ECLSS.Equipment_Volume.BPS * (Spare_Rate/100);
 
-ECLSS.Equipment_Mass.GLS = ECLSS.GLS.Mass * (ECLSS.GLS.Primary + ECLSS.GLS.Secondary);
-ECLSS.Equipment_Volume.GLS = ECLSS.GLS.Volume * (ECLSS.GLS.Primary + ECLSS.GLS.Secondary);
-ECLSS.Equipment_Power.GLS = ECLSS.GLS.Power * (ECLSS.GLS.Primary + ECLSS.GLS.Secondary);
-ECLSS.Spare_Mass.GLS = ECLSS.Equipment_Mass.GLS * (Spare_Rate/100);
-ECLSS.Spare_Volume.GLS = ECLSS.Equipment_Volume.GLS * (Spare_Rate/100);
+ECLSS.Equipment_Mass.GLS = ECLSS.GLS.Mass * (ECLSS.GLS.Primary);
+ECLSS.Equipment_Volume.GLS = ECLSS.GLS.Volume * (ECLSS.GLS.Primary);
+ECLSS.Equipment_Power.GLS = ECLSS.GLS.Power * (ECLSS.GLS.Primary) * 12.73/24;
+ECLSS.Spare_Mass.GLS = ECLSS.Equipment_Mass.GLS * ECLSS.GLS.Secondary;
+ECLSS.Spare_Volume.GLS = ECLSS.Equipment_Volume.GLS * ECLSS.GLS.Secondary;
 
 ECLSS.Equipment_Mass.Overall = ECLSS.Equipment_Mass.OGA + ECLSS.Equipment_Mass.CDRA + ECLSS.Equipment_Mass.CCAA + ECLSS.Equipment_Mass.UPA + ECLSS.Equipment_Mass.WPA + ECLSS.Equipment_Mass.CRA + ECLSS.Equipment_Mass.CO2_Injector + ECLSS.Equipment_Mass.BPS + ECLSS.Equipment_Mass.GLS;
 ECLSS.Equipment_Volume.Overall = ECLSS.Equipment_Volume.OGA + ECLSS.Equipment_Volume.CDRA + ECLSS.Equipment_Volume.CCAA + ECLSS.Equipment_Volume.UPA + ECLSS.Equipment_Volume.WPA + ECLSS.Equipment_Volume.CRA + ECLSS.Equipment_Volume.CO2_Injector + ECLSS.Equipment_Volume.BPS + ECLSS.Equipment_Volume.GLS;
