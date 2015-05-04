@@ -12,24 +12,23 @@ for i=1:Num_Arches
     marsh2(i) = nansum([All_Results{i,1}.Mars_ISRU.Fuel_Output]);
     LCC_Prox(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
         All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
-        All_Results{i,1}.PowerPlant.Mass]) + (10*All_Results{i,1}.IMLEO);
+        All_Results{i,1}.PowerPlant.Mass]) + (1.6*All_Results{i,1}.IMLEO);
     Infra(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
         All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
-        All_Results{i,1}.PowerPlant.Mass]);
+        All_Results{i,1}.PowerPlant.Mass] +...
+        All_Results{i}.FerrySpacecraft.Static_Mass + All_Results{i}.FerrySpacecraft.Eng_Mass + All_Results{i}.FerrySpacecraft.Bus_Mass);
 end
-%disp
-hold off;
-xaxis = val;
-xlab = 'Science Value';
-scatter(xaxis,Im);
-hold on;
-%scatter(250000,30000,'d');
-ylabel('IMLEO');
-xlabel(xlab);
+% disp
+% hold off;
+% xaxis = Infra;
+% xlab = 'Infrastructure';
+% scatter(xaxis,Im);
+% hold on;
+% %scatter(250000,30000,'d');
+% ylabel('IMLEO');
+% xlabel(xlab);
 
-
-
-%% Morph Section
+% Morph Section
 val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 
@@ -55,6 +54,8 @@ for i=1:Num_Arches
             crater(i) = 1;
         case Site.GALE
             crater(i) = 0;
+        case Site.MERIDIANI
+            crater(i) = 2;
 	end
     food(i) = Morph{i}.FoodSupply(2).Amount; %percent grown on mars
 	switch Morph{i}.Staging
@@ -115,11 +116,15 @@ end
 
 %% disp
 hold off;
-gscatter(val,Im,transfuel,'mcrgb','o+xsd');
+gscatter(val,Im,stage,'mcrgb','o+xsd');
+lim = ylim;
+lim(1) = 0;
+ylim(lim);
 hold on;
 %scatter(250000,30000,'d');
-xlabel('Science Value');
-ylabel('IMLEO');
+xlabel('Sci');
+ylabel('LCC');
+
 
 %% isolate utopian corner
 ind = [];

@@ -31,7 +31,7 @@ tic
 %Fixed Main Effects.
 Morph = MarsArchitecture.Enumerate( ...
     {Propulsion.NTR,Propulsion.LH2},...
-	{Location.LEO}, ...
+	{Location.LEO},...2 Location.EML1, Location.EML2}, ...
 	{[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2],[TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2]},...
     {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
     {PowerSource.NUCLEAR}, ...
@@ -46,7 +46,9 @@ Morph = MarsArchitecture.Enumerate( ...
 % Num_Arches = length(Morph);
 % for i=1:length(Morph)
 %     Morph_temp = Morph{i};
+%     if ~isequal(Morph_temp.TransitCrew.Size, 6)
 %     Morph_temp.SurfaceCrew.Size = Morph_temp.TransitCrew.Size * 4;
+%     end
 %     Morph{i+Num_Arches} = Morph_temp;
 % end
 Num_Arches = length(Morph)
@@ -345,6 +347,9 @@ for i=1:Num_Arches %begin looping for each architecture
 end %end main loop
 time_per_run = toc / Num_Arches
 runtime_Mins = toc / 60
+load gong.mat;
+gong = audioplayer(y, Fs);
+play(gong); %signal completion
 %% --- Results Managment --- %%
 
 %IMLEO vs Sci_Value Scatter Plot
