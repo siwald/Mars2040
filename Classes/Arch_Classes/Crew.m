@@ -71,7 +71,7 @@ classdef Crew < handle
         MIN_CREW = Crew(double(2));
         DEFAULT_TRANSIT = Crew(double(4));
         DRA_CREW = Crew(double(6));
-        TARGET_SURFACE = Crew(double(20));
+        TARGET_SURFACE = Crew(double(24));
     end
 end
 

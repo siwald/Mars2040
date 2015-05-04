@@ -72,5 +72,7 @@ classdef SurfaceCrew < handle
         DEFAULT_TRANSIT = SurfaceCrew(double(4));
         DRA_CREW = SurfaceCrew(double(6));
         TARGET_SURFACE = SurfaceCrew(double(24));
+        MID_SURFACE = SurfaceCrew(double(18));
+        MIN_SURFACE = SurfaceCrew(double(12));
     end
 end
