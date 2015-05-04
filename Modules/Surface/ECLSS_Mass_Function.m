@@ -86,12 +86,12 @@ ECLSS.BPS.Volume = 14.26;
 ECLSS.BPS.Primary = 1;
 ECLSS.BPS.Secondary = 0;
 
-ECLSS.GLS.Mass = 8.0;
-ECLSS.GLS.Volume = 0.02;
-ECLSS.GLS.Spec = 1.44; %Units: m^2/unit
-ECLSS.GLS.Power = 0.630;
+ECLSS.GLS.Mass = 2.98;
+ECLSS.GLS.Volume = 0.003824407;
+ECLSS.GLS.Spec = 62.5/MARS_2040.Crop_Area; %Units: m^2/unit
+ECLSS.GLS.Power = 0.03;
 ECLSS.GLS.Primary = ceil(MARS_2040.Crop_Area/ECLSS.GLS.Spec);
-ECLSS.GLS.Secondary = 0;
+ECLSS.GLS.Secondary = ECLSS.GLS.Primary/(2500/12.73/MARS_2040.Surface_Duration);
 
 load('Crew_System_Values.var')
 load('Storage_Values.var')
