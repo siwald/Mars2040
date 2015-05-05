@@ -25,6 +25,7 @@ L_Reactor_Size = L_Reactor_Size * 1000; %Units: kW; convert MW to kW
 M_Reactor_Size = M_Reactor_Size * 1000; %Units: kW; convert MW to kW
 S_Reactor_Size = S_Reactor_Size * 1000; %Units: kW; convert MW to kW
 
+Synod = 2.137;
 %% Move Fuel to the appropriate spots
 Results.Lunar_ISRU.Oxidizer_Output = 0; %initialize this
 Results.Lunar_ISRU.Fuel_Output = 0; %initialize this
@@ -39,7 +40,7 @@ elseif or(isequal(Cur_Arch.TransitFuel, [TransitFuel.EARTH_LH2,TransitFuel.LUNAR
         isequal(Cur_Arch.TransitFuel, [TransitFuel.LUNAR_O2,TransitFuel.EARTH_LH2]))
     %O2 Only
     if ~isequal(Cur_Arch.PropulsionType, Propulsion.NTR) %just skip if NTR
-    O2_Per_Month = Results.Lunar_ISRU.Oxidizer_Output / (1.881*12) ; %kg/month
+    O2_Per_Month = Results.Lunar_ISRU.Oxidizer_Output / (Synod*12) ; %kg/month
     Results.Lunar_ISRU.Mass = (6.50 * O2_Per_Month) + 11800; %kg
     Results.Lunar_ISRU.Power = (58.2 * (O2_Per_Month/1000)) + 30.8; %kW
 
@@ -85,8 +86,8 @@ elseif or(...
             isequal(Cur_Arch.TransitFuel, [TransitFuel.EARTH_O2,TransitFuel.LUNAR_LH2])) ...
         )
     %H2 Only, or H2 and O2
-    Lunar_Plant_O2_Prod = 24000 * 1.881; %kg/synod
-    Lunar_Plant_H2_Prod = 14000 * 1.881; %kg/synod
+    Lunar_Plant_O2_Prod = 24000 * Synod; %kg/synod
+    Lunar_Plant_H2_Prod = 14000 * Synod; %kg/synod
     Lunar_Plant_Mass = 60000 ; %Plant and Power
 
     Results.Lunar_ISRU.Num = max(ceil(Results.Lunar_ISRU.Oxidizer_Output/Lunar_Plant_O2_Prod), ...
