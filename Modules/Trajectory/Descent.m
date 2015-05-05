@@ -12,30 +12,36 @@ function [AscentSpacecraft, HumanSpacecraft, CargoSpacecraft, Num_Landers] = Des
 %   from Mars ISRU
 %    
 %% Inputs
-Landing_Cargo = nansum([Results.Consumables, Results.Spares, Results.Replacements, AscentSpacecraft.Mass]);
-
 %% Constants
-Max_AeroB_Mass = 40000; %kg
-%Descent_Syst_Mass = 4000; %est basd on DRA 5.0 Add 1 pg 99. < this is AeroCapture, not Descent
+Max_AeroB_Mass = 40400; %kg
 
 %% Descent Taxi
     %Get out the Multiple Entry And Ascent vehicle
     MEAA = AscentSpacecraft.Get_Craft('Ascent and Earth Entry Module');
     MEAA.Description = 'Multiple Entry and Ascent Module';
+%     
+%     %test only
+%     MEAA = SC_Class('test MEAA');
+%     MEAA.Payload_Mass = 40400;
+%     %end test
+    
 %    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
-        MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
-        MEAA.Bus_Mass = MEAA.Bus_Mass + MEAA_Aeroshell;
+        %MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
+        MEAA.Dry_Mass = 16400; %see cargo lander below, NASA DRA5 T4-3, Dry Descent Stage for max 40.4mt payload
+        MEAA.Static_Mass = 62900; %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
 %     else
 %         warning('alternative descents not yet programmed')
 %     end
     %Add it to the Human Spacecraft
     HumanSpacecraft.Add_Craft = MEAA;
+    HumanSpacecraft.MALMO = HumanSpacecraft.Mass;
     
 %% Cargo Descenders
     Cargo_Manifest = [Results.Consumables, Results.Spares, Results.Replacements, AscentSpacecraft.Mass];
     if ~isempty(varargin)
         %Cargo_Manifest = [Cargo_Manifest [AscentSpacecraft.Mass, Results.ECLSS.Mass, Results.PowerPlant.Mass, Results.Mars_ISRU.Mass]];
         Cargo_Manifest = [36000, 36000];
+        %Cargo_Manifest = [11007];
     end
     Landing_Cargo = nansum(Cargo_Manifest);
     CargoSpacecraft = OverallSC; %Initialize the Cargo Spacecraft
@@ -57,6 +63,7 @@ multiply by Results.Num_CargoSpacecraft, since they're all alike.
 %}
         %for i=1:Num_Landers %add a Cargo_Lander Module until number of landers is reached
             CargoSpacecraft.Add_Craft = Cargo_Lander;
+            CargoSpacecraft.MALMO = CargoSpacecraft.Mass;
         %end
         %}
 end

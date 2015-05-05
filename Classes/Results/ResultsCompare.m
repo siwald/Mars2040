@@ -311,7 +311,26 @@ function [ results_table ] = ResultsCompare( results_obj1, results_obj2, num_car
         results_table{end,3} = nansum([results_obj1.CargoSpacecraft.SC{i}.Eng_Mass, results_obj1.CargoSpacecraft.SC{i}.Bus_Mass]);
         results_table{end,4} = results_obj1.CargoSpacecraft.SC{i}.Prop_Mass;
     end
-%     results_table{end+1,1} = 'Lunar Ferry';
+    results_table{end+1,1} = 'Human MALMO';
+    results_table{end,2} = results_obj1.HumanSpacecraft.MALMO;
+    results_table{end,3} = results_obj2.HumanSpacecraft.MALMO;
+    results_table{end+1,1} = 'Human MAMA';
+    results_table{end,2} = results_obj1.HumanSpacecraft.MAMA;
+    results_table{end,3} = results_obj2.HumanSpacecraft.MAMA;
+    results_table{end+1,1} = 'Human Final';
+    results_table{end,2} = results_obj1.HumanSpacecraft.Mass;
+    results_table{end,3} = results_obj2.HumanSpacecraft.Mass;
+    results_table{end+1,1} = 'Cargo MALMO';
+    results_table{end,2} = results_obj1.CargoSpacecraft.MALMO;
+    results_table{end,3} = results_obj2.CargoSpacecraft.MALMO;
+    results_table{end+1,1} = 'Cargo MAMA';
+    results_table{end,2} = results_obj1.CargoSpacecraft.MAMA;
+    results_table{end,3} = results_obj2.CargoSpacecraft.MAMA;
+    results_table{end+1,1} = 'Cargo Final';
+    results_table{end,2} = results_obj1.CargoSpacecraft.Mass;
+    results_table{end,3} = results_obj2.CargoSpacecraft.Mass;
+
+    %     results_table{end+1,1} = 'Lunar Ferry';
 %     for i = 1:length(results_obj1.FerrySpacecraft.SC)
 %         results_table{end+1,1} = results_obj1.FerrySpacecraft.SC{i}.Description;
 %         results_table{end,2} = results_obj1.FerrySpacecraft.SC{i}.Origin_Mass;

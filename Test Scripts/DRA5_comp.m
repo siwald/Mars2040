@@ -58,8 +58,7 @@
     %}
     
     Earth_Entry = SC_Class('Earth Entry Module'); %initialize the Earth Entry Module
-    %Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size * 1570 %kg, based on (Apollo CM Mass - heat sheild mass) / astronaut
-    Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size *(14000/6); %kg, based on DRA5, assume 10t + 4t for 'bookeeping'
+    Earth_Entry.Hab_Mass = Cur_Arch.TransitCrew.Size * 1570; %kg, based on (Apollo CM Mass - heat sheild mass) / astronaut
     Earth_Entry.Hab_Vol = Cur_Arch.TransitCrew.Size * 2.067; %based on Apollo hab vol / astronaut
     Earth_Entry.Payload_Vol = 0; %As yet undefined, and not a trade
     Earth_Entry.Payload_Mass = 0; %As yet undefined, and not a trade
@@ -67,7 +66,7 @@
     Earth_Entry.Bus_Mass = Earth_Entry.Volume * 81.73; %size of HeatSheild, kg, based on Apollo, per total module volume
     Earth_Entry.drymass_calc; %populate the overall mass numbers
     Results.HumanSpacecraft.Add_Craft = Earth_Entry; %Add entry module to the S/C
-    
+
     %% --- Return Transit Module --- %%
     %{
     Inputs:
@@ -83,9 +82,9 @@
         Results Object
             Mars ISRU requirements
     %}
-    
+
     [Results.HumanSpacecraft, Results] = Return_Trans (Cur_Arch, Results.HumanSpacecraft, Results);
-    
+
     %% --- Ascent Module --- %%
     %{
     Inputs:
@@ -212,8 +211,10 @@
             MEAA Module
             Cargo Descenders
     %}
+    Pre = Results.HumanSpacecraft.Mass
     [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, Results.Num_CargoSpacecraft] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation, 'DRAcomp');
-
+    Post = Results.HumanSpacecraft.Mass
+    Cargo = Results.CargoSpacecraft.Mass
     %% --- Outgoing Transit --- %%
     %{
     Inputs:

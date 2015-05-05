@@ -22,6 +22,7 @@ switch Cur_Arch.OrbitCapture
         Cap_Stage = Propellant_Mass(Cur_Arch.PropulsionType, Cap_Stage, Hohm_Chart('TMI','LMO'), spacecraft.Mass);
 end
 spacecraft.Add_Craft = Cap_Stage;
+spacecraft.MAMA = spacecraft.Mass;
 
 
 %% Transit Engines

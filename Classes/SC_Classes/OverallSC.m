@@ -16,6 +16,12 @@ classdef OverallSC < dynamicprops
         Fuel_Mass
         Prop_Mass
     end
+    
+    properties
+        MALMO %Mass at Low Mars Orbit
+        MAMA %Mass at Mars Approach
+    end
+    
     properties (GetAccess = private) %thus SetAccess = public
         Add_Craft
     end

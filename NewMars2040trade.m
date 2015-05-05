@@ -275,8 +275,8 @@ for i=1:Num_Arches %begin looping for each architecture
             MEAA Module
             Cargo Descenders
     %}
+    
     [Results.AscentSpacecraft, Results.HumanSpacecraft, Results.CargoSpacecraft, Results.Num_CargoSpacecraft] = Descent(Cur_Arch, Results.AscentSpacecraft, Results.HumanSpacecraft, Results, Site_Elevation);
-
     %% --- Outgoing Transit --- %%
     %{
     Inputs:
