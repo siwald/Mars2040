@@ -50,12 +50,30 @@ for i=1:Num_Arches
     crew(i) = Morph{i}.TransitCrew.Size;
     surfcrew(i) = Morph{i}.SurfaceCrew.Size;
 	switch Morph{i}.SurfaceSites
-        case Site.HOLDEN
+        case Site.HOLDEN	
             crater(i) = 1;
-        case Site.GALE
-            crater(i) = 0;
-        case Site.MERIDIANI
+        case Site.GALE	
             crater(i) = 2;
+        case Site.MERIDIANI	
+            crater(i) = 3;
+        case Site.GUSEV	
+            crater(i) = 4;
+        case Site.ISIDIS	
+            crater(i) = 5;
+        case Site.ELYSIUM	
+            crater(i) = 6;
+        case Site.MAWRTH	
+            crater(i) = 7;
+        case Site.EBERSWALDE	
+            crater(i) = 8;
+        case Site.UTOPIA	
+            crater(i) = 9;
+        case Site.PLANUS_BOREUM	
+            crater(i) = 10;
+        case Site.HELLAS	
+            crater(i) = 11;
+        case Site.AMAZONIS	
+            crater(i) = 12;
 	end
     food(i) = Morph{i}.FoodSupply(2).Amount; %percent grown on mars
 	switch Morph{i}.Staging
@@ -116,14 +134,14 @@ end
 
 %% disp
 hold off;
-gscatter(val,Im,stage,'mcrgb','o+xsd');
+gscatter(val,Im,crater,'mcrgb','o+xsd');
 lim = ylim;
 lim(1) = 0;
 ylim(lim);
 hold on;
 %scatter(250000,30000,'d');
 xlabel('Sci');
-ylabel('LCC');
+ylabel('IMLEO');
 
 
 %% isolate utopian corner
