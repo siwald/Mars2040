@@ -99,6 +99,7 @@ classdef SC_Class < handle
                 obj.Prop_Mass = nansum([obj.Fuel_Mass, obj.Prop_Mass]);
             end
             out = nansum([obj.Prop_Mass]);
+        end
     end
     
 end
