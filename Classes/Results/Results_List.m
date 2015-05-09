@@ -13,7 +13,8 @@ classdef Results_List < handle
         Volume
         Fuel_Output 
         Oxidizer_Output 
-        CH4_Prop_Output 
+        CH4_Prop_Output
+        Lights
     end
     properties
         Consumables

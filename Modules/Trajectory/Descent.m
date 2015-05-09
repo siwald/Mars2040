@@ -25,17 +25,18 @@ Max_AeroB_Mass = 40400; %kg
 %     MEAA = SC_Class('test MEAA');
 %     MEAA.Payload_Mass = 40400;
 %     %end test
-    
-%    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
-%        MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
+
+    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
+%deprecated line        MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
+        
         %These are scaled, the Engines scale to payload
          MEAA.Dry_Mass = 28700 / (40400 / Origin_temp); %see cargo lander below, NASA DRA5 T4-3, Dry Descent Stage for max 40.4mt payload
         %These are scaled, the Aeroshell scales to volume, mass scales to
         %volume within some degree of variablity.
          MEAA.Static_Mass = 40700 / (40400 / Origin_temp); %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
-%     else
-%         warning('alternative descents not yet programmed')
-%     end
+    else
+        warning('alternative descents not yet programmed')
+    end
     %Add it to the Human Spacecraft
     HumanSpacecraft.Add_Craft = MEAA;
     HumanSpacecraft.MALMO = HumanSpacecraft.Mass;

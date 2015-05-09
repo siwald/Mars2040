@@ -153,13 +153,13 @@ end
 
 %% disp
 hold off;
-gscatter(val,Im,returnfuel,'mcrgb','o+xsd');
+gscatter(val,Im,food,'mcrgb','o+xsd');
 lim = ylim;
-lim(1) = 0;
+%lim(1) = 0;
 ylim(lim);
 hold on;
 %scatter(250000,30000,'d');
-xlabel('Infra');
+xlabel('Sci');
 ylabel('IMLEO');
 title('Graph');
 

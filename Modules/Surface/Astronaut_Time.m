@@ -9,12 +9,30 @@ spent_time = nansum([food_time, general_repairs, personal]);
 
 Astronaut_Daily_Time = 24.66 - spent_time; % in Hours per Astronaut
 
+switch Cur_Arch.CrewTrajectory.Type
+    case TrajectoryType.HOHMANN.Type
+        until_next = 280; % Days between crew leaving, and next batch arriving
+    case TrajectoryType.ELLIPTICAL.Type
+        until_next = 0; % Days between crew leaving, and next batch arriving
+        disp('too bad')
+    case TrajectoryType.ALDRIN.Type
+        until_next = 0; % Days between crew leaving, and next batch arriving
+        disp('too bad')
+    case TrajectoryType.LONGCYCLER.Type
+        until_next = 0; % Days between crew leaving, and next batch arriving
+        disp('too bad')
+    case TrajectoryType.SHORTCYCLER.Type
+        until_next = 0; % Days between crew leaving, and next batch arriving
+        disp('too bad')
+    otherwise
+        disp('Astronaut_Time, line 12 switch case')
+end
 Astronaut_Days_on_Surf = ...%in Total Astronaut-Days per Synod
     (Cur_Arch.SurfaceCrew.Size * 780)... Base crew size for full Synod
-    - (Cur_Arch.TransitCrew.Size * 280); %minus rotation crew size until next arrival
+    - (Cur_Arch.TransitCrew.Size * until_next); %minus rotation crew size until next arrival
 Results.Science_Time = (Astronaut_Daily_Time * Astronaut_Days_on_Surf) / 24; %in Science-Days per Synod
 
-if Cur_Arch.EDL == ArrivalDescent.AEROENTRY %subtract 30 days for each crew member in aerocapture maneuver
-    Results.Science_Time = Results.Science_Time - (Cur_Arch.TransitCrew.Size * 30);
-end
+% if Cur_Arch.EDL == OrbitCapture.AEROENTRY %subtract 30 days for each crew member in aerocapture maneuver
+%     Results.Science_Time = Results.Science_Time - (Cur_Arch.TransitCrew.Size * 30);
+% end
 end

@@ -7,6 +7,12 @@ classdef TrajectoryType < handle % derive handle to prevent object copying
         HOHMANN = TrajectoryType('H');
         %% Reference to Elliptical trajectory
         ELLIPTICAL = TrajectoryType('E');
+        %% Reference to 1L1 Cycler
+        ALDRIN = TrajectoryType('A');
+        %% Reference to 2L3 Cycler
+        LONGCYCLER = TrajectoryType('L');
+        %% Reference to 6S8 Cycler
+        SHORTCYCLER = TrajectoryType('S');
     end
     
     %% Private class variables
@@ -44,6 +50,12 @@ classdef TrajectoryType < handle % derive handle to prevent object copying
                         obj.type = 'H';
                     case 'E' % elliptical
                         obj.type = 'E';
+                    case 'A' %Aldrin cycler
+                        obj.type = 'A';
+                    case 'L' %2L3 cycler
+                        obj.type = 'L';
+                    case 'S' %6S8 cycler
+                        obj.type = 'S';
                     otherwise
                         % letter did not have a matching type, output error
                         error('Trajectory type not recognized.');
@@ -77,6 +89,12 @@ classdef TrajectoryType < handle % derive handle to prevent object copying
                         name = 'Hohmann';
                     case 'E' % elliptical
                         name = 'Elliptical';
+                    case 'A'
+                        name = '1L1 Cycler';
+                    case 'L'
+                        name = '2L3 Cycler';
+                    case 'S'
+                        name = '6S8 Cycler';
                     otherwise % didn't match type (this shouldn't happen)
                         name = 'unknown';
                 end
