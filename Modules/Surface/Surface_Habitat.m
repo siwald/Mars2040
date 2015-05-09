@@ -37,7 +37,7 @@ BVAD.Tunnel = 263.43; %Units: m^3; The tunnel will not be affected by the increa
 BVAD.Airlock = 48; %Units: m^3; The airlock will not be affected by the increase in astronauts.
 Inflatable_Ratio = 21.13; %Units: kg/m^3; This is based off the Transhab used for ISS. 
 Inflatable_Weight_Advantage = 50;  %Units: %; Source:http://www.marshome.org/files2/Fisher.pdf. Inflatable habitats are 30-50% lighter than Hard Aluminum structures 
-Thermal_Cost = 0.005882353; %kW/kg; This value is from BVAD 2015 table 3.17. 
+%Thermal_Cost = 0.005882353; %kW/kg; This value is from BVAD 2015 table 3.17. 
 
 MARS2040.Crew_Size = Crew_Size;
 [a,FoodSupply] = Cur_Arch.FoodSupply.Amount;
@@ -153,7 +153,8 @@ end
 % end
 
 %Surf_Power = (0.019*Surf_Mass); %Units: kW; 0.019 is worst case value from BVAD table 3.2.2 for surface power.
-Surf_Power = Surf_Mass * Thermal_Cost;
+%Surf_Power = Surf_Mass * Thermal_Cost;
+Surf_Power = 0;
 Regolith_Mass = Regolith_Constant * Surf_Volume;
 
 %MMSEV_Mass = 4000; %kg SEV total mass
