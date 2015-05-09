@@ -47,16 +47,16 @@ PowerPlant_Distance = 3000; %Units: m; distance from power plant to habitat, DRA
 
 XL_Reactor_Size = 10; %Units: MW; Rocketdyne reactor, liquid cooled
 L_Reactor_Size = 5; %Units: MW; ORNL reactor, UN pellet fuel pin w/T-111 alloy
-M_Reactor_Size = 4; %Units: MW; 1993 DRM derived from NTP and SP-100
+%M_Reactor_Size = 4; %Units: MW; 1993 DRM derived from NTP and SP-100
 S_Reactor_Size = 0.1; %Units: MW; SP-100 US Research group for nuclear reactors in space
 XL_Reactor_Mass = 40095; %Units: kg; Rocketdyne reactor, liquid cooled
 XL_Reactor_Volume = 8247.98; %Units: m^3
 L_Reactor_Mass = 24500; %Units: kg; ORNL reactor, UN pellet fuel pin w/T-111 alloy
 L_Reactor_Volume = 2324.74; %Units: m^3;
-M_Reactor_Mass = 41510; %Units: kg; 1993 DRM derived from NTP and SP-100
+%M_Reactor_Mass = 41510; %Units: kg; 1993 DRM derived from NTP and SP-100
 S_Reactor_Mass = 4610; %Units: kg; SP-100 US Research group for nuclear reactors in space
 S_Reactor_Volume = 36.77; %Units: m^3;
-M_Reactor_Volume = (S_Reactor_Mass + L_Reactor_Mass)/2; %Units: m^3
+%M_Reactor_Volume = (S_Reactor_Mass + L_Reactor_Mass)/2; %Units: m^3
 DRA_Reactor_Size = 40; %units kW
 DRA_Reactor_Mass = 8800; %units kg
 
@@ -82,7 +82,7 @@ PowerCable_Mass = (0.11446*PowerPlant_Distance);
 
 XL_Reactor_Size = XL_Reactor_Size * 1000; %Units: kW; convert MW to kW
 L_Reactor_Size = L_Reactor_Size * 1000; %Units: kW; convert MW to kW
-M_Reactor_Size = M_Reactor_Size * 1000; %Units: kW; convert MW to kW
+%M_Reactor_Size = M_Reactor_Size * 1000; %Units: kW; convert MW to kW
 S_Reactor_Size = S_Reactor_Size * 1000; %Units: kW; convert MW to kW
 
 XL_Reactor_Quantity = floor(Results.Cum_Surface_Power/XL_Reactor_Size);
@@ -98,7 +98,7 @@ end
 %Don't use M reactor, 2X as heavy as Large.
 % M_Reactor_Quantity = floor(Remaining_Power/M_Reactor_Size);
 % Remaining_Power = Remaining_Power - (M_Reactor_Quantity * M_Reactor_Size);
-M_Reactor_Quantity =0; %set as 0 for later calcs.
+%M_Reactor_Quantity =0; %set as 0 for later calcs.
 
 if (Remaining_Power / S_Reactor_Size) > 5 %Use another L rather than 6+ S, mass savings!
     L_Reactor_Quantity = L_Reactor_Quantity + 1;
@@ -115,8 +115,8 @@ else
     %do not add anything to Small Reactor Quantity, we have a power margin!
 end
 
-PowerPlant_Mass = (XL_Reactor_Quantity * XL_Reactor_Mass) + (L_Reactor_Quantity * L_Reactor_Mass)+(M_Reactor_Quantity * M_Reactor_Mass)+(S_Reactor_Quantity * S_Reactor_Mass);
-PowerPlant_Volume = (XL_Reactor_Quantity * XL_Reactor_Volume) + (L_Reactor_Quantity * L_Reactor_Volume)+(M_Reactor_Quantity * M_Reactor_Volume)+(S_Reactor_Quantity * S_Reactor_Volume);
+PowerPlant_Mass = (XL_Reactor_Quantity * XL_Reactor_Mass) + (L_Reactor_Quantity * L_Reactor_Mass)+(S_Reactor_Quantity * S_Reactor_Mass);
+PowerPlant_Volume = (XL_Reactor_Quantity * XL_Reactor_Volume) + (L_Reactor_Quantity * L_Reactor_Volume)+(S_Reactor_Quantity * S_Reactor_Volume);
 
 n = length(Cur_Arch.SurfacePower);
 Power_Method = Cur_Arch.SurfacePower;
