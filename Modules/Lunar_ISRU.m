@@ -44,39 +44,41 @@ elseif or(isequal(Cur_Arch.TransitFuel, [TransitFuel.EARTH_LH2,TransitFuel.LUNAR
     Results.Lunar_ISRU.Mass = (6.50 * O2_Per_Month) + 11800; %kg
     Results.Lunar_ISRU.Power = (58.2 * (O2_Per_Month/1000)) + 30.8; %kW
 
-                XL_Reactor_Quantity = floor(Results.Cum_Surface_Power/XL_Reactor_Size);
-            Remaining_Power = Results.Cum_Surface_Power - (XL_Reactor_Quantity * XL_Reactor_Size);
-            if (Remaining_Power/L_Reactor_Size) > 1 %add another XL_Reactor instead of 2 Larges, Mass Savings!
-                XL_Reactor_Quantity = XL_Reactor_Quantity + 1;
-                Remaining_Power = Remaining_Power - (1 * XL_Reactor_Size);
-                L_Reactor_Quantity = 0; %set as 0 for later calcs
-            else
-            L_Reactor_Quantity = floor(Remaining_Power/L_Reactor_Size);
-            Remaining_Power = Remaining_Power - (L_Reactor_Quantity * L_Reactor_Size);
-            end
-            %Don't use M reactor, 2X as heavy as Large.
-            % M_Reactor_Quantity = floor(Remaining_Power/M_Reactor_Size);
-            % Remaining_Power = Remaining_Power - (M_Reactor_Quantity * M_Reactor_Size);
-            M_Reactor_Quantity =0; %set as 0 for later calcs.
-
-            if (Remaining_Power / S_Reactor_Size) > 5 %Use another L rather than 6+ S, mass savings!
-                L_Reactor_Quantity = L_Reactor_Quantity + 1;
-                S_Reactor_Quantity = 0; %set as for later calcs
-                Remaining_Power = Remaining_Power - (1 * L_Reactor_Size);
-            else
-                S_Reactor_Quantity = floor(Remaining_Power/S_Reactor_Size);
-                Remaining_Power = Remaining_Power - (S_Reactor_Quantity * S_Reactor_Size);
-            end
-
-            if Remaining_Power > 0
-                S_Reactor_Quantity = S_Reactor_Quantity + 1; 
-            else
-                %do not add anything to Small Reactor Quantity, we have a power margin!
-            end
-
-            PowerPlant_Mass = (XL_Reactor_Quantity * XL_Reactor_Mass) + (L_Reactor_Quantity * L_Reactor_Mass)+(M_Reactor_Quantity * M_Reactor_Mass)+(S_Reactor_Quantity * S_Reactor_Mass);
-            PowerPlant_Volume = (XL_Reactor_Quantity * XL_Reactor_Volume) + (L_Reactor_Quantity * L_Reactor_Volume)+(M_Reactor_Quantity * M_Reactor_Volume)+(S_Reactor_Quantity * S_Reactor_Volume);
-    Results.Lunar_ISRU.Mass = Results.Lunar_ISRU.Mass + PowerPlant_Mass;
+%                 XL_Reactor_Quantity = floor(Results.Cum_Surface_Power/XL_Reactor_Size);
+%             Remaining_Power = Results.Cum_Surface_Power - (XL_Reactor_Quantity * XL_Reactor_Size);
+%             if (Remaining_Power/L_Reactor_Size) > 1 %add another XL_Reactor instead of 2 Larges, Mass Savings!
+%                 XL_Reactor_Quantity = XL_Reactor_Quantity + 1;
+%                 Remaining_Power = Remaining_Power - (1 * XL_Reactor_Size);
+%                 L_Reactor_Quantity = 0; %set as 0 for later calcs
+%             else
+%             L_Reactor_Quantity = floor(Remaining_Power/L_Reactor_Size);
+%             Remaining_Power = Remaining_Power - (L_Reactor_Quantity * L_Reactor_Size);
+%             end
+%             %Don't use M reactor, 2X as heavy as Large.
+%             % M_Reactor_Quantity = floor(Remaining_Power/M_Reactor_Size);
+%             % Remaining_Power = Remaining_Power - (M_Reactor_Quantity * M_Reactor_Size);
+%             M_Reactor_Quantity =0; %set as 0 for later calcs.
+% 
+%             if (Remaining_Power / S_Reactor_Size) > 5 %Use another L rather than 6+ S, mass savings!
+%                 L_Reactor_Quantity = L_Reactor_Quantity + 1;
+%                 S_Reactor_Quantity = 0; %set as for later calcs
+%                 Remaining_Power = Remaining_Power - (1 * L_Reactor_Size);
+%             else
+%                 S_Reactor_Quantity = floor(Remaining_Power/S_Reactor_Size);
+%                 Remaining_Power = Remaining_Power - (S_Reactor_Quantity * S_Reactor_Size);
+%             end
+% 
+%             if Remaining_Power > 0
+%                 S_Reactor_Quantity = S_Reactor_Quantity + 1; 
+%             else
+%                 %do not add anything to Small Reactor Quantity, we have a power margin!
+%             end
+% 
+%             PowerPlant_Mass = (XL_Reactor_Quantity * XL_Reactor_Mass) + (L_Reactor_Quantity * L_Reactor_Mass)+(M_Reactor_Quantity * M_Reactor_Mass)+(S_Reactor_Quantity * S_Reactor_Mass);
+%             PowerPlant_Volume = (XL_Reactor_Quantity * XL_Reactor_Volume) + (L_Reactor_Quantity * L_Reactor_Volume)+(M_Reactor_Quantity * M_Reactor_Volume)+(S_Reactor_Quantity * S_Reactor_Volume);
+%             Results.Lunar_ISRU.Mass = Results.Lunar_ISRU.Mass + PowerPlant_Mass;
+            
+    
     Results.Lunar_ISRU.Spares = Results.Lunar_ISRU.Mass * 0.05;
     end
 elseif or(...

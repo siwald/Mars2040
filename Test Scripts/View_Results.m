@@ -17,14 +17,13 @@ for i=1:Num_Arches
     Im(i) = All_Results{i,1}.IMLEO;
     marsox(i) = nansum([All_Results{i,1}.Mars_ISRU.Oxidizer_Output]);
     marsh2(i) = nansum([All_Results{i,1}.Mars_ISRU.Fuel_Output]);
-    LCC_Prox(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
-        All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
-        All_Results{i,1}.PowerPlant.Mass]) + (1.6*All_Results{i,1}.IMLEO);
     Infra(i) = nansum([All_Results{i,1}.Surface_Habitat.Mass,All_Results{i,1}.ECLSS.Mass, ...
         All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
-        All_Results{i,1}.PowerPlant.Mass] +...
-        All_Results{i}.FerrySpacecraft.Static_Mass + All_Results{i}.FerrySpacecraft.Eng_Mass + All_Results{i}.FerrySpacecraft.Bus_Mass);
-    LandedMass(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass;
+        All_Results{i,1}.PowerPlant.Mass, ...
+        All_Results{i}.FerrySpacecraft.Static_Mass, All_Results{i}.FerrySpacecraft.Eng_Mass, All_Results{i}.FerrySpacecraft.Bus_Mass]);
+    LCC_Prox(i) = Infra(i) + (6 * All_Results{i}.IMLEO);
+    MarsInfra(i) = Infra(i) - nansum([All_Results{i,1}.Lunar_ISRU.Mass]);
+    LandedMass(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass + All_Results{i}.HumanSpacecraft.SC{3}.Origin_Mass;
     AscentMass(i) = All_Results{i}.AscentSpacecraft.Mass;
     HumanMass(i) = All_Results{i}.HumanSpacecraft.Mass;
 
@@ -154,15 +153,15 @@ end
 
 %% disp
 hold off;
-gscatter(HumanMass,Im,crew,'mcrgb','o+xsd');
+gscatter(MarsInfra,Im,transfuel,'mcrgb','o+xsd');
 lim = ylim;
 lim(1) = 0;
 ylim(lim);
 hold on;
 %scatter(250000,30000,'d');
-xlabel('Crew Vehicle Mass');
+xlabel('Infra');
 ylabel('IMLEO');
-title('Crew Vehicle Mass, Color by Transit Crew');
+title('Graph');
 
 
 %% isolate utopian corner

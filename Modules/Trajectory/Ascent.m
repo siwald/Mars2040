@@ -44,7 +44,7 @@ Fuel_Payload = SC_Class('ISRU generated Fuel for Earth Return');
 %remove_ox lines, so it dosen't get counted in landed mass.
 Fuel_Payload.Fuel_Mass = Results.Mars_ISRU.Fuel_Output;
 Fuel_Payload.Ox_Mass = Results.Mars_ISRU.Oxidizer_Output;
-Fuel_Payload.Bus_Mass = 0; %tank weight, add later?
+Fuel_Payload.Bus_Mass = .05 * Fuel_Payload.Prop_Mass; %tank weight, add later?
 origin_calc(Fuel_Payload);
 Ascent_Vehicle.Add_Craft = Fuel_Payload;
 

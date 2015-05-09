@@ -90,6 +90,15 @@ classdef SC_Class < handle
             %end
             out = obj.Origin_Mass;
         end  
+        
+        %Prop mass getter, populate if empty
+        function out = get.Prop_Mass(obj)
+            if isempty(obj.Prop_Mass) && ...
+                    or(~isempty(obj.Fuel_Mass), ...
+                    ~isempty(obj.Ox_Mass))
+                obj.Prop_Mass = nansum([obj.Fuel_Mass, obj.Prop_Mass]);
+            end
+            out = nansum([obj.Prop_Mass]);
     end
     
 end
