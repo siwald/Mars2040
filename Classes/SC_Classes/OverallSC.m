@@ -108,8 +108,8 @@ classdef OverallSC < dynamicprops
             [num,~] = size(obj.SC); %get number of SC elements
             descrips = cell(num,1); %initialize array of masses
             for i=1:num
-                current = obj.SC{i,1}; %extract the current SC element
-                descrips{i,1} = current.Description;
+                current = obj.SC{i}; %extract the current SC element
+                descrips{i} = current.Description;
             end
             out = descrips;
         end

@@ -3,16 +3,17 @@ classdef Results_List < handle
     %   Detailed explanation goes here
     
     properties
-        Consumables_Mass
-        Consumables_Volume
-        Spares_Mass
-        Spares_Volume
-        Replacements
-        Mass
-        Power
+        Consumables_Mass 
+        Consumables_Volume 
+        Spares_Mass 
+        Spares_Volume 
+        Replacements 
+        Mass 
+        Power 
         Volume
-        Fuel_Output
-        Oxidizer_Output
+        Fuel_Output 
+        Oxidizer_Output 
+        CH4_Prop_Output 
     end
     properties
         Consumables
