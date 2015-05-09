@@ -87,7 +87,7 @@ WPA_Efficiency = 100; %Units: %; Efficiency to reuse water from waste water
 %----------------------------Food-----------------------------------------
 Earth_Food_Mass = 2.3; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
 Earth_Food_Volume = 0.00657; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
-[a,Food_Supply] = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
+[~,Food_Supply] = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
 MARS_2040.Food_Supply = Food_Supply;
 Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from inedible crops
 CrewTime_FoodGrowth = 13.1; %Units: CM-hr/m3/yr; BVAD 2015 p.163

@@ -19,6 +19,7 @@ Max_AeroB_Mass = 40400; %kg
     %Get out the Multiple Entry And Ascent vehicle
     MEAA = AscentSpacecraft.Get_Craft('Ascent and Earth Entry Module');
     MEAA.Description = 'Multiple Entry and Ascent Module';
+    Origin_temp = MEAA.Origin_Mass;
 %     
 %     %test only
 %     MEAA = SC_Class('test MEAA');
@@ -28,10 +29,10 @@ Max_AeroB_Mass = 40400; %kg
 %    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
 %        MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
         %These are scaled, the Engines scale to payload
-         MEAA.Dry_Mass = 28700 / (40.4 / MEAA.Origin_Mass); %see cargo lander below, NASA DRA5 T4-3, Dry Descent Stage for max 40.4mt payload
+         MEAA.Dry_Mass = 28700 / (40400 / Origin_temp); %see cargo lander below, NASA DRA5 T4-3, Dry Descent Stage for max 40.4mt payload
         %These are scaled, the Aeroshell scales to volume, mass scales to
         %volume within some degree of variablity.
-         MEAA.Static_Mass = 40700 / (40.4 / MEAA.Origin_Mass); %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
+         MEAA.Static_Mass = 40700 / (40400 / Origin_temp); %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
 %     else
 %         warning('alternative descents not yet programmed')
 %     end
@@ -54,8 +55,8 @@ Max_AeroB_Mass = 40400; %kg
     Cargo_Lander.Payload_Mass = Landing_Cargo / Num_Landers;
 %     if Cur_Arch.EDL == ArrivalDescent.AEROENTRY 
         %Descent_Dry_Mass = Cargo_Lander.Payload_Mass * (0.10 + (0.01*Site_Elevation)) % 10% mass in Descent System, + 1% for each km altitude
-        Cargo_Lander.Dry_Mass = 28700 / (40.4 / Cargo_Lander.Payload_Mass); %kg, DRA 5.0 T4-3 EDL summary
-        Cargo_Lander.Static_Mass = 40700  / (40.4 / Cargo_Lander.Payload_Mass); %kg, DRA 5.0 T4-3 EDL summary
+        Cargo_Lander.Dry_Mass = 28700 / (40400 / Cargo_Lander.Payload_Mass); %kg, DRA 5.0 T4-3 EDL summary
+        Cargo_Lander.Static_Mass = 40700  / (40400 / Cargo_Lander.Payload_Mass); %kg, DRA 5.0 T4-3 EDL summary
 %     else
 %         warning('alternative entry types not yet programmed')
 %     end

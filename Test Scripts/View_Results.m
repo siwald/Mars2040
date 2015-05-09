@@ -153,7 +153,7 @@ end
 
 %% disp
 hold off;
-gscatter(MarsInfra,Im,transfuel,'mcrgb','o+xsd');
+gscatter(val,Im,returnfuel,'mcrgb','o+xsd');
 lim = ylim;
 lim(1) = 0;
 ylim(lim);
