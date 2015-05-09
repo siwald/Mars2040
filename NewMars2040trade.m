@@ -260,7 +260,7 @@ for i=1:Num_Arches %begin looping for each architecture
     Synod = 2.137;
     
     Results.Surface_Habitat.Spares = Results.Surface_Habitat.Mass * SparesRatio * Synod;
-    Results.ECLSS.Spares = Results.ECLSS.Mass * SparesRatio * Synod;
+    %Results.ECLSS.Spares = Results.ECLSS.Mass * SparesRatio * Synod;
     Results.Mars_ISRU.Spares = Results.Mars_ISRU.Mass * SparesRatio * Synod;
     Results.PowerPlant.Spares = Results.PowerPlant.Mass * SparesRatio * Synod;
     

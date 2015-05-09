@@ -118,7 +118,7 @@ Surf_Mass = Solid_Mass + Inflatable_Mass;
 Results.Surface_Habitat.Volume = Surf_Volume;
 Results.Surface_Habitat.Mass = Surf_Mass;
 
-[Food_Time,ISRU_Requirements] = ECLSS (Cur_Arch,Results);
+[Food_Time,ISRU_Requirements,Results] = ECLSS (Cur_Arch,Results);
 
 switch DesignChoice
     case 1

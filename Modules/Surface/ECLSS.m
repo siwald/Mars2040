@@ -34,9 +34,9 @@ function [Crew_Time_Total, ISRU_Requirements, Results] = ECLSS(Cur_Arch, Results
 %Crew Activities on Mars. EVA_Freq is the amount of EVA trips expected per 
 %week. CM_EVA is the number of crew members per EVA. EVA_Dur is the 
 %duration of each EVA per crew member.
-Crew_Activity.EVA_Freq = 5;
-Crew_Activity.CM_EVA = 10;
-Crew_Activity.EVA_Dur = 8;
+Crew_Activity.EVA_Freq = 2;
+Crew_Activity.CM_EVA = 4;
+Crew_Activity.EVA_Dur = 6;
 %Find the total time budget of time on Mars
 
 %------Outputs------
@@ -175,7 +175,7 @@ MARS_2040.Habitat_Volume = Habitat_Volume;
 MARS_2040.Packed_Food_Mass = Earth_Food_Mass;
 MARS_2040.Packed_Food_Volume = Earth_Food_Volume;
 
-[ECLSS_Mass, Storage_Mass, Crew_System_Mass] = ECLSS_Mass_Function(MARS_2040, 10);
+[ECLSS_Mass, Storage_Mass, Crew_System_Mass] = ECLSS_Mass_Function(MARS_2040, (0.05*2.137));
 
 %Calculations to determine the amount of Crew Time is required to prepare
 %and cook food. 
