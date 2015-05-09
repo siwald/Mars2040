@@ -68,7 +68,7 @@ Crew_Activity.EVA_Dur = 8;
 %----------------------------General--------------------------------------
 MARS_2040.Crew_Size = Cur_Arch.SurfaceCrew.Size; %Units: Crew Members; Mission Decision
 %MARS_2040.Crew_Size = 4; %DRA5.0 Testing Condition
-MARS_2040.Surface_Duration = 500;
+MARS_2040.Surface_Duration = 780;
 
 %----------------------------Habitat--------------------------------------
 Cabin_Pressure = 70.3; %Units: kPa; Architectural Decision by Team
