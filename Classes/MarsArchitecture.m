@@ -26,6 +26,7 @@ classdef MarsArchitecture < handle
         returnCapture = ReturnEntry.DIRECT;
         returnDescent = ReturnDescent.CHUTE;
         index = 0;
+        forceCH4Ascent = 1;
         
         %% validation indicator
         isValid = false;
@@ -56,6 +57,7 @@ classdef MarsArchitecture < handle
         ReturnCapture;
         ReturnDescent;
         Index;
+        ForceCH4Ascent;
         %% Indicates whether or not architecture is valid and doesn't contain any contrary decisions
         IsValid;
     end
@@ -371,27 +373,32 @@ classdef MarsArchitecture < handle
             if nargin > 0 && isa(currentArchitecture, 'MarsArchitecture')
                 duplicate = MarsArchitecture();
                 
-                duplicate.origin = currentArchitecture.origin;
-                duplicate.stageLocation = currentArchitecture.stageLocation;
-                duplicate.destinations = currentArchitecture.destinations;
-                duplicate.propulsionType = currentArchitecture.propulsionType;
-                duplicate.transitFuel = currentArchitecture.transitFuel;
-                duplicate.crewTrajectory = currentArchitecture.crewTrajectory;
-                duplicate.cargoTrajectory = currentArchitecture.cargoTrajectory;
-                duplicate.returnFuel = currentArchitecture.returnFuel;
-                duplicate.transitCrew = currentArchitecture.transitCrew;
-                duplicate.transitShielding = currentArchitecture.transitShielding;
-                duplicate.orbitCapture = currentArchitecture.orbitCapture;
-                duplicate.entryDescent = currentArchitecture.entryDescent;
-                duplicate.siteSelection = currentArchitecture.siteSelection;
-                duplicate.surfaceCrew = currentArchitecture.surfaceCrew;
-                duplicate.isruBase = currentArchitecture.isruBase;
-                duplicate.isruUse = currentArchitecture.isruUse;
-                duplicate.foodSupply = currentArchitecture.foodSupply;
-                duplicate.surfaceShielding = currentArchitecture.surfaceShielding;
-                duplicate.surfaceStructure = currentArchitecture.surfaceStructure;
-                duplicate.surfacePower = currentArchitecture.surfacePower;
-                duplicate.isfrUse = currentArchitecture.isfrUse;
+                duplicate.origin  = currentArchitecture.origin ;
+                duplicate.stageLocation  = currentArchitecture.stageLocation ;
+                duplicate.destinations  = currentArchitecture.destinations ;
+                duplicate.propulsionType  = currentArchitecture.propulsionType ;
+                duplicate.crewTrajectory  = currentArchitecture.crewTrajectory ;
+                duplicate.cargoTrajectory  = currentArchitecture.cargoTrajectory ;
+                duplicate.transitFuel  = currentArchitecture.transitFuel ;
+                duplicate.transitCrew  = currentArchitecture.transitCrew ;
+                duplicate.transitShielding  = currentArchitecture.transitShielding ;
+                duplicate.orbitCapture  = currentArchitecture.orbitCapture ;
+                duplicate.entryDescent  = currentArchitecture.entryDescent ;
+                duplicate.siteSelection  = currentArchitecture.siteSelection ;
+                duplicate.surfaceCrew  = currentArchitecture.surfaceCrew ;
+                duplicate.isruBase  = currentArchitecture.isruBase ;
+                duplicate.isruUse  = currentArchitecture.isruUse ;
+                duplicate.foodSupply  = currentArchitecture.foodSupply ;
+                duplicate.surfaceShielding  = currentArchitecture.surfaceShielding ;
+                duplicate.surfaceStructure  = currentArchitecture.surfaceStructure ;
+                duplicate.surfacePower  = currentArchitecture.surfacePower ;
+                duplicate.isfrUse  = currentArchitecture.isfrUse ;
+                duplicate.returnFuel  = currentArchitecture.returnFuel ;
+                duplicate.returnCapture  = currentArchitecture.returnCapture ;
+                duplicate.returnDescent  = currentArchitecture.returnDescent ;
+                duplicate.index  = currentArchitecture.index ;
+                duplicate.forceCH4Ascent  = currentArchitecture.forceCH4Ascent ;
+
             else
                 error('Invalid architecture to duplicate.');
             end
@@ -845,6 +852,22 @@ classdef MarsArchitecture < handle
                 warning('Setting architecture transit crew not possible because of invalid input.');
             end
         end
+        %% ForceCH4Ascent setter
+        function set.ForceCH4Ascent(obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceCH4Ascent = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
+        
+        %% ForceCH4Ascent getter
+        function out = get.ForceCH4Ascent(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceCH4Ascent;
+             end
+        end
+        
     %% display the key points
     function display(obj)
         disp('Propulsion Type:')

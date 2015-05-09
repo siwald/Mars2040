@@ -1,10 +1,17 @@
-%% IMLEO vs Sci_Value Scatter Plot
+%% Results Section
 val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 marsox = zeros(1,Num_Arches);
 marsh2 = zeros(1,Num_Arches);
 LCC_Prox = zeros(1,Num_Arches);
 Infra = zeros(1,Num_Arches);
+LandedMass = zeros(1,Num_Arches);
+AscentMass = zeros(1,Num_Arches);
+HumanMass = zeros(1,Num_Arches);
+MAMA = zeros(1,Num_Arches);
+MALMO = zeros(1,Num_Arches);
+
+
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
     Im(i) = All_Results{i,1}.IMLEO;
@@ -17,6 +24,10 @@ for i=1:Num_Arches
         All_Results{i,1}.Mars_ISRU.Mass, All_Results{i,1}.Lunar_ISRU.Mass, All_Results{i,1}.ISFR.Mass, ...
         All_Results{i,1}.PowerPlant.Mass] +...
         All_Results{i}.FerrySpacecraft.Static_Mass + All_Results{i}.FerrySpacecraft.Eng_Mass + All_Results{i}.FerrySpacecraft.Bus_Mass);
+    LandedMass(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass;
+    AscentMass(i) = All_Results{i}.AscentSpacecraft.Mass;
+    HumanMass(i) = All_Results{i}.HumanSpacecraft.Mass;
+
 end
 % disp
 % hold off;
@@ -28,7 +39,7 @@ end
 % ylabel('IMLEO');
 % xlabel(xlab);
 
-% Morph Section
+%% Morph Section
 val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 
@@ -42,6 +53,9 @@ prop = zeros(1,Num_Arches);
 cap = zeros(1,Num_Arches);
 transfuel = zeros(1,Num_Arches);
 returnfuel = zeros(1,Num_Arches);
+cumpower = zeros(1,Num_Arches);
+ch4 = zeros(1,Num_Arches);
+stay = zeros(1,Num_Arches);
 
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
@@ -129,19 +143,26 @@ for i=1:Num_Arches
 			returnfuel(i) = 2;
     else
         returnfuel{i} = 5;
-end
+    end
+    MAMA(i) = All_Results{i}.HumanSpacecraft.MAMA;
+    MALMO(i) = All_Results{i}.HumanSpacecraft.MALMO;
+    cumpower(i) = All_Results{i}.Cum_Surface_Power;
+    ch4(i) = Morph{i}.ForceCH4Ascent;
+    stay(i) = 780 * ((Morph{i}.SurfaceCrew.Size/Morph{i}.TransitCrew.Size))/365; %Stay duration in Earth Years
+    
 end
 
 %% disp
 hold off;
-gscatter(val,Im,crater,'mcrgb','o+xsd');
+gscatter(HumanMass,Im,crew,'mcrgb','o+xsd');
 lim = ylim;
 lim(1) = 0;
 ylim(lim);
 hold on;
 %scatter(250000,30000,'d');
-xlabel('Sci');
+xlabel('Crew Vehicle Mass');
 ylabel('IMLEO');
+title('Crew Vehicle Mass, Color by Transit Crew');
 
 
 %% isolate utopian corner

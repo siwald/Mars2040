@@ -26,9 +26,9 @@ Max_AeroB_Mass = 40400; %kg
 %     %end test
     
 %    if Cur_Arch.EDL == ArrivalDescent.AEROENTRY
-        %MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
-        MEAA.Dry_Mass = 16400; %see cargo lander below, NASA DRA5 T4-3, Dry Descent Stage for max 40.4mt payload
-        MEAA.Static_Mass = 62900; %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
+        MEAA_Aeroshell = MEAA.Origin_Mass * (0.10 +(0.01*Site_Elevation)); % 10% mass in Descent System, + 1% for each km altitude
+%         MEAA.Dry_Mass = 16400; %see cargo lander below, NASA DRA5 T4-3, Dry Descent Stage for max 40.4mt payload
+%         MEAA.Static_Mass = 62900; %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
 %     else
 %         warning('alternative descents not yet programmed')
 %     end

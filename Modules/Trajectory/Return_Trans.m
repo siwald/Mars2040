@@ -70,19 +70,36 @@ end
 if isempty(Results.Mars_ISRU.Fuel_Output)
     Results.Mars_ISRU.Fuel_Output = 0; %initialize this if empty
 end
-    
-%Move Ox to Mars ISRU if appropriate
-if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_O2, ...
-        Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_O2)
-    Results.Mars_ISRU.Oxidizer_Output = Results.Mars_ISRU.Oxidizer_Output + Spacecraft.Ox_Mass; %add O2 to Mars generation
-    remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
-end
-%Move Fuel to Mars ISRU if appropriate
-if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_LH2, ...
-        Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_LH2)
-    if ~(Cur_Arch.PropulsionType == Propulsion.CH4); %skip if Methane, can't gen on Mars ISRU
-        Results.Mars_ISRU.Fuel_Output = Results.Mars_ISRU.Fuel_Output + Spacecraft.Fuel_Mass; %add LH2 to Mars generation
-        remove_fuel(Spacecraft); %remove all LH2 from Spacecraft Modules
+
+if ~(Cur_Arch.PropulsionType == Propulsion.CH4)
+ %Normal ISRU if not CH4
+    %Move Ox to Mars ISRU if appropriate
+    if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_O2, ...
+            Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_O2)
+        Results.Mars_ISRU.Oxidizer_Output = Results.Mars_ISRU.Oxidizer_Output + Spacecraft.Ox_Mass; %add O2 to Mars generation
+        remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
     end
+    %Move Fuel to Mars ISRU if appropriate
+    if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_LH2, ...
+           Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_LH2)
+            Results.Mars_ISRU.Fuel_Output = Results.Mars_ISRU.Fuel_Output + Spacecraft.Fuel_Mass; %add LH2 to Mars generation
+            remove_fuel(Spacecraft); %remove all LH2 from Spacecraft Modules
+    end
+
+elseif (Cur_Arch.PropulsionType == Propulsion.CH4)
+  %if CH4, and fuel ISRU, use Sabatier
+    if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_LH2, ...
+           Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_LH2)
+       %If CH4 and Fuel ISRU, use Sabatier, both CH4 and O2, produced.
+            Results.Mars_ISRU.CH4_Prop_Output = Results.Mars_ISRU.Fuel_Output + Spacecraft.Fuel_Mass + Spacecraft.Ox_Mass; %add LH2 to Mars generation
+            remove_fuel(Spacecraft); %remove all LH2 from Spacecraft Modules
+            remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
+    elseif or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_O2, ... use else-if to skip if it already move O2 because Sabatier
+            Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_O2) 
+        Results.Mars_ISRU.Oxidizer_Output = Results.Mars_ISRU.Oxidizer_Output + Spacecraft.Ox_Mass; %add O2 to Mars generation
+        remove_ox(Spacecraft); %remove all O2 from Spacecraft Modules
+    end
+    
 end
+
 end
