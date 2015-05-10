@@ -40,6 +40,7 @@ classdef Results_Class < dynamicprops
         Consumables
         Spares
         Replacements
+        Lighting
     end
     
     methods
@@ -85,6 +86,13 @@ classdef Results_Class < dynamicprops
                 obj.Lunar_ISRU.Replacements,
                 obj.ISFR.Replacements,
                 obj.PowerPlant.Replacements]); %sum Replacements from each Module
+        end
+        function out = get.Lighting(obj)
+            out = nansum([obj.ECLSS.Lighting,
+                obj.Mars_ISRU.Lighting,
+                obj.Lunar_ISRU.Lighting,
+                obj.ISFR.Lighting,
+                obj.PowerPlant.Lighting]); %sum Replacements from each Module
         end
         
     end

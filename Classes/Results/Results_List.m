@@ -4,7 +4,10 @@ classdef Results_List < handle
     
     properties
         Consumables_Mass 
-        Consumables_Volume 
+        Consumables_Volume
+        Lighting_Mass
+        Lighting_Volume
+        Lighting_Power
         Spares_Mass 
         Spares_Volume 
         Replacements_Mass
@@ -21,6 +24,7 @@ classdef Results_List < handle
         Consumables
         Spares
         Replacements
+        Lighting
         Num
     end
     
@@ -42,6 +46,9 @@ classdef Results_List < handle
         end
         function out = get.Replacements(obj)
             out = obj.Replacements_Mass;
+        end
+        function out = get.Lighting(obj)
+            out = obj.Lighting_Mass;
         end
     end
     
