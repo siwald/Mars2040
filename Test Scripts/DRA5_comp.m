@@ -137,7 +137,7 @@
     Outputs:
         Site_Sci_Value
     %}
-    [Site_Sci_Value, Site_Elevation, Site_Water_Percent] = Site_Selection(Cur_Arch);
+    [Site_Sci_Value, Site_Elevation, Site_Water_Percent, Site_Lat] = Site_Selection(Cur_Arch);
     
     %% --- Mars ISRU --- %%
     %{
@@ -163,7 +163,8 @@
         Results
             Surface_PowerPlant.Mass & Volume
     %}
-    Results = Surface_Power (Cur_Arch, Results, 'DRA5');
+    Results = MarsPower (Cur_Arch, Results, Site_Lat, 'DRA5');
+    %Results = Surface_Power (Cur_Arch, Results, 'DRA5');
     
     %% --- ISFR and Sparing Module --- %%
     %{

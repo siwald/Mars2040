@@ -10,6 +10,7 @@ AscentMass = zeros(1,Num_Arches);
 HumanMass = zeros(1,Num_Arches);
 MAMA = zeros(1,Num_Arches);
 MALMO = zeros(1,Num_Arches);
+PowerMass = zeros(1,Num_Arches);
 
 
 for i=1:Num_Arches
@@ -26,6 +27,7 @@ for i=1:Num_Arches
     LandedMass(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass + All_Results{i}.HumanSpacecraft.SC{3}.Origin_Mass;
     AscentMass(i) = All_Results{i}.AscentSpacecraft.Mass;
     HumanMass(i) = All_Results{i}.HumanSpacecraft.Mass;
+    PowerMass(i) = All_Results{i}.PowerPlant.Mass;
 
 end
 % disp
@@ -97,15 +99,13 @@ for i=1:Num_Arches
         case Location.EML2
             stage(i) = 3;
     end
-% 	if Morph{i}.SurfacePower == PowerSource.SOLAR
-%             power(i) = 1;
-%     elseif Morph{i}.SurfacePower == PowerSource.NUCLEAR
-%             power(i) = 2;
-%     elseif Morph{i}.SurfacePower ==  [PowerSource.NUCLEAR, PowerSource.SOLAR]
-%             power(i) = 3;
-%     elseif Morph{i}.SurfacePower == [PowerSource.NUCLEAR, PowerSource.FUEL_CELL]
-%             power(i) = 4;
-%    end
+	if Morph{i}.SurfacePower == PowerSource.SOLAR
+            power(i) = 1;
+    elseif Morph{i}.SurfacePower == PowerSource.NUCLEAR
+            power(i) = 2;
+    else
+            power(i) = 3;
+   end
     switch char(Morph{i}.PropulsionType)
         case char(Propulsion.LH2)
             prop(i) = 1;
@@ -153,15 +153,14 @@ end
 
 %% disp
 hold off;
-gscatter(val,Im,food,'mcrgb','o+xsd');
-lim = ylim;
-%lim(1) = 0;
-ylim(lim);
+gscatter(val,Im,crater,'mcrgb','o+xsd');
+% lim = ylim;
+% lim(1) = 0;
+% ylim(lim);
 hold on;
-%scatter(250000,30000,'d');
-xlabel('Sci');
+xlabel('Science Value');
 ylabel('IMLEO');
-title('Graph');
+title('Full Results');
 
 
 %% isolate utopian corner

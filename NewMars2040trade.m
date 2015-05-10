@@ -26,8 +26,11 @@ tic
 %  Morph = {MarsArchitecture.DEFAULT, MarsArchitecture.DRA5};
 
 % Morph = MarsArchitecture.Enumerate( ...
-%     {Propulsion.LH2}, ...
+%     {Propulsion.LH2, Propulsion.NTR}, ...
 %     {ArrivalEntry.AEROCAPTURE, ArrivalEntry.PROPULSIVE}, ...
+%     {PowerSource.NUCLEAR, PowerSource.SOLAR}, ...
+%     {Site.HOLDEN, Site.GALE, Site.UTOPIA}, ...
+%     {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25}, ...
 %     {[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2]});
 
 % %%%%%%%%Fixed Main Effects.
@@ -38,21 +41,21 @@ Morph = MarsArchitecture.Enumerate( ...
     {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
     {SurfaceCrew.TARGET_SURFACE}, ... , SurfaceCrew.MID_SURFACE, SurfaceCrew.MIN_SURFACE}, ...
     {Crew.DRA_CREW, Crew.DEFAULT_TRANSIT},...
-    {PowerSource.NUCLEAR},... , PowerSource.SOLAR}, ...
+    {PowerSource.NUCLEAR, PowerSource.SOLAR},... , PowerSource.SOLAR}, ...
     {SurfaceShielding.REGOLITH}, ...
     {ArrivalEntry.AEROCAPTURE},..., ArrivalEntry.PROPULSIVE}, ...
-    {Site.HOLDEN},..., Site.GALE, Site.MERIDIANI},..., Site.GUSEV, Site.ISIDIS, Site.ELYSIUM, Site.MAWRTH, Site.EBERSWALDE, Site.UTOPIA, Site.PLANUS_BOREUM, Site.HELLAS, Site.AMAZONIS}, ...
+    {Site.HOLDEN, Site.GALE, Site.MERIDIANI, Site.GUSEV, Site.ISIDIS, Site.ELYSIUM, Site.MAWRTH, Site.EBERSWALDE, Site.UTOPIA, Site.PLANUS_BOREUM, Site.HELLAS, Site.AMAZONIS}, ...
     {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25} ...
     );
 
-%Add runs without forced CH4
-% tots = length(Morph);
-% for i=1:tots
-%     ind = i + tots;
-%     temp = Duplicate(Morph{i});
-%     temp.ForceCH4Ascent = 0;
-%     Morph{ind} = temp;
-% end
+% %Add runs without forced CH4
+tots = length(Morph);
+for i=1:tots
+    ind = i + tots;
+    temp = Duplicate(Morph{i});
+    temp.ForceCH4Ascent = 0;
+    Morph{ind} = temp;
+end
 
 % %Set Surface Crew to 4X Transit Crew
 % for i=1:length(Morph)
@@ -74,6 +77,7 @@ Num_Arches = length(Morph)
 enumeration_time = toc
 %Preallocate the results array
 All_Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 cols: Results object
+
 %% Begin Main Loop
 tic
 for i=1:Num_Arches %begin looping for each architecture
@@ -216,7 +220,7 @@ for i=1:Num_Arches %begin looping for each architecture
     Outputs:
         Site_Sci_Value
     %}
-    [Site_Sci_Value, Site_Elevation, Site_Water_Percent] = Site_Selection(Cur_Arch);
+    [Site_Sci_Value, Site_Elevation, Site_Water_Percent, Site_Lat] = Site_Selection(Cur_Arch);
     
     %% --- Mars ISRU --- %%
     %{
@@ -242,8 +246,8 @@ for i=1:Num_Arches %begin looping for each architecture
         Results
             Surface_PowerPlant.Mass & Volume
     %}
-    Results = Surface_Power (Cur_Arch, Results);
-    
+    Results = MarsPower (Cur_Arch, Results, Site_Lat);
+    %Results = Surface_Power (Cur_Arch, Results);
     %% --- ISFR and Sparing Module --- %%
     %{
     Inputs:
