@@ -91,10 +91,11 @@ Electrolysis_Plant_Capacity = 36; %kg of Water processed per day
 Num_Electrolysis_Plants = ceil(Remaining_Electrolysis_H20 / Electrolysis_Plant_Capacity);
 
 %% Sabatier Section
-Sabatier_Mass = 30; %kg
-Sabatier_Vol = 0;%unknown as yet
-Sabatier_Power = 8.62 / 24; %8.62 kWh, for 1kg fuel per hour.
-Sabatier_Production = 1; %kg per hour, propellant (2.93 mixture ratio)
+Sabatier_Mass = 479.12; %kg
+Sabatier_Vol = 0.8; %m^3
+Sabatier_Power = 24.98;
+Sabatier_Production = 6567 / 496; %kg per day, CH4, DRA5 Addendum 1, Table 3-18, necessary CH4 for trip, divided by stay duration
+Sabatier_Production = Sabatier_Production * (1+2.93); %kg per day, Propellant(CH4+O2), since plant produces both, stoichiometrically
 
 
 if ~isempty(Results.Mars_ISRU.CH4_Prop_Output) % skip if no CH4

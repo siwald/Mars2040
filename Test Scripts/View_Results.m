@@ -153,15 +153,14 @@ end
 
 %% disp
 hold off;
-gscatter(cumpower,PowerMass,power,'mcrgb','o+xsd');
-lim = ylim;
-%lim(1) = 0;
-ylim(lim);
+gscatter(val,Im,crater,'mcrgb','o+xsd');
+% lim = ylim;
+% lim(1) = 0;
+% ylim(lim);
 hold on;
-%scatter(250000,30000,'d');
-%xlabel('Sci');
-%ylabel('IMLEO');
-title('Graph');
+xlabel('Science Value');
+ylabel('IMLEO');
+title('Full Results');
 
 
 %% isolate utopian corner

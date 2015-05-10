@@ -77,6 +77,7 @@ Num_Arches = length(Morph)
 enumeration_time = toc
 %Preallocate the results array
 All_Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 cols: Results object
+
 %% Begin Main Loop
 tic
 for i=1:Num_Arches %begin looping for each architecture
