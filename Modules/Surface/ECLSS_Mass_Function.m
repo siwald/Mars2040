@@ -167,14 +167,16 @@ ECLSS.Spare_Volume.BPS = ECLSS.Equipment_Volume.BPS * (Spare_Rate);
 ECLSS.Equipment_Mass.GLS = ECLSS.GLS.Mass * (ECLSS.GLS.Primary);
 ECLSS.Equipment_Volume.GLS = ECLSS.GLS.Volume * (ECLSS.GLS.Primary);
 ECLSS.Equipment_Power.GLS = ECLSS.GLS.Power * (ECLSS.GLS.Primary) * 12.73/24;
-ECLSS.Spare_Mass.GLS = ECLSS.GLS.Mass * ECLSS.GLS.Secondary;
-ECLSS.Spare_Volume.GLS = ECLSS.GLS.Volume * ECLSS.GLS.Secondary;
+ECLSS.Replacements_Mass.GLS = ECLSS.GLS.Mass * ECLSS.GLS.Secondary;
+ECLSS.Replacements_Volume.GLS = ECLSS.GLS.Volume * ECLSS.GLS.Secondary;
 
 ECLSS.Equipment_Mass.Overall = ECLSS.Equipment_Mass.OGA + ECLSS.Equipment_Mass.CDRA + ECLSS.Equipment_Mass.CCAA + ECLSS.Equipment_Mass.UPA + ECLSS.Equipment_Mass.WPA + ECLSS.Equipment_Mass.CRA + ECLSS.Equipment_Mass.CO2_Injector + ECLSS.Equipment_Mass.BPS + ECLSS.Equipment_Mass.GLS;
 ECLSS.Equipment_Volume.Overall = ECLSS.Equipment_Volume.OGA + ECLSS.Equipment_Volume.CDRA + ECLSS.Equipment_Volume.CCAA + ECLSS.Equipment_Volume.UPA + ECLSS.Equipment_Volume.WPA + ECLSS.Equipment_Volume.CRA + ECLSS.Equipment_Volume.CO2_Injector + ECLSS.Equipment_Volume.BPS + ECLSS.Equipment_Volume.GLS;
 ECLSS.Equipment_Power.Overall = ECLSS.Equipment_Power.OGA + ECLSS.Equipment_Power.CDRA + ECLSS.Equipment_Power.CCAA + ECLSS.Equipment_Power.UPA + ECLSS.Equipment_Power.WPA + ECLSS.Equipment_Power.CRA + ECLSS.Equipment_Power.CO2_Injector + ECLSS.Equipment_Power.GLS;
-ECLSS.Spare_Mass.Overall = ECLSS.Spare_Mass.OGA + ECLSS.Spare_Mass.CDRA + ECLSS.Spare_Mass.CCAA + ECLSS.Spare_Mass.UPA + ECLSS.Spare_Mass.WPA + ECLSS.Spare_Mass.CRA + ECLSS.Spare_Mass.CO2_Injector + ECLSS.Spare_Mass.BPS + ECLSS.Spare_Mass.GLS;
-ECLSS.Spare_Volume.Overall = ECLSS.Spare_Volume.OGA + ECLSS.Spare_Volume.CDRA + ECLSS.Spare_Volume.CCAA + ECLSS.Spare_Volume.UPA + ECLSS.Spare_Volume.WPA + ECLSS.Spare_Volume.CRA + ECLSS.Spare_Volume.CO2_Injector + ECLSS.Spare_Volume.BPS + ECLSS.Spare_Volume.GLS;
+ECLSS.Spare_Mass.Overall = ECLSS.Spare_Mass.OGA + ECLSS.Spare_Mass.CDRA + ECLSS.Spare_Mass.CCAA + ECLSS.Spare_Mass.UPA + ECLSS.Spare_Mass.WPA + ECLSS.Spare_Mass.CRA + ECLSS.Spare_Mass.CO2_Injector + ECLSS.Spare_Mass.BPS;
+ECLSS.Spare_Volume.Overall = ECLSS.Spare_Volume.OGA + ECLSS.Spare_Volume.CDRA + ECLSS.Spare_Volume.CCAA + ECLSS.Spare_Volume.UPA + ECLSS.Spare_Volume.WPA + ECLSS.Spare_Volume.CRA + ECLSS.Spare_Volume.CO2_Injector + ECLSS.Spare_Volume.BPS;
+ECLSS.Replacements_Mass.Overall = ECLSS.Replacements_Mass.GLS;
+ECLSS.Replacements_Volume.Overall = ECLSS.Replacements_Volume.GLS;
 
 %Crew_System_Subgroups = {'Food_System' 'Waste' 'Hygiene' 'Clothing' 'Closet' 'Housekeeping' 'Restraints' 'Photography' 'Sleep' 'Healthcare' 'Exercise_Equipment' 'EVA'};
 

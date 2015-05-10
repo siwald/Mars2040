@@ -7,7 +7,8 @@ classdef Results_List < handle
         Consumables_Volume 
         Spares_Mass 
         Spares_Volume 
-        Replacements 
+        Replacements_Mass
+        Replacements_Volume
         Mass 
         Power 
         Volume
@@ -19,6 +20,7 @@ classdef Results_List < handle
     properties
         Consumables
         Spares
+        Replacements
         Num
     end
     
@@ -37,6 +39,9 @@ classdef Results_List < handle
         end
         function out = get.Spares(obj)
             out = obj.Spares_Mass;
+        end
+        function out = get.Replacements(obj)
+            out = obj.Replacements_Mass;
         end
     end
     
