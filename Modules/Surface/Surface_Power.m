@@ -16,7 +16,7 @@ Results.Cum_Surface_Power = nansum([Results.Surface_Habitat.Power, ...
     Results.ECLSS.Power, ...
     Results.Mars_ISRU.Power]); %Units: kW 
 if ~isempty(varargin)%DRA5 comparison
-    %Results.Cum_Surface_Power = 26; %kW, use DRA5 number.
+    Results.Cum_Surface_Power = 26; %kW, use DRA5 number.
 end
 
 %------Outputs------
