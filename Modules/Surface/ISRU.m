@@ -48,23 +48,23 @@ Full_H2O = Needed_H2O + ECLSS_Requirements.Water; %add the molecular water neede
 
 S_Plant_Mass = Water_Percent*(-6.6) + (168.8);
 S_Plant_Vol = 0;
-S_Plant_Power = 1.41;
+S_Plant_Power = Water_Percent*(-0.004)+(1.422);
 S_Plant_Output = 7.15;
 S_Plant_Qty = 0; %initialize
 
 M_Plant_Mass = Water_Percent*(-9.8) + 210.4;
 M_Plant_Vol = 0;
-M_Plant_Power = 1.47;
+M_Plant_Power = Water_Percent*(-0.006)+(1.488);
 M_Plant_Output = 11.95;%kg / day
 M_Plant_Qty = 0; %initialize
 
 L_Plant_Mass = Water_Percent*(-33) + 512; 
 L_Plant_Vol = 0;
-L_Plant_Power = 2.02;
+L_Plant_Power = Water_Percent*(-0.028)+(2.104);
 L_Plant_Output = 55.96;
 L_Plant_Qty = 0; %initialize
 
-Remaining_Daily_H2O = Full_H2O;
+Remaining_Daily_H2O = Full_H2O
 if Remaining_Daily_H2O > L_Plant_Output
     L_Plant_Qty = floor(Remaining_Daily_H2O/L_Plant_Output);
     Remaining_Daily_H2O = Remaining_Daily_H2O - (L_Plant_Qty * L_Plant_Output);
