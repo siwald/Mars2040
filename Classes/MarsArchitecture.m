@@ -432,7 +432,7 @@ classdef MarsArchitecture < handle
                 duplicate.returnCapture  = currentArchitecture.returnCapture ;
                 duplicate.returnDescent  = currentArchitecture.returnDescent ;
                 duplicate.index  = currentArchitecture.index ;
-                %duplicate.forceCH4Ascent  = currentArchitecture.forceCH4Ascent ;
+                duplicate.forceCH4Ascent  = currentArchitecture.forceCH4Ascent ;
 
             else
                 error('Invalid architecture to duplicate.');
@@ -972,6 +972,120 @@ classdef MarsArchitecture < handle
                  out = (obj.ReturnFuel(1) == ReturnFuel.ASCENT_O2 || ...
                         obj.ReturnFuel(2) == ReturnFuel.ASCENT_O2);
              end
+        end
+        
+        function isEqual = eq(obj1, obj2)
+             if nargin > 0 && isa(obj1, 'MarsArchitecture') && isa(obj2, 'MarsArchitecture')
+                 if obj1.origin ~= obj2.origin 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.stageLocation ~= obj2.stageLocation 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.destinations ~= obj2.destinations 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.propulsionType ~= obj2.propulsionType 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.crewTrajectory ~= obj2.crewTrajectory 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.cargoTrajectory ~= obj2.cargoTrajectory 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.ascentFuel ~= obj2.ascentFuel 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.transitFuel ~= obj2.transitFuel 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.transitCrew ~= obj2.transitCrew 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.transitShielding ~= obj2.transitShielding 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.orbitCapture ~= obj2.orbitCapture 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.cargoCapture ~= obj2.cargoCapture 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.entryDescent ~= obj2.entryDescent 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.siteSelection ~= obj2.siteSelection 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.surfaceCrew ~= obj2.surfaceCrew 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.isruBase ~= obj2.isruBase 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.isruUse ~= obj2.isruUse 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.foodSupply ~= obj2.foodSupply 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.surfaceShielding ~= obj2.surfaceShielding 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.surfaceStructure ~= obj2.surfaceStructure 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.surfacePower ~= obj2.surfacePower 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.isfrUse ~= obj2.isfrUse 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.returnFuel ~= obj2.returnFuel 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.returnCapture ~= obj2.returnCapture 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.returnDescent ~= obj2.returnDescent 
+                    isEqual = false;
+                    return;
+                end
+                if obj1.forceCH4Ascent ~= obj2.forceCH4Ascent
+                    isEqual = false;
+                    return;
+                end
+                isEqual = true;
+                return
+             else
+                warn('Objects for architecture comparison were invalid.');
+             end
+             isEqual = false;
         end
                 
     %% display the key points
