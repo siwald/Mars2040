@@ -64,7 +64,7 @@ L_Plant_Power = Water_Percent*(-0.028)+(2.104);
 L_Plant_Output = 55.96;
 L_Plant_Qty = 0; %initialize
 
-Remaining_Daily_H2O = Full_H2O
+Remaining_Daily_H2O = Full_H2O;
 if Remaining_Daily_H2O > L_Plant_Output
     L_Plant_Qty = floor(Remaining_Daily_H2O/L_Plant_Output);
     Remaining_Daily_H2O = Remaining_Daily_H2O - (L_Plant_Qty * L_Plant_Output);
