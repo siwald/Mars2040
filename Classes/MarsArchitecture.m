@@ -12,6 +12,7 @@ classdef MarsArchitecture < handle
         transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = ArrivalEntry.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
+        cargoCapture = ArrivalCargoEntry.AEROCAPTURE;
         entryDescent = ArrivalDescent.AEROENTRY;
         siteSelection = Site.HOLDEN;
         surfaceCrew = SurfaceCrew.TARGET_SURFACE;
@@ -22,11 +23,15 @@ classdef MarsArchitecture < handle
         surfaceStructure = {StructureType.FIXED_SHELL, 0.500; StructureType.INFLATABLE, 0.500};
         surfacePower = [PowerSource.NUCLEAR, PowerSource.SOLAR, PowerSource.RTG];
         isfrUse = {cellstr('Metal')};
+        ascentFuel = AscentFuel.ISRU_CH4;
         returnFuel = [ReturnFuel.EARTH_LH2, ReturnFuel.MARS_O2];
         returnCapture = ReturnEntry.DIRECT;
         returnDescent = ReturnDescent.CHUTE;
         index = 0;
+        %% updated to take from architecture
         forceCH4Ascent = 1;
+        %forceAscentISRU_O2 = 1;
+        %forceAscentISRU_CH4 = 1;
         
         %% validation indicator
         isValid = false;
@@ -39,10 +44,12 @@ classdef MarsArchitecture < handle
         TransitFuel;
         CrewTrajectory;
         CargoTrajectory;
+        AscentFuel;
         ReturnFuel;
         TransitCrew;
         TransitShielding;
         OrbitCapture;
+        CargoCapture;
         EDL;
         SurfaceSites;
         NumberOfSites;
@@ -58,6 +65,8 @@ classdef MarsArchitecture < handle
         ReturnDescent;
         Index;
         ForceCH4Ascent;
+        ForceAscentISRUO2;
+        ForceAscentISRUCH4;
         %% Indicates whether or not architecture is valid and doesn't contain any contrary decisions
         IsValid;
     end
@@ -203,6 +212,14 @@ classdef MarsArchitecture < handle
                            end
                            continue; % onto next decision
                        end
+                       if isa(optionArray{1}, 'AscentFuel')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set ascent fuel option for architecture
+                               architectures{archIndIndex}.AscentFuel = optionArray{1};
+                           end
+                           continue; % onto next decision
+                       end
                        if isa(optionArray{1}, 'ReturnFuel')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
@@ -216,6 +233,14 @@ classdef MarsArchitecture < handle
                            for archIndIndex = 1:length(architectures)
                                % set orbit capture option for architecture
                                architectures{archIndIndex}.OrbitCapture = optionArray{1};
+                           end
+                           continue; % onto next decision
+                       end
+                       if isa(optionArray{1}, 'ArrivalCargoEntry')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set cargo capture option for architecture
+                               architectures{archIndIndex}.CargoCapture = optionArray{1};
                            end
                            continue; % onto next decision
                        end
@@ -318,12 +343,20 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.TransitFuel = optionArray{optionIndex};
                                    continue;
                                end
+                               if isa(optionArray{1}, 'AscentFuel')
+                                   tempArray{newIndex}.AscentFuel = optionArray{optionIndex};
+                                   continue;
+                               end
                                if isa(optionArray{1}, 'ReturnFuel')
                                    tempArray{newIndex}.ReturnFuel = optionArray{optionIndex};
                                    continue;
                                end
                                if isa(optionArray{1}, 'ArrivalEntry')
                                    tempArray{newIndex}.OrbitCapture = optionArray{optionIndex};
+                                   continue;
+                               end
+                               if isa(optionArray{1}, 'ArrivalCargoEntry')
+                                   tempArray{newIndex}.CargoCapture = optionArray{optionIndex};
                                    continue;
                                end
                                if isa(optionArray{1}, 'ReturnEntry')
@@ -379,10 +412,12 @@ classdef MarsArchitecture < handle
                 duplicate.propulsionType  = currentArchitecture.propulsionType ;
                 duplicate.crewTrajectory  = currentArchitecture.crewTrajectory ;
                 duplicate.cargoTrajectory  = currentArchitecture.cargoTrajectory ;
+                duplicate.ascentFuel = currentArchitecture.ascentFuel;
                 duplicate.transitFuel  = currentArchitecture.transitFuel ;
                 duplicate.transitCrew  = currentArchitecture.transitCrew ;
                 duplicate.transitShielding  = currentArchitecture.transitShielding ;
                 duplicate.orbitCapture  = currentArchitecture.orbitCapture ;
+                duplicate.cargoCapture  = currentArchitecture.cargoCapture ;
                 duplicate.entryDescent  = currentArchitecture.entryDescent ;
                 duplicate.siteSelection  = currentArchitecture.siteSelection ;
                 duplicate.surfaceCrew  = currentArchitecture.surfaceCrew ;
@@ -397,7 +432,7 @@ classdef MarsArchitecture < handle
                 duplicate.returnCapture  = currentArchitecture.returnCapture ;
                 duplicate.returnDescent  = currentArchitecture.returnDescent ;
                 duplicate.index  = currentArchitecture.index ;
-                duplicate.forceCH4Ascent  = currentArchitecture.forceCH4Ascent ;
+                %duplicate.forceCH4Ascent  = currentArchitecture.forceCH4Ascent ;
 
             else
                 error('Invalid architecture to duplicate.');
@@ -460,6 +495,14 @@ classdef MarsArchitecture < handle
                 trajectory = obj.cargoTrajectory;
             end
         end
+        %% Ascent fuel getter
+        function ascentFuel = get.AscentFuel(obj)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture')
+                % get ascent fuel object from architecture object
+                ascentFuel = obj.ascentFuel;
+            end
+        end
         %% Return fuel getter
         function returnFuel = get.ReturnFuel(obj)
             % verify we have valid input object
@@ -490,6 +533,14 @@ classdef MarsArchitecture < handle
             if nargin > 0 && isa(obj, 'MarsArchitecture')
                 % get orbit capture from architecture object
                 orbCap = obj.orbitCapture;
+            end
+        end
+        %% Orbit capture getter
+        function cargoCap = get.CargoCapture(obj)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture')
+                % get orbit capture from architecture object
+                cargoCap = obj.cargoCapture;
             end
         end
         %% EDL getter
@@ -678,6 +729,16 @@ classdef MarsArchitecture < handle
                 warning('Setting architecture trajectory not possible because of invalid input.');
             end
         end
+        %% Ascent fuel setter
+        function set.AscentFuel(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'AscentFuel')
+                % get ascent fuel object from architecture object
+                obj.ascentFuel = value;
+            else
+                warning('Setting architecture ascent fuel not possible because of invalid input.');
+            end
+        end
         %% Return fuel setter
         function set.ReturnFuel(obj, value)
             % verify we have valid input object
@@ -716,6 +777,16 @@ classdef MarsArchitecture < handle
                 obj.orbitCapture = value;
             else
                 warning('Setting architecture orbit capture not possible because of invalid input.');
+            end
+        end
+        %% Orbit capture setter
+        function set.CargoCapture(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalCargoEntry')
+                % get orbit capture from architecture object
+                obj.cargoCapture = value;
+            else
+                warning('Setting architecture cargo capture not possible because of invalid input.');
             end
         end
         %% EDL setter
@@ -860,14 +931,60 @@ classdef MarsArchitecture < handle
                 warning('Setting ForceCH4Ascent error, needs 1 or 0');
             end
         end
+                %% ForceAscentISRUO2 setter
+        function set.ForceAscentISRUO2(obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceAscentISRUO2 = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
+                %% ForceAscentISRUCH4 setter
+        function set.ForceAscentISRUCH4 (obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceAscentISRUCH4  = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
         
         %% ForceCH4Ascent getter
         function out = get.ForceCH4Ascent(obj)
              if nargin > 0 && isa(obj, 'MarsArchitecture')
                  out = obj.forceCH4Ascent;
+                 %out = (obj.AscentFuel == AscentFuel.EARTH_CH4 || ...
+                 %       obj.AscentFuel == AscentFuel.ISRU_CH4 || ...
+                 %       obj.AscentFuel == AscentFuel.MARS_CH4);
              end
         end
         
+        %% ForceCH4Ascent getter
+        function out = get.ForceAscentISRUCH4(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = (obj.ReturnFuel(1) == ReturnFuel.ASCENT_LH2 || ...
+                        obj.ReturnFuel(2) == ReturnFuel.ASCENT_LH2);
+             end
+        end
+        
+        %% ForceCH4Ascent getter
+        function out = get.ForceAscentISRUO2(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = (obj.ReturnFuel(1) == ReturnFuel.ASCENT_O2 || ...
+                        obj.ReturnFuel(2) == ReturnFuel.ASCENT_O2);
+             end
+        end
+                %% ForceAscentISRUO2 getter
+        function out = get.ForceAscentISRUO2(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceAscentISRUO2;
+             end
+        end
+        %% ForceAscentISRUCH4 getter
+        function out = get.ForceAscentISRUCH4(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceAscentISRUCH4;
+             end
+        end
     %% display the key points
     function display(obj)
         disp('Propulsion Type:')

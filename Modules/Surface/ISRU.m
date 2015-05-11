@@ -58,7 +58,7 @@ M_Plant_Power = 1.47;
 M_Plant_Output = 11.95;%kg / day
 M_Plant_Qty = 0; %initialize
 
-L_Plant_Mass = Water_Percent*(-33) + 512;
+L_Plant_Mass = Water_Percent*(-33) + 512; 
 L_Plant_Vol = 0;
 L_Plant_Power = 2.02;
 L_Plant_Output = 55.96;
