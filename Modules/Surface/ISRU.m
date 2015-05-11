@@ -42,7 +42,7 @@ Full_H2O = Needed_H2O + ECLSS_Requirements.Water; %add the molecular water neede
 
 %% H2O Plant Selection
 
-Daily_H2O = Needed_H2O / 780;
+Daily_H2O = Full_H2O / 780;
 
 S_Plant_Mass = Water_Percent*(-33/5) + (844/5);
 S_Plant_Vol = 0;
