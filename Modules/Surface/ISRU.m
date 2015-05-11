@@ -46,19 +46,19 @@ Daily_H2O = Full_H2O / 780;
 
 S_Plant_Mass = Water_Percent*(-33/5) + (844/5);
 S_Plant_Vol = 0;
-S_Plant_Power = 0;
+S_Plant_Power = 1.41;
 S_Plant_Output = 7.15;
 S_Plant_Qty = 0; %initialize
 
 M_Plant_Mass = Water_Percent*(-49) + 1052;
 M_Plant_Vol = 0;
-M_Plant_Power = 0;
+M_Plant_Power = 1.47;
 M_Plant_Output = 11.95;%kg / day
 M_Plant_Qty = 0; %initialize
 
 L_Plant_Mass = Water_Percent*(-33) + 512;
 L_Plant_Vol = 0;
-L_Plant_Power = 0;
+L_Plant_Power = 2.02;
 L_Plant_Output = 55.96;
 L_Plant_Qty = 0; %initialize
 
