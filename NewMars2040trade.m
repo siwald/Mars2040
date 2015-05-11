@@ -38,7 +38,7 @@ Morph = MarsArchitecture.Enumerate( ...
     {Propulsion.LH2, Propulsion.NTR}, ... 
 	{Location.LEO},... 
 	{[TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2]},...
-    {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2]}, ...
+    {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2],[ReturnFuel.EARTH_LH2,ReturnFuel.MARS_O2],[ReturnFuel.MARS_LH2,ReturnFuel.MARS_O2], [ReturnFuel.ASCENT_LH2, ReturnFuel.ASCENT_O2]}, ...
     {SurfaceCrew.BIG_SURFACE, SurfaceCrew.MID_SURFACE, SurfaceCrew.MIN_SURFACE}, ...
     {Crew.DRA_CREW, Crew.DEFAULT_TRANSIT},...
     {PowerSource.NUCLEAR, PowerSource.SOLAR},...
@@ -49,24 +49,15 @@ Morph = MarsArchitecture.Enumerate( ...
     {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25} ...
     );
 
-% %Add runs without forced CH4
-tots = length(Morph);
-for i=1:tots
-    ind = i + tots;
-    temp = Duplicate(Morph{i});
-    temp.ForceCH4Ascent = 0;
-    Morph{ind} = temp;
-end
+% % %Add runs without forced CH4
+% tots = length(Morph);
+% for i=1:tots
+%     ind = i + tots;
+%     temp = Duplicate(Morph{i});
+%     temp.ForceCH4Ascent = 0;
+%     Morph{ind} = temp;
+% end
 
-% %Add runs without forced Ascent ISRU
-tots = length(Morph);
-for i=1:tots
-    ind = i + tots;
-    temp = Duplicate(Morph{i});
-    temp.ForceAscentISRUO2 = 0;
-    temp.ForceAscentISRUCH4 = 0;
-    Morph{ind} = temp;
-end
 
 % %Set Surface Crew to 4X Transit Crew
 % for i=1:length(Morph)

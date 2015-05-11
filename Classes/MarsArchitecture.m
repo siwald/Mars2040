@@ -958,7 +958,7 @@ classdef MarsArchitecture < handle
              end
         end
         
-        %% ForceCH4Ascent getter
+        %% ForceAscentISRUCH4 getter
         function out = get.ForceAscentISRUCH4(obj)
              if nargin > 0 && isa(obj, 'MarsArchitecture')
                  out = (obj.ReturnFuel(1) == ReturnFuel.ASCENT_LH2 || ...
@@ -966,25 +966,14 @@ classdef MarsArchitecture < handle
              end
         end
         
-        %% ForceCH4Ascent getter
+        %% ForceAscentISRUO2 getter
         function out = get.ForceAscentISRUO2(obj)
              if nargin > 0 && isa(obj, 'MarsArchitecture')
                  out = (obj.ReturnFuel(1) == ReturnFuel.ASCENT_O2 || ...
                         obj.ReturnFuel(2) == ReturnFuel.ASCENT_O2);
              end
         end
-                %% ForceAscentISRUO2 getter
-        function out = get.ForceAscentISRUO2(obj)
-             if nargin > 0 && isa(obj, 'MarsArchitecture')
-                 out = obj.forceAscentISRUO2;
-             end
-        end
-        %% ForceAscentISRUCH4 getter
-        function out = get.ForceAscentISRUCH4(obj)
-             if nargin > 0 && isa(obj, 'MarsArchitecture')
-                 out = obj.forceAscentISRUCH4;
-             end
-        end
+                
     %% display the key points
     function display(obj)
         disp('Propulsion Type:')
