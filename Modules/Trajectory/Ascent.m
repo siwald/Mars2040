@@ -97,7 +97,7 @@ elseif or(Cur_Arch.ForceCH4Ascent == 1, Cur_Arch.PropulsionType == Propulsion.CH
         remove_ox(Ascent_Vehicle);%remove all O2 from Spacecraft Modules
         
     elseif or(or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_O2, ...
-        Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_O2), %use else-if, so only triggers if not already fuel ISRU
+        Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_O2),... %use else-if, so only triggers if not already fuel ISRU
         Cur_Arch.ForceAscentISRUCH4)
             Results.Mars_ISRU.Oxidizer_Output = Results.Mars_ISRU.Oxidizer_Output + Ascent_Vehicle.Ox_Mass; %add O2 to Mars generation
             remove_ox(Ascent_Vehicle); %remove all O2 from Spacecraft Modules
