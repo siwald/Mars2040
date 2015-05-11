@@ -14,6 +14,7 @@ if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_O2, ... skip if no Mars_ISRU ox.
 	Moles_O2 = Results.Mars_ISRU.Oxidizer_Output / .0319988;
 	Needed_Moles_H2O_Ox = Moles_O2 * 2;
 	Needed_H2O_From_Oxidizer = Needed_Moles_H2O_Ox * 0.01801528;
+    Needed_H2O_From_Oxidizer = Needed_H2O_From_Oxidizer/780;
 else
 	Needed_H2O_From_Oxidizer = 0;
 end
@@ -22,6 +23,7 @@ if or(Cur_Arch.ReturnFuel(1) == ReturnFuel.MARS_LH2, ... skip if no Mars_ISRU fu
         Cur_Arch.ReturnFuel(2) == ReturnFuel.MARS_LH2) 
 	Moles_H2 = Results.Mars_ISRU.Fuel_Output / .00202;
 	Needed_H2O_From_Fuel = Moles_H2 * 0.01801528;
+    Needed_H2O_From_Fuel = Needed_H2O_From_Fuel/780;
 else
 	Needed_H2O_From_Fuel = 0;
 end
@@ -40,17 +42,17 @@ Needed_H2O = max((Needed_H2O_From_Oxidizer + Needed_H2O_for_ECLSS_O2), Needed_H2
 
 Full_H2O = Needed_H2O + ECLSS_Requirements.Water; %add the molecular water needed.
 
+
+
 %% H2O Plant Selection
 
-Daily_H2O = Full_H2O / 780;
-
-S_Plant_Mass = Water_Percent*(-33/5) + (844/5);
+S_Plant_Mass = Water_Percent*(-6.6) + (168.8);
 S_Plant_Vol = 0;
 S_Plant_Power = 1.41;
 S_Plant_Output = 7.15;
 S_Plant_Qty = 0; %initialize
 
-M_Plant_Mass = Water_Percent*(-49) + 1052;
+M_Plant_Mass = Water_Percent*(-9.8) + 210.4;
 M_Plant_Vol = 0;
 M_Plant_Power = 1.47;
 M_Plant_Output = 11.95;%kg / day
@@ -62,22 +64,22 @@ L_Plant_Power = 2.02;
 L_Plant_Output = 55.96;
 L_Plant_Qty = 0; %initialize
 
-Remaining_Daily_H2O = Needed_H2O / 780;
+Remaining_Daily_H2O = Full_H2O;
 if Remaining_Daily_H2O > L_Plant_Output
-    L_Plant_Qty = floor(Daily_H2O/L_Plant_Output);
+    L_Plant_Qty = floor(Remaining_Daily_H2O/L_Plant_Output);
     Remaining_Daily_H2O = Remaining_Daily_H2O - (L_Plant_Qty * L_Plant_Output);
 end
 if Remaining_Daily_H2O > M_Plant_Output
-    M_Plant_Qty = floor(Daily_H2O/M_Plant_Output);
+    M_Plant_Qty = floor(Remaining_Daily_H2O/M_Plant_Output);
     Remaining_Daily_H2O = Remaining_Daily_H2O - (M_Plant_Qty * M_Plant_Output);
 end
 if Remaining_Daily_H2O > S_Plant_Output
-    S_Plant_Qty = floor(Daily_H2O/S_Plant_Output);
+    S_Plant_Qty = floor(Remaining_Daily_H2O/S_Plant_Output);
     Remaining_Daily_H2O = Remaining_Daily_H2O - (S_Plant_Qty * S_Plant_Output);
 end
 if Remaining_Daily_H2O > 0 
     S_Plant_Qty = S_Plant_Qty + 1;
-    Remaining_Daily_H2O = Remaining_Daily_H2O - (1 * S_Plant_Output);
+    %Remaining_Daily_H2O = Remaining_Daily_H2O - (1 * S_Plant_Output);
 end
 
 %% Electrolysis Section
