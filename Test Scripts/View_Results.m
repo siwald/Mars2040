@@ -154,7 +154,7 @@ end
 
 %% disp
 hold off;
- gscatter(isrupower,food,food,'mcrgb','o+xsd*^<>ph');
+ gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);

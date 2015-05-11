@@ -28,6 +28,8 @@ classdef MarsArchitecture < handle
         returnDescent = ReturnDescent.CHUTE;
         index = 0;
         forceCH4Ascent = 1;
+        forceAscentISRUO2 = 1;
+        forceAscentISRUCH4 = 1;
         
         %% validation indicator
         isValid = false;
@@ -60,6 +62,8 @@ classdef MarsArchitecture < handle
         ReturnDescent;
         Index;
         ForceCH4Ascent;
+        ForceAscentISRUO2;
+        ForceAscentISRUCH4;
         %% Indicates whether or not architecture is valid and doesn't contain any contrary decisions
         IsValid;
     end
@@ -893,6 +897,22 @@ classdef MarsArchitecture < handle
                 warning('Setting ForceCH4Ascent error, needs 1 or 0');
             end
         end
+                %% ForceAscentISRUO2 setter
+        function set.ForceAscentISRUO2(obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceAscentISRUO2 = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
+                %% ForceAscentISRUCH4 setter
+        function set.ForceAscentISRUCH4 (obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceAscentISRUCH4  = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
         
         %% ForceCH4Ascent getter
         function out = get.ForceCH4Ascent(obj)
@@ -900,7 +920,18 @@ classdef MarsArchitecture < handle
                  out = obj.forceCH4Ascent;
              end
         end
-        
+                %% ForceAscentISRUO2 getter
+        function out = get.ForceAscentISRUO2(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceAscentISRUO2;
+             end
+        end
+        %% ForceAscentISRUCH4 getter
+        function out = get.ForceAscentISRUCH4(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceAscentISRUCH4;
+             end
+        end
     %% display the key points
     function display(obj)
         disp('Propulsion Type:')
