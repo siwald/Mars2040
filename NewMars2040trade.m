@@ -233,7 +233,7 @@ for i=1:Num_Arches %begin looping for each architecture
         Results
             ISRU.Mass, Volume & Power
     %}
-    %Results = ISRU(Cur_Arch, ECLSS_ISRU, Site_Water_Percent, Results);
+    Results = ISRU(Cur_Arch, ECLSS_ISRU, Site_Water_Percent, Results);
   
     %% --- Surface Power Module --- %%
     %{
