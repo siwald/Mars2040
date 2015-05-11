@@ -65,6 +65,7 @@ classdef Results_Class < dynamicprops
         %Getter for total Consumables
         function out = get.Consumables(obj)
             out = nansum([obj.ECLSS.Consumables,
+                obj.Surface_Habitat.Consumables,
                 obj.Mars_ISRU.Consumables,
                 obj.Lunar_ISRU.Consumables,
                 obj.ISFR.Consumables,
@@ -74,6 +75,7 @@ classdef Results_Class < dynamicprops
         %Getter for total Spares
         function out = get.Spares(obj)
             out = nansum([obj.ECLSS.Spares,
+                obj.Surface_Habitat.Spares,
                 obj.Mars_ISRU.Spares,
                 obj.Lunar_ISRU.Spares,
                 obj.ISFR.Spares,
@@ -82,6 +84,7 @@ classdef Results_Class < dynamicprops
                 %Getter for total Replacements
         function out = get.Replacements(obj)
             out = nansum([obj.ECLSS.Replacements,
+                obj.Surface_Habitat.Replacements,
                 obj.Mars_ISRU.Replacements,
                 obj.Lunar_ISRU.Replacements,
                 obj.ISFR.Replacements,
@@ -89,6 +92,7 @@ classdef Results_Class < dynamicprops
         end
         function out = get.Lighting(obj)
             out = nansum([obj.ECLSS.Lighting,
+                obj.Surface_Habitat.Lighting,
                 obj.Mars_ISRU.Lighting,
                 obj.Lunar_ISRU.Lighting,
                 obj.ISFR.Lighting,

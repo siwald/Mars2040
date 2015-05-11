@@ -9,7 +9,7 @@ end
 length(list)
 for i=1:length(list)
     ind = list(i);
-    if Morph{ind}.PropulsionType == Propulsion.NTR
+    if Morph{ind}.PropulsionType == Propulsion.LH2
         list2(end+1) = ind;
     end
 end
@@ -25,7 +25,7 @@ length(list)
 list2 = [];
 for i=1:length(list)
     ind = list(i);
-    if Morph{ind}.TransitFuel == [TransitFuel.EARTH_LH2,TransitFuel.EARTH_O2]
+    if Morph{ind}.TransitFuel == [TransitFuel.EARTH_LH2,TransitFuel.LUNAR_O2]
         list2(end+1) = ind;
     end
 end

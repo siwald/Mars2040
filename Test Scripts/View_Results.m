@@ -45,7 +45,7 @@ val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 
 crew = zeros(1,Num_Arches);
-sufcrew = zeros(1,Num_Arches);
+surfcrew = zeros(1,Num_Arches);
 crater = zeros(1,Num_Arches);
 food = zeros(1,Num_Arches);
 stage = zeros(1,Num_Arches);
@@ -57,11 +57,12 @@ returnfuel = zeros(1,Num_Arches);
 cumpower = zeros(1,Num_Arches);
 ch4 = zeros(1,Num_Arches);
 stay = zeros(1,Num_Arches);
+isrupower = zeros(1,Num_Arches);
 
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
     Im(i) = All_Results{i,1}.IMLEO;
-
+    isrupower(i) = nansum([All_Results{i}.Mars_ISRU.Power]);
     crew(i) = Morph{i}.TransitCrew.Size;
     surfcrew(i) = Morph{i}.SurfaceCrew.Size;
 	switch Morph{i}.SurfaceSites
@@ -153,14 +154,14 @@ end
 
 %% disp
 hold off;
-gscatter(val,Im,crater,'mcrgb','o+xsd');
+ gscatter(isrupower,food,food,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);
 hold on;
-xlabel('Science Value');
-ylabel('IMLEO');
-title('Full Results');
+% xlabel('Surface Crew Size');
+% ylabel('Cumulative Surface Power Draw, kW');
+% title('0% Food grown on Mars');
 
 
 %% isolate utopian corner
