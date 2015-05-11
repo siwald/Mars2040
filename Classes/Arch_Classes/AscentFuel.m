@@ -6,9 +6,9 @@ classdef AscentFuel < handle
         EARTH_LH2 = AscentFuel('H2', Location.EARTH);
         EARTH_O2 = AscentFuel('O2', Location.EARTH);
         EARTH_CH4 = AscentFuel('CH4', Location.EARTH);
-        ISRU_O2 = AscentFuel('O2', Location.Mars);
-        ISRU_LH2 = AscentFuel('H2', Location.Mars);
-        ISRU_CH4 = AscentFuel('CH4', Location.Mars);
+        ISRU_O2 = AscentFuel('O2', Location.MARS);
+        ISRU_LH2 = AscentFuel('H2', Location.MARS);
+        ISRU_CH4 = AscentFuel('CH4', Location.MARS);
         MARS_LH2 = AscentFuel('H2', Location.MARS);
         MARS_O2 = AscentFuel('O2', Location.MARS);
         MARS_CH4 = AscentFuel('CH4', Location.MARS);
