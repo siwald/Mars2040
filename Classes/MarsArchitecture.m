@@ -12,6 +12,7 @@ classdef MarsArchitecture < handle
         transitCrew = Crew.DEFAULT_TRANSIT;
         transitShielding = HabitatShielding.H2O_INSULATION;
         orbitCapture = ArrivalEntry.AEROCAPTURE; % TODO: make an array to capture any orbital manuevars from destinations list
+        cargoCapture = ArrivalCargoEntry.AEROCAPTURE;
         entryDescent = ArrivalDescent.AEROENTRY;
         siteSelection = Site.HOLDEN;
         surfaceCrew = SurfaceCrew.TARGET_SURFACE;
@@ -43,6 +44,7 @@ classdef MarsArchitecture < handle
         TransitCrew;
         TransitShielding;
         OrbitCapture;
+        CargoCapture;
         EDL;
         SurfaceSites;
         NumberOfSites;
@@ -219,6 +221,14 @@ classdef MarsArchitecture < handle
                            end
                            continue; % onto next decision
                        end
+                       if isa(optionArray{1}, 'ArrivalCargoEntry')
+                            % iterate of each of the architectures
+                           for archIndIndex = 1:length(architectures)
+                               % set orbit capture option for architecture
+                               architectures{archIndIndex}.CargoCapture = optionArray{1};
+                           end
+                           continue; % onto next decision
+                       end
                        if isa(optionArray{1}, 'ReturnEntry')
                             % iterate of each of the architectures
                            for archIndIndex = 1:length(architectures)
@@ -326,6 +336,10 @@ classdef MarsArchitecture < handle
                                    tempArray{newIndex}.OrbitCapture = optionArray{optionIndex};
                                    continue;
                                end
+                               if isa(optionArray{1}, 'ArrivalCargoEntry')
+                                   tempArray{newIndex}.CargoCapture = optionArray{optionIndex};
+                                   continue;
+                               end
                                if isa(optionArray{1}, 'ReturnEntry')
                                    tempArray{newIndex}.ReturnCapture = optionArray{optionIndex};
                                    continue;
@@ -383,6 +397,7 @@ classdef MarsArchitecture < handle
                 duplicate.transitCrew  = currentArchitecture.transitCrew ;
                 duplicate.transitShielding  = currentArchitecture.transitShielding ;
                 duplicate.orbitCapture  = currentArchitecture.orbitCapture ;
+                duplicate.cargoCapture  = currentArchitecture.cargoCapture ;
                 duplicate.entryDescent  = currentArchitecture.entryDescent ;
                 duplicate.siteSelection  = currentArchitecture.siteSelection ;
                 duplicate.surfaceCrew  = currentArchitecture.surfaceCrew ;
@@ -490,6 +505,14 @@ classdef MarsArchitecture < handle
             if nargin > 0 && isa(obj, 'MarsArchitecture')
                 % get orbit capture from architecture object
                 orbCap = obj.orbitCapture;
+            end
+        end
+        %% Orbit capture getter
+        function cargoCap = get.CargoCapture(obj)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture')
+                % get orbit capture from architecture object
+                cargoCap = obj.cargoCapture;
             end
         end
         %% EDL getter
@@ -716,6 +739,16 @@ classdef MarsArchitecture < handle
                 obj.orbitCapture = value;
             else
                 warning('Setting architecture orbit capture not possible because of invalid input.');
+            end
+        end
+        %% Orbit capture setter
+        function set.CargoCapture(obj, value)
+            % verify we have valid input object
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && isa(value, 'ArrivalCargoEntry')
+                % get orbit capture from architecture object
+                obj.cargoCapture = value;
+            else
+                warning('Setting architecture cargo capture not possible because of invalid input.');
             end
         end
         %% EDL setter
