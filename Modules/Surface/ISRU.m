@@ -81,11 +81,11 @@ if Remaining_Daily_H2O > 0
 end
 
 %% Electrolysis Section
-Remaining_Electrolysis_H20 = Needed_H2O;
+Remaining_Electrolysis_H20 = Needed_H2O / 780; %H2Okg per day
 
 Electrolysis_Plant_Mass = 38.5; %kg
 Electrolysis_Plant_Vol = 0; %as yet unknown
-Electrolysis_Plant_Power = (72 * 36) / 24; %72 kWh per kilogram, times daily kg, times  per 24 hours
+Electrolysis_Plant_Power = (72 * 36) / 24; %72 kWh per kilogram, times kg per day, divided by  24 hours running per day
 Electrolysis_Plant_Capacity = 36; %kg of Water processed per day
 
 Num_Electrolysis_Plants = ceil(Remaining_Electrolysis_H20 / Electrolysis_Plant_Capacity);
