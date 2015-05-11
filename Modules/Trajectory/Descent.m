@@ -34,6 +34,10 @@ Max_AeroB_Mass = 40400; %kg
         %These are scaled, the Aeroshell scales to volume, mass scales to
         %volume within some degree of variablity.
          MEAA.Static_Mass = 40700 / (40400 / Origin_temp); %see cargo lander below, NASA DRA5 T4-3, Entry Mass for max 40.4mt payload
+         
+%          %Unscaled for happiness
+%          MEAA.Dry_Mass = 28700;
+%          MEAA.Static_Mass = 40700;
     else
         warning('alternative descents not yet programmed')
     end
@@ -61,6 +65,9 @@ Max_AeroB_Mass = 40400; %kg
 %     else
 %         warning('alternative entry types not yet programmed')
 %     end
+       
+
+
 %{
 Comment for loop out.  We'll have one Cargo Spacecraft pulled back, then
 multiply by Results.Num_CargoSpacecraft, since they're all alike.
