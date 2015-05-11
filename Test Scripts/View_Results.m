@@ -45,7 +45,7 @@ val = zeros(1, Num_Arches); %initialize value vector
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 
 crew = zeros(1,Num_Arches);
-sufcrew = zeros(1,Num_Arches);
+surfcrew = zeros(1,Num_Arches);
 crater = zeros(1,Num_Arches);
 food = zeros(1,Num_Arches);
 stage = zeros(1,Num_Arches);
@@ -153,14 +153,14 @@ end
 
 %% disp
 hold off;
-gscatter(val,Im,crater,'mcrgb','o+xsd');
+ gscatter(AscentMass,Im,food,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);
 hold on;
-xlabel('Science Value');
-ylabel('IMLEO');
-title('Full Results');
+xlabel('Surface Crew Size');
+ylabel('Cumulative Surface Power Draw, kW');
+title('0% Food grown on Mars');
 
 
 %% isolate utopian corner
