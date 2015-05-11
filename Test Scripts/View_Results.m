@@ -10,6 +10,7 @@ LandedCargo = zeros(1,Num_Arches);
 LandedHumans = zeros(1,Num_Arches);
 AscentMass = zeros(1,Num_Arches);
 HumanMass = zeros(1,Num_Arches);
+TransHabMass = zeros(1,Num_Arches);
 CargoMass = zeros(1,Num_Arches);
 MAMA = zeros(1,Num_Arches);
 HumanMALMO = zeros(1,Num_Arches);
@@ -35,6 +36,7 @@ for i=1:Num_Arches
     HumanMass(i) = All_Results{i}.HumanSpacecraft.Mass;
     CargoMass(i) = All_Results{i}.CargoSpacecraft.Mass;
     PowerMass(i) = All_Results{i}.PowerPlant.Mass;
+    TransHabMass(i) = All_Results{i}.HumanSpacecraft.SC{1}.Origin_Mass;
 
 end
 % disp
@@ -67,6 +69,7 @@ stay = zeros(1,Num_Arches);
 isrupower = zeros(1,Num_Arches);
 forceCH4 = zeros(1,Num_Arches);
 forceISRU = zeros(1,Num_Arches);
+
 
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
@@ -167,7 +170,7 @@ end
 %% disp
 hold off;
 
-plot = gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
+plot = gscatter(HumanMass,CargoMass,cap,'mcrgb','o+xsd*^<>ph');
  % ylim(xlim);
 hold on;
 %  xlabel('HumanMass');
@@ -191,14 +194,19 @@ hold on;
  ylabel('Resupply IMLEO, kg');
  zlabel('Infrastructure Mass, kg');
  title('3D Results');
- 
+
+ figure
+ time = gscatter(time,Im,food,'mcrgb','o+xsd*^<>ph');
+ xlabel('Scientice Time, CM-hr/synod');
+ ylabel('Resupply IMLEO, kg');
+ title('Science Time to IMLEO, Colored by Food Grown on Mars');
+ set(full,'MarkerSize',10);
  
 figure;
 full = gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);
-hold on;
  xlabel('Scientific Value, CM-hr-Intrest/synod');
  ylabel('Resupply IMLEO, kg');
  title('Full Results, Colored by Food Grown on Mars');
