@@ -89,7 +89,6 @@ Earth_Food_Mass = 2.3; %Units: kg/CM/day; Architectural Decision from BVAD pg. 5
 Earth_Food_Volume = 0.00657; %Units: kg/CM/day; Architectural Decision from BVAD pg. 56
 [~,Food_Supply] = Cur_Arch.FoodSupply.Amount; %Units: %; Percentage of food to be grown on Mars.
 MARS_2040.Food_Supply = Food_Supply;
-Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from inedible crops
 CrewTime_FoodGrowth = 13.1; %Units: CM-hr/m3/yr; BVAD 2015 p.163
 Mars_Food_Prep = 0.83; %Units: CM-hr/CM-day; This is the amount of preparation time required to prepare fod that is grown on Mars; BVAD 2015 p.109
 Earth_Food_Prep = 0.17; %Units: CM-hr/CM-day; This is the amount of preparation time required to prepare food that is brought to Mars from Earth; BVAD 2015 p.109
@@ -136,7 +135,7 @@ ISRU_Requirements.Oxygen = ISRU_Requirements.Oxygen * -1;
 %Calculations to determine the amount of Water that is required from ISRU. 
 EMU_EVA_Loss = (EVA_Cooling_Loss*EVA_Weekly_Rate/7)+(EVA_Water_Consumption*EVA_Weekly_Rate/7);
 Crew_Water = ECLSS_Water(MARS_2040.Crew_Size);
-Crop_Water_Requirement = ECLSS_Crop.Transportation +(88.60*(Crop_FoodProcessor_Efficiency/100))-ECLSS_Crop.Crop_Water_Generation;
+Crop_Water_Requirement = ECLSS_Crop.Crop_Water_Requirement;
 Habitat_Water_CCAA = Crew_Water.Vapor_Water;
 Portable_Water_Crew = EMU_EVA_Loss+Crew_Water.Drink_Water+Crew_Water.Urine_Flush+Crew_Water.Hygiene+Crew_Water.Shower+Crew_Water.Laundry_In+(Crop_Water_Requirement*-1);
 Habitat_DirtyUrine_Water = Crew_Water.Urine_Water_Flush - (Crew_Water.Urine_Water_Flush*(UPA_Efficiency/100));

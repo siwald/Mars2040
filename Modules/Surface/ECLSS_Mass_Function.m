@@ -88,7 +88,7 @@ ECLSS.BPS.Secondary = 0;
 
 ECLSS.GLS.Mass = 2.98;
 ECLSS.GLS.Volume = 0.003824407;
-ECLSS.GLS.Spec = 62.5/MARS_2040.Crop_Area; %Units: m^2/unit
+ECLSS.GLS.Spec = 62.5/672.12; %Units: m^2/unit
 ECLSS.GLS.Power = 0.03;
 ECLSS.GLS.Primary = ceil(MARS_2040.Crop_Area/ECLSS.GLS.Spec);
 ECLSS.GLS.Secondary = ECLSS.GLS.Primary/(25000/12.73/MARS_2040.Surface_Duration);

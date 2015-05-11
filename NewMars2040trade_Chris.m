@@ -36,13 +36,13 @@ Morph = MarsArchitecture.Enumerate( ...
 	{Location.LEO},... 2 Location.EML1, Location.EML2}, ...
 	{[TransitFuel.LUNAR_LH2,TransitFuel.LUNAR_O2]},...
     {[ReturnFuel.EARTH_LH2, ReturnFuel.EARTH_O2]}, ...
-    {SurfaceCrew.TARGET_SURFACE, SurfaceCrew.MID_SURFACE, SurfaceCrew.MIN_SURFACE}, ...
-    {Crew.DRA_CREW, Crew.DEFAULT_TRANSIT}, ...
+    {SurfaceCrew.MID_SURFACE}, ...
+    {Crew.DEFAULT_TRANSIT}, ...
     {PowerSource.NUCLEAR}, ...
     {SurfaceShielding.REGOLITH}, ...
     {ArrivalEntry.AEROCAPTURE}, ...
     {Site.HOLDEN}, ...
-    {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.MARS_ONLY,FoodSource.EARTH_MARS_25_75, FoodSource.EARTH_MARS_75_25} ...
+    {FoodSource.EARTH_ONLY,FoodSource.EARTH_MARS_50_SPLIT,FoodSource.EARTH_MARS_75_25,FoodSource.EARTH_MARS_25_75,FoodSource.MARS_ONLY} ...
     );
 
 
@@ -58,6 +58,14 @@ Num_Arches = length(Morph)
 enumeration_time = toc
 %Preallocate the results array
 All_Results = cell(Num_Arches,1); %1 row for every architectureal combo, 1 cols: Results object
+
+desc = struct('RunNo',{},'PropType',{},'TransitCrew',{},'SurfaceCrew',{},'FoodGrown',{},...
+    'Staging',{},'TransitFuel',{},'TransitLOX',{},'ReturnFuel',{},'ReturnLOX',{},'Site',{},...
+    'OrbitCapture',{},'IMLEO',{},'Consumables',{},'Spares',{},'Replacements',{},'SurfPower',{},'NumCargo',{},...
+    'mCrewVehicle',{},'mPropCrewVehicle',{},...
+    'mCargoVehicle',{},'mPropCargoVehicle',{},...
+    'mAscentVehicle',{},'mPropAscentVehicle',{},...
+    'LandedMass',{},'ECLSS_ISRU_Requirements',{});
 %% Begin Main Loop
 tic
 for i=1:Num_Arches %begin looping for each architecture
@@ -213,7 +221,7 @@ for i=1:Num_Arches %begin looping for each architecture
         Results
             ISRU.Mass, Volume & Power
     %}
-    %Results = ISRU(Cur_Arch, ECLSS_ISRU, Site_Water_Percent, Results);
+    Results = ISRU(Cur_Arch, ECLSS_ISRU, Site_Water_Percent, Results);
   
     %% --- Surface Power Module --- %%
     %{
@@ -348,7 +356,38 @@ for i=1:Num_Arches %begin looping for each architecture
     %Index into All_Results
     All_Results{i,1} = Results; 
     %% End Main Loop
+    
+        desc(i).Site = Morph{i}.SurfaceSites.Name;
+    desc(i).PropType = Morph{i}.PropulsionType.type;
+    desc(i).FoodGrown = Morph{i}.FoodSupply(2).Amount;
+    desc(i).Staging = Morph{i}.Staging.Name;
+    desc(i).TransitCrew = Morph{i}.TransitCrew.Size;
+    desc(i).SurfaceCrew = Morph{i}.SurfaceCrew.Size;
+    desc(i).TransitFuel = Morph{i}.TransitFuel(1).Location.Name;
+    desc(i).TransitLOX = Morph{i}.TransitFuel(2).Location.Name;
+    desc(i).ReturnFuel = Morph{i}.ReturnFuel(1).Location.Name;
+    desc(i).ReturnLOX = Morph{i}.ReturnFuel(2).Location.Name;
+    desc(i).OrbitCapture = Morph{i}.OrbitCapture.Name;
+    desc(i).Consumables = Results.Consumables/1000;
+    desc(i).Spares = Results.Spares/1000;
+    desc(i).Replacements = Results.Replacements/1000;
+    desc(i).SurfPower = Results.Cum_Surface_Power;
+    desc(i).IMLEO = Results.IMLEO/1000;
+    desc(i).NumCargo = Results.Num_CargoSpacecraft;
+    desc(i).mAscentVehicle = Results.AscentSpacecraft.Mass/1000;
+    desc(i).mPropAscentVehicle = Results.AscentSpacecraft.Prop_Mass/1000;
+    desc(i).mCargoVehicle = Results.CargoSpacecraft.Mass/1000;
+    desc(i).mPropCargoVehicle = Results.CargoSpacecraft.Prop_Mass/1000;
+    desc(i).mCrewVehicle = Results.HumanSpacecraft.Mass/1000;
+    desc(i).mPropCrewVehicle = Results.HumanSpacecraft.Prop_Mass/1000;
+    desc(i).RunNo = i;
+    desc(i).LandedMass = (Results.Consumables + Results.AscentSpacecraft.Mass + Results.Spares)/1000;
+    desc(i).ECLSS_ISRU_Requirements = ECLSS_ISRU.CO2;
 end %end main loop
+
+xlswrite('Results.xls',struct2cell(desc(:)).',1,'A2');
+
+close all;
 time_per_run = toc / Num_Arches
 runtime_Mins = toc / 60
 load gong.mat;

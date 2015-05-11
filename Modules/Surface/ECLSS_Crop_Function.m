@@ -18,7 +18,7 @@ function [ECLSS_Crop] = ECLSS_Crop_Function(MARS_2040)
 %The following are constants that are used in equating the requried
 %resources. These values can be changed once further information becomes
 %available on the actual usage that is seen.
-
+Crop_FoodProcessor_Efficiency = 50; %Units: %; Efficiency to reclaim water from inedible crops
 %Crop_Constant_Values = xlsread('Habitat Resource Analysis_v5.xlsx',5,'E4:L16');
 load('Crop_Constant_Values.var');
 %------------------------------------------------------------------------
@@ -156,6 +156,6 @@ ECLSS_Crop.Crop_Water_Generation = Crop_Water_Generation.Overall;
 ECLSS_Crop.Stock_Solution = Crop_Stock_Solution.Overall;
 ECLSS_Crop.Acid_Usage = Crop_Acid_Usage.Overall;
 ECLSS_Crop.Transportation = Crop_Water_Generation.Overall - Crop_Water_Edible.Overall - Crop_Water_InEdible.Overall;
-
+ECLSS_Crop.Crop_Water_Requirement = (Crop_Water_InEdible.Overall*(Crop_FoodProcessor_Efficiency/100))+ECLSS_Crop.Transportation-ECLSS_Crop.Crop_Water_Generation;
 end
 
