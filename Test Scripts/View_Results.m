@@ -158,16 +158,46 @@ end
 
 %% disp
 hold off;
- gscatter(val,Im,forceISRU,'mcrgb','o+xsd*^<>ph');
+
+plot = gscatter(AscentMass,Im,food,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);
 hold on;
-% xlabel('Surface Crew Size');
-% ylabel('Cumulative Surface Power Draw, kW');
-% title('0% Food grown on Mars');
+ xlabel('Scientific Value, CM-hr-Intrest/synod');
+ ylabel('Resupply IMLEO, kg');
+ title('Full Results, Colored by Food Grown on Mars');
 
-
+%% Gen Presentation Graphs
+figure;
+ gscatter(Infra,Im,transfuel,'mcrgb','o+xsd*^<>ph');
+% lim = ylim;
+% lim(1) = 0;
+% ylim(lim);
+hold on;
+ xlabel('Infrastructure Mass, kg');
+ ylabel('Resupply IMLEO, kg');
+ title('Effects of Lunar ISRU');
+ 
+figure;
+ gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
+% lim = ylim;
+% lim(1) = 0;
+% ylim(lim);
+hold on;
+ xlabel('Scientific Value, CM-hr-Intrest/synod');
+ ylabel('Resupply IMLEO, kg');
+ title('Full Results, Colored by Food Grown on Mars');
+ 
+ ID_DRA5;
+ 
+ figure;
+ scatter3(val,Im,Infra);
+ xlabel('Scientific Value, CM-hr-Intrest/synod');
+ ylabel('Resupply IMLEO, kg');
+ zlabel('Infrastructure Mass, kg');
+ title('3D Results');
+ 
 %% isolate utopian corner
 ind = [];
 Im = transpose(Im);
