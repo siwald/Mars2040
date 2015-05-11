@@ -66,6 +66,9 @@ Max_AeroB_Mass = 40400; %kg
 %         warning('alternative entry types not yet programmed')
 %     end
        
+%        %Unscaled for happiness
+%        Cargo_Lander.Dry_Mass = 28700;
+%        Cargo_Lander.Static_Mass = 40700;
 
 
 %{
