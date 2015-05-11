@@ -931,6 +931,22 @@ classdef MarsArchitecture < handle
                 warning('Setting ForceCH4Ascent error, needs 1 or 0');
             end
         end
+                %% ForceAscentISRUO2 setter
+        function set.ForceAscentISRUO2(obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceAscentISRUO2 = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
+                %% ForceAscentISRUCH4 setter
+        function set.ForceAscentISRUCH4 (obj, value)
+            if nargin > 0 && isa(obj, 'MarsArchitecture') && or(value == 0, value == 1)
+                obj.forceAscentISRUCH4  = value;
+            else
+                warning('Setting ForceCH4Ascent error, needs 1 or 0');
+            end
+        end
         
         %% ForceCH4Ascent getter
         function out = get.ForceCH4Ascent(obj)
@@ -957,7 +973,18 @@ classdef MarsArchitecture < handle
                         obj.ReturnFuel(2) == ReturnFuel.ASCENT_O2);
              end
         end
-        
+                %% ForceAscentISRUO2 getter
+        function out = get.ForceAscentISRUO2(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceAscentISRUO2;
+             end
+        end
+        %% ForceAscentISRUCH4 getter
+        function out = get.ForceAscentISRUCH4(obj)
+             if nargin > 0 && isa(obj, 'MarsArchitecture')
+                 out = obj.forceAscentISRUCH4;
+             end
+        end
     %% display the key points
     function display(obj)
         disp('Propulsion Type:')

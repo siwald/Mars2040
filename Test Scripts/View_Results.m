@@ -58,11 +58,15 @@ cumpower = zeros(1,Num_Arches);
 ch4 = zeros(1,Num_Arches);
 stay = zeros(1,Num_Arches);
 isrupower = zeros(1,Num_Arches);
+forceCH4 = zeros(1,Num_Arches);
+forceISRU = zeros(1,Num_Arches);
 
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
     Im(i) = All_Results{i,1}.IMLEO;
     isrupower(i) = nansum([All_Results{i}.Mars_ISRU.Power]);
+    forceCH4(i) = Morph{i}.ForceCH4Ascent;
+    forceISRU(i) = Morph{i}.ForceAscentISRUCH4;
     crew(i) = Morph{i}.TransitCrew.Size;
     surfcrew(i) = Morph{i}.SurfaceCrew.Size;
 	switch Morph{i}.SurfaceSites
@@ -154,7 +158,7 @@ end
 
 %% disp
 hold off;
- gscatter(isrupower,food,food,'mcrgb','o+xsd*^<>ph');
+ gscatter(val,Im,forceISRU,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);
