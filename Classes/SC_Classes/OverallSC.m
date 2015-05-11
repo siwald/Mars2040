@@ -136,9 +136,24 @@ classdef OverallSC < dynamicprops
         %% Copy an element
         function out = Copy_Craft(obj, name)
             [num, ~] = size(obj.SC);
+            out = SC_Class(name);
             for i=1:num
                 if strcmp(obj.SC{i,1}.Description, name)
-                    out = obj.SC{i,1}; %copy out the entry module
+                    out.Prop_Mass = obj.SC{i}                    .Prop_Mass;
+                    out.Fuel_Mass = obj.SC{i}.Fuel_Mass;
+                    out.Ox_Mass = obj.SC{i}.Ox_Mass;
+                    out.Origin_Mass = obj.SC{i}.Origin_Mass;
+                    out.Bus_Mass = obj.SC{i}.Bus_Mass;
+                    out.Bus_Vol = obj.SC{i}.Bus_Vol;
+                    out.Payload_Mass = obj.SC{i}.Payload_Mass;
+                    out.Payload_Vol = obj.SC{i}.Payload_Vol;
+                    out.Hab_Mass = obj.SC{i}.Hab_Mass;
+                    out.Hab_Vol = obj.SC{i}.Hab_Vol;
+                    out.Hab_Power = obj.SC{i}.Hab_Power;
+                    out.Eng_Mass = obj.SC{i}.Eng_Mass;
+                    out.Static_Mass = obj.SC{i}.Static_Mass;
+                    out.Volume = obj.SC{i}.Volume;
+                    out.Dry_Mass = obj.SC{i}.Dry_Mass;
                     break
                 end
             end

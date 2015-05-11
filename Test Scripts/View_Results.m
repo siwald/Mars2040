@@ -1,20 +1,25 @@
 %% Results Section
 val = zeros(1, Num_Arches); %initialize value vector
+time = zeros(1, Num_Arches);
 Im = zeros(1,Num_Arches); %ititialize IMLEO vector
 marsox = zeros(1,Num_Arches);
 marsh2 = zeros(1,Num_Arches);
 LCC_Prox = zeros(1,Num_Arches);
 Infra = zeros(1,Num_Arches);
-LandedMass = zeros(1,Num_Arches);
+LandedCargo = zeros(1,Num_Arches);
+LandedHumans = zeros(1,Num_Arches);
 AscentMass = zeros(1,Num_Arches);
 HumanMass = zeros(1,Num_Arches);
+CargoMass = zeros(1,Num_Arches);
 MAMA = zeros(1,Num_Arches);
-MALMO = zeros(1,Num_Arches);
+HumanMALMO = zeros(1,Num_Arches);
+CargoMALMO = zeros(1,Num_Arches);
 PowerMass = zeros(1,Num_Arches);
 
 
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
+    time(i) = All_Results{i}.Science_Time;
     Im(i) = All_Results{i,1}.IMLEO;
     marsox(i) = nansum([All_Results{i,1}.Mars_ISRU.Oxidizer_Output]);
     marsh2(i) = nansum([All_Results{i,1}.Mars_ISRU.Fuel_Output]);
@@ -24,9 +29,11 @@ for i=1:Num_Arches
         All_Results{i}.FerrySpacecraft.Static_Mass, All_Results{i}.FerrySpacecraft.Eng_Mass, All_Results{i}.FerrySpacecraft.Bus_Mass]);
     LCC_Prox(i) = Infra(i) + (6 * All_Results{i}.IMLEO);
     MarsInfra(i) = Infra(i) - nansum([All_Results{i,1}.Lunar_ISRU.Mass]);
-    LandedMass(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass + All_Results{i}.HumanSpacecraft.SC{3}.Origin_Mass;
+    LandedCargo(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass + All_Results{i}.HumanSpacecraft.SC{3}.Origin_Mass;
+    LandedHumans(i) = All_Results{i}.HumanSpacecraft.SC{4}.Origin_Mass - (All_Results{i}.HumanSpacecraft.SC{4}.Dry_Mass + All_Results{i}.HumanSpacecraft.SC{4}.Static_Mass);
     AscentMass(i) = All_Results{i}.AscentSpacecraft.Mass;
     HumanMass(i) = All_Results{i}.HumanSpacecraft.Mass;
+    CargoMass(i) = All_Results{i}.CargoSpacecraft.Mass;
     PowerMass(i) = All_Results{i}.PowerPlant.Mass;
 
 end
@@ -149,7 +156,8 @@ for i=1:Num_Arches
         returnfuel{i} = 5;
     end
     MAMA(i) = All_Results{i}.HumanSpacecraft.MAMA;
-    MALMO(i) = All_Results{i}.HumanSpacecraft.MALMO;
+    HumanMALMO(i) = All_Results{i}.HumanSpacecraft.MALMO;
+    CargoMALMO(i) = All_Results{i}.CargoSpacecraft.MALMO;
     cumpower(i) = All_Results{i}.Cum_Surface_Power;
     ch4(i) = Morph{i}.ForceCH4Ascent;
     stay(i) = 780 * ((Morph{i}.SurfaceCrew.Size/Morph{i}.TransitCrew.Size))/365; %Stay duration in Earth Years
@@ -159,14 +167,12 @@ end
 %% disp
 hold off;
 
-plot = gscatter(AscentMass,Im,food,'mcrgb','o+xsd*^<>ph');
-% lim = ylim;
-% lim(1) = 0;
-% ylim(lim);
+plot = gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
+ % ylim(xlim);
 hold on;
- xlabel('Scientific Value, CM-hr-Intrest/synod');
- ylabel('Resupply IMLEO, kg');
- title('Full Results, Colored by Food Grown on Mars');
+%  xlabel('HumanMass');
+%  ylabel('Resupply IMLEO');
+%  title('Single-site Science hrs, Colored by Food Grown on Mars');
 
 %% Gen Presentation Graphs
 figure;
@@ -178,9 +184,17 @@ hold on;
  xlabel('Infrastructure Mass, kg');
  ylabel('Resupply IMLEO, kg');
  title('Effects of Lunar ISRU');
+  
+ figure;
+ scatter3(val,Im,Infra);
+ xlabel('Scientific Value, CM-hr-Intrest/synod');
+ ylabel('Resupply IMLEO, kg');
+ zlabel('Infrastructure Mass, kg');
+ title('3D Results');
+ 
  
 figure;
- gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
+full = gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
 % lim = ylim;
 % lim(1) = 0;
 % ylim(lim);
@@ -188,15 +202,10 @@ hold on;
  xlabel('Scientific Value, CM-hr-Intrest/synod');
  ylabel('Resupply IMLEO, kg');
  title('Full Results, Colored by Food Grown on Mars');
+ set(full,'MarkerSize',10);
  
  ID_DRA5;
- 
- figure;
- scatter3(val,Im,Infra);
- xlabel('Scientific Value, CM-hr-Intrest/synod');
- ylabel('Resupply IMLEO, kg');
- zlabel('Infrastructure Mass, kg');
- title('3D Results');
+
  
 %% isolate utopian corner
 ind = [];

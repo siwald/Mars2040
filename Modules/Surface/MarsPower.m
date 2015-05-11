@@ -54,8 +54,9 @@ Power_Req = Results.Cum_Surface_Power;
 % MarsLat = [-50:1:50];
 
 
-%% Reactor Section
+
 if Cur_Arch.SurfacePower == PowerSource.NUCLEAR
+%% Reactor Section
 % Rx CORE
 Brayton_Eff = 0.24;
 FuelDen = 0.96; %percent
@@ -166,8 +167,10 @@ RxVolume = (Radiator_Volume+Volume_Recoup+Volume_Brayton...
 Results.PowerPlant.Mass = RxMass;
 Results.PowerPlant.Volume = RxVolume;
 
-%% Solar Section
+
 elseif Cur_Arch.SurfacePower == PowerSource.SOLAR
+%% Solar Section
+Power_Req = Results.Cum_Surface_Power * 2; %Need Extra power for ISRU heat, since w/Nuclear, ISRU plant utalizes nuclear waste heat.
 % SOLAR POWER VS MARS LATITUDE
 MarsLatT = [-60 -55 -50 -45 -40 -35 -30 -25 -20 -15 -10 -5 0 5 10 15 20 25 30 35 40 45 50 55 60];
 RFCMassT = [4.845010567 7.833596698 9.841331374 11.31986659 12.46520732 13.40169797 14.18348732 14.86331412 15.46299724 16.00481623 16.49705038 16.94919278 17.36792385 17.75014533 18.09149292 18.37767261 18.56919109 18.61464779 18.3097226 16.33125137 15.05009617 13.75409675 12.11506707 9.832893282 6.283439143];
