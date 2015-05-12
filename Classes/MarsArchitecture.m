@@ -973,7 +973,7 @@ classdef MarsArchitecture < handle
                         obj.ReturnFuel(2) == ReturnFuel.ASCENT_O2);
              end
         end
-        
+        %% Comparison
         function isEqual = eq(obj1, obj2)
              if nargin > 0 && isa(obj1, 'MarsArchitecture') && isa(obj2, 'MarsArchitecture')
                  if obj1.origin ~= obj2.origin 
@@ -1008,7 +1008,7 @@ classdef MarsArchitecture < handle
                     isEqual = false;
                     return;
                 end
-                if obj1.transitCrew ~= obj2.transitCrew 
+                if obj1.transitCrew.Size ~= obj2.transitCrew.Size 
                     isEqual = false;
                     return;
                 end
@@ -1032,7 +1032,7 @@ classdef MarsArchitecture < handle
                     isEqual = false;
                     return;
                 end
-                if obj1.surfaceCrew ~= obj2.surfaceCrew 
+                if obj1.surfaceCrew.Size ~= obj2.surfaceCrew.Size
                     isEqual = false;
                     return;
                 end
@@ -1122,11 +1122,13 @@ classdef MarsArchitecture < handle
             {Location.LEO}, ...
             {HabitatShielding.DEDICATED}, ...
             {ArrivalEntry.AEROCAPTURE}, ...
+            {ArrivalCargoEntry.AEROCAPTURE},...
             {ArrivalDescent.AEROENTRY}, ...
             {Crew.DRA_CREW}, ...
             {PowerSource.NUCLEAR}, ...
             {SurfaceCrew.DRA_CREW}, ...
             {SurfaceShielding.DEDICATED}, ...
+            {Site.GALE},...
             {FoodSource.EARTH_ONLY});
     end
 end

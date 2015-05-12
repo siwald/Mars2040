@@ -126,6 +126,9 @@ Results.Mars_ISRU.Volume = (S_Plant_Qty * S_Plant_Vol) + (M_Plant_Qty * M_Plant_
 Results.Mars_ISRU.Power = (S_Plant_Qty * S_Plant_Power) + (M_Plant_Qty * M_Plant_Power) + (L_Plant_Qty * L_Plant_Power)...
     + (Electrolysis_Plant_Power * Num_Electrolysis_Plants)...
     + (Sabatier_Power * Num_Sabatier_Plants); %ISRU_Power;
+if ~isequal(Cur_Arch.SurfacePower, PowerSource.NUCLEAR)
+   Results.Mars_ISRU.Power = Results.Mars_ISRU.Power + (0.2 * Full_H2O); %2 Watts per kilogram to melt the water without Nuclear waste heat.
+end
 Results.Mars_ISRU.Consumables_Mass = ECLSS_Requirements.Nitrogen + ECLSS_Requirements.CO2; %mass of gasses shipped in.
 
 

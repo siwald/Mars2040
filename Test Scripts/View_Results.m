@@ -207,7 +207,7 @@ hold on;
  xlabel('Scientice Time, CM-hr/synod');
  ylabel('Resupply IMLEO, kg');
  title('Science Time to IMLEO, Colored by Food Grown on Mars');
- set(full,'MarkerSize',10);
+ set(time,'MarkerSize',10);
  
 figure;
 full = gscatter(val,Im,food,'mcrgb','o+xsd*^<>ph');
