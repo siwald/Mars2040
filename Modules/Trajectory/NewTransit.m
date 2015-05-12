@@ -13,8 +13,8 @@ switch type
                 Capture_Time = 30; %days based on DRA 5.0?
                 if ~isequal(Cur_Arch.EDL, ArrivalDescent.AEROENTRY)
                     Cap_Stage.Bus_Mass = 66100; % Based on DRA 5.0, including payload fairing & adapter
-                elseif isequal(Cur_Arch.EDL, ArrivalDescent.AEROENTRY)
-                    Cap_Stage.Bus_Mass = 0; %Aeroshell aleady added, used for descent as well.
+%                 elseif isequal(Cur_Arch.EDL, ArrivalDescent.AEROENTRY)
+%                     Cap_Stage.Bus_Mass = 0; %Aeroshell aleady added, used for descent as well.
                 end
             case ArrivalEntry.PROPULSIVE %Based on Propulsive Capture Engines
                 Capture_Time = 0; %Don't need to wait in circularization

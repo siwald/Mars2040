@@ -31,7 +31,7 @@ dV = 4.41; % total km/s, Mars Surface to LMO (500 km). est. from HSMAD Fig. 10-2
 
 %% Ascent Taxi Definition
 Ascent_Vehicle = OverallSC; %initialize the Ascent Vehicle
-Ascent_Hab = HumanSpacecraft.Copy_Craft('Earth Entry Module');
+Ascent_Hab = HumanSpacecraft.Get_Craft('Earth Entry Module');
 
 %% Add Ascent Hab to the Ascent Vehicle
 Ascent_Hab.Description = 'Ascent and Earth Entry Module';

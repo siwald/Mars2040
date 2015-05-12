@@ -6,6 +6,7 @@ marsox = zeros(1,Num_Arches);
 marsh2 = zeros(1,Num_Arches);
 LCC_Prox = zeros(1,Num_Arches);
 Infra = zeros(1,Num_Arches);
+LandedMass = zeros(1,Num_Arches);
 LandedCargo = zeros(1,Num_Arches);
 LandedHumans = zeros(1,Num_Arches);
 AscentMass = zeros(1,Num_Arches);
@@ -30,8 +31,9 @@ for i=1:Num_Arches
         All_Results{i}.FerrySpacecraft.Static_Mass, All_Results{i}.FerrySpacecraft.Eng_Mass, All_Results{i}.FerrySpacecraft.Bus_Mass]);
     LCC_Prox(i) = Infra(i) + (6 * All_Results{i}.IMLEO);
     MarsInfra(i) = Infra(i) - nansum([All_Results{i,1}.Lunar_ISRU.Mass]);
-    LandedCargo(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass + All_Results{i}.HumanSpacecraft.SC{3}.Origin_Mass;
-    LandedHumans(i) = All_Results{i}.HumanSpacecraft.SC{4}.Origin_Mass - (All_Results{i}.HumanSpacecraft.SC{4}.Dry_Mass + All_Results{i}.HumanSpacecraft.SC{4}.Static_Mass);
+    LandedCargo(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass ;
+    LandedMass(i) = All_Results{i}.CargoSpacecraft.SC{1}.Payload_Mass + All_Results{i}.HumanSpacecraft.SC{3}.Origin_Mass;
+    LandedHumans(i) = nansum([All_Results{i}.HumanSpacecraft.SC{4}.Origin_Mass]) - nansum([All_Results{i}.HumanSpacecraft.SC{4}.Dry_Mass, All_Results{i}.HumanSpacecraft.SC{4}.Static_Mass]);
     AscentMass(i) = All_Results{i}.AscentSpacecraft.Mass;
     HumanMass(i) = All_Results{i}.HumanSpacecraft.Mass;
     CargoMass(i) = All_Results{i}.CargoSpacecraft.Mass;
@@ -170,9 +172,14 @@ end
 %% disp
 hold off;
 
-plot = gscatter(HumanMass,CargoMass,cap,'mcrgb','o+xsd*^<>ph');
- % ylim(xlim);
+plot = gscatter(C,CargoMass,cap,'mcrgb','o+xsd*^<>ph');
+lim = xlim;
+lim(1) = 0;
+ ylim(lim);
+ xlim(lim);
 hold on;
+
+plot = bar(HumanMass,CargoMass)
 %  xlabel('HumanMass');
 %  ylabel('Resupply IMLEO');
 %  title('Single-site Science hrs, Colored by Food Grown on Mars');

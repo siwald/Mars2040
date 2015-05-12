@@ -8,6 +8,7 @@ classdef OverallSC < dynamicprops
     
     properties (SetAccess = private) %thus GetAccess = public
         Mass %will return the total mass of all S/C elements
+        ListMasses
         Eng_Mass
         Bus_Mass
         Static_Mass
@@ -110,6 +111,15 @@ classdef OverallSC < dynamicprops
             for i=1:num
                 current = obj.SC{i}; %extract the current SC element
                 descrips{i} = current.Description;
+            end
+            out = descrips;
+        end
+        function out = get.ListMasses(obj)
+            [num,~] = size(obj.SC); %get number of SC elements
+            descrips = cell(num,1); %initialize array of masses
+            for i=1:num
+                current = obj.SC{i}; %extract the current SC element
+                descrips{i} = current.Origin_Mass;
             end
             out = descrips;
         end
