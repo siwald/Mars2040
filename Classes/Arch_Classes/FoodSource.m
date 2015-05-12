@@ -19,6 +19,10 @@ classdef FoodSource < handle
         EARTH_MARS_25_75 = [FoodSource(Location.EARTH, 0.25), FoodSource(Location.MARS, 0.75)];
         EARTH_MARS_75_25 = [FoodSource(Location.EARTH, 0.75), FoodSource(Location.MARS, 0.25)];
         MARS_ONLY =  [FoodSource(Location.EARTH, 0), FoodSource(Location.MARS, 1)];
+        M125 =  [FoodSource(Location.EARTH, 0.875), FoodSource(Location.MARS, .125)];
+        M375 =  [FoodSource(Location.EARTH, .625), FoodSource(Location.MARS, .375)];
+        M625 =  [FoodSource(Location.EARTH, .375), FoodSource(Location.MARS, .625)];
+        M875 =  [FoodSource(Location.EARTH, .125), FoodSource(Location.MARS, .875)];
     end
     
     %% private methods (incl. constructor)
