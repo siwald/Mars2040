@@ -3,11 +3,13 @@ function [Results] = Astronaut_Time(Cur_Arch, Results, CrewFood)
 
 %Subtractions. These are in units of hours per days spent doing tasks
 personal = 13; %sleeping 8, exercise 2, hygiene 1, personal 2
-general_repairs = (24.66-13)*0.13; %Maintenance % of work time, NASA IG-13-019 pg. 7
+%general_repairs = (24.66-13)*0.13; %Maintenance % of work time, NASA IG-13-019 pg. 7
 food_time = CrewFood / Cur_Arch.SurfaceCrew.Size;
-spent_time = nansum([food_time, general_repairs, personal]);
+%spent_time = nansum([food_time, general_repairs, personal]);
+spent_time = nansum([food_time, personal]);
 
 Astronaut_Daily_Time = 24.66 - spent_time; % in Hours per Astronaut
+Astronaut_Daily_Time = Astronaut_Daily_Time *(1-0.13-0.06-0.04-0.03);%Maintenance, prep, medical, etc. % of work time, NASA IG-13-019 pg. 7
 
 switch Cur_Arch.CrewTrajectory.Type
     case TrajectoryType.HOHMANN.Type

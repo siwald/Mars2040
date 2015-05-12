@@ -21,7 +21,7 @@ PowerMass = zeros(1,Num_Arches);
 
 for i=1:Num_Arches
     val(i) = All_Results{i,1}.Science;
-    time(i) = All_Results{i}.Science_Time;
+    time(i) = All_Results{i}.Science_Time / 780;
     Im(i) = All_Results{i,1}.IMLEO;
     marsox(i) = nansum([All_Results{i,1}.Mars_ISRU.Oxidizer_Output]);
     marsh2(i) = nansum([All_Results{i,1}.Mars_ISRU.Fuel_Output]);
@@ -172,11 +172,11 @@ end
 %% disp
 hold off;
 
-plot = gscatter(C,CargoMass,cap,'mcrgb','o+xsd*^<>ph');
-lim = xlim;
-lim(1) = 0;
- ylim(lim);
- xlim(lim);
+plot = gscatter(time,Im,cap,'mcrgb','o+xsd*^<>ph');
+% lim = xlim;
+% lim(1) = 0;
+%  ylim(lim);
+%  xlim(lim);
 hold on;
 
 plot = bar(HumanMass,CargoMass)
@@ -204,7 +204,7 @@ hold on;
 
  figure
  time = gscatter(time,Im,food,'mcrgb','o+xsd*^<>ph');
- xlabel('Scientice Time, CM-hr/synod');
+ xlabel('Scientice Time, CM-hr/day');
  ylabel('Resupply IMLEO, kg');
  title('Science Time to IMLEO, Colored by Food Grown on Mars');
  set(time,'MarkerSize',10);
