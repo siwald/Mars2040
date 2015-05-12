@@ -164,7 +164,10 @@ RxVolume = (Radiator_Volume+Volume_Recoup+Volume_Brayton...
 % RxMassSP = (Power_Req.*1000)/RxMass; %W/kg
 % RxVolSP = (Power_Req.*1000)/RxVolume; %W/m^3
 
-Results.PowerPlant.Mass = RxMass;
+PowerPlant_Distance = 3000; %Units: m; distance from power plant to habitat, DRA5, no sheild
+PowerCable_Mass = (0.11446*PowerPlant_Distance);
+
+Results.PowerPlant.Mass = RxMass + PowerCable_Mass;
 Results.PowerPlant.Volume = RxVolume;
 
 
